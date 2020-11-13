@@ -6,10 +6,12 @@ import "./PostCreatorStyles.css";
 
 const PostCreator = (props) => {
     const [isText, setIsText] = useState(true);
+    const [postTags, setPostTags] = useState([]);
     const [postText, setPostText] = useState();
     const [postImage, setPostImage] = useState();
 
 
+    //Handle a click on the top radio buttons and set the state
     const handleRadioClick = (event) => {
         if (event.target.value === "text") {
             setIsText(true);
@@ -29,7 +31,21 @@ const PostCreator = (props) => {
 
     }
 
-    const handleTextChnage = (event) => {
+    //Validates the tags and sets the current tags
+    const handleTagsChange = (event) => {
+        const tags = event.target.value.split(' ');
+        let final_tags = [];
+        for (let tag of tags) {
+            if (tag !== "") {
+                final_tags.push(tag);
+            }
+        }
+
+        //Update the list of tags with the non-empty tags
+        setPostTags(final_tags);
+    }
+
+    const handleTextChange = (event) => {
         //Set the post message
         setPostText(event.target.value);
 
@@ -40,15 +56,15 @@ const PostCreator = (props) => {
     //If it is of type text, return with the text area
     if (isText) {
         return (
-            <PostCreatorBase isText={isText} handleRadioClick={handleRadioClick} >
-                <textarea id="text_input_area" placeholder="Start typing here..." onChange={handleTextChnage}></textarea>
+            <PostCreatorBase isText={isText} handleRadioClick={handleRadioClick} handleTagsChange={handleTagsChange} onSubmit={onPostSubmit}>
+                <textarea id="text_input_area" placeholder="Start typing here..." onChange={handleTextChange}></textarea>
             </PostCreatorBase>
         );
     }
     //Else return with the image area
     else {
         return (
-            <PostCreatorBase isText={isText} handleRadioClick={handleRadioClick} onSubmit={onPostSubmit}>
+            <PostCreatorBase isText={isText} handleRadioClick={handleRadioClick} handleTagsChange={handleTagsChange} onSubmit={onPostSubmit}>
                 <DropzoneArea
                     acceptedFiles={['image/*']}
                     filesLimit={1}

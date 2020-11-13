@@ -15,9 +15,9 @@
 #text_input_area{
     width: 100%;
     height: 100%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
 }
 
 #tags_input_area{

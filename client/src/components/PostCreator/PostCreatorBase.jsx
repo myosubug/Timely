@@ -34,7 +34,7 @@ const PostCreatorBase = (props) => {
                 </div>
 
                 <h2> Tags </h2>
-                <input id="tags_input_area"></input>
+                <input id="tags_input_area" onChange={props.handleTagsChange}></input>
                 <div>
                     <div className="action_btn">
                         <Button variant="contained" color="secondary" > Cancel</Button>
