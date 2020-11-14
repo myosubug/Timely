@@ -6,27 +6,41 @@ import {
   Typography,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import DeleteAccountModal from '../DeleteAccountModal';
 import './style.css';
 
 export class UserSettingsPage extends Component {
   static propTypes = {
     // Could probably make some sort of user data structure to be passed in
     // Rather than passing in props for each field
+    userId: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     memberStatus: PropTypes.string.isRequired,
     posts: PropTypes.number.isRequired,
     email: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
     isAdmin: PropTypes.bool.isRequired,
-  };
+  }
 
   constructor(props) {
     super(props);
     this.state = {
+      isDeleteOpen: false,
       isEditEmailOpen: false,
       isEditUserOpen: false,
       isEditPassOpen: false,
     };
+  }
+
+  openDeleteModal = () => {
+    this.setState({ 
+      isDeleteOpen: true });
+  };
+
+  closeDeleteModal = () => {
+    this.setState({
+      isDeleteOpen: false,
+    });
   }
 
   handleOnDeleteClick = () => {
@@ -39,6 +53,10 @@ export class UserSettingsPage extends Component {
 
   handleOnEditUserClick = () => {
     console.log("edit user clicked")
+  }
+
+  handleOnEditPassClick = () => {
+    console.log("edit pass clicked")
   }
 
   renderProfileGrid = () => {
@@ -59,15 +77,16 @@ export class UserSettingsPage extends Component {
           />
           {/* TODO Change profile pic button*/}
         </Grid>
+
         <Grid item xs={3} className="DeleteAccount">
           <Button
             variant="contained"
             className="DeleteAccountButton"
-            onClick={this.handleOnDeleteClick}
+            onClick={this.openDeleteModal}
             size="medium"
           >
             Delete
-        </Button>
+          </Button>
         </Grid>
       </Grid>
     );
@@ -93,6 +112,7 @@ export class UserSettingsPage extends Component {
             {this.props.posts + " posts"}
           </Typography>
         </Grid>
+
         <Grid item xs className="UserActions">
           {this.renderUserActions()}
         </Grid>
@@ -109,6 +129,7 @@ export class UserSettingsPage extends Component {
             <Typography variant="body1">Email</Typography>
             {this.props.email}
           </Grid>
+
           <Grid item xs={4}>
             <Button
               variant="contained"
@@ -117,10 +138,10 @@ export class UserSettingsPage extends Component {
               size="medium"
             >
               Edit
-          </Button>
+            </Button>
           </Grid>
         </Grid>
-        
+
         {/* Edit Username */}
         <Grid container spacing={1}>
           <Grid item xs={8}>
@@ -138,6 +159,7 @@ export class UserSettingsPage extends Component {
             </Button>
           </Grid>
         </Grid>
+
         {/* Edit Password */}
         <Grid container spacing={1}>
           <Grid item xs={8}>
@@ -152,7 +174,7 @@ export class UserSettingsPage extends Component {
               size="medium"
             >
               Edit
-        </Button>
+            </Button>
           </Grid>
         </Grid>
       </div>
@@ -167,6 +189,7 @@ export class UserSettingsPage extends Component {
             User Settings Page
           </Typography>
         </Grid>
+
         <Grid
           container
           direction="row"
@@ -185,6 +208,13 @@ export class UserSettingsPage extends Component {
           </Grid>
           <Grid item xs={1} />
         </Grid>
+        <DeleteAccountModal
+          userId={this.props.userId}
+          password={this.props.password}
+          delete={() => {}}
+          isOpen={this.state.isDeleteOpen}
+          onClose={this.closeDeleteModal}
+        />
       </div>
     );
   }

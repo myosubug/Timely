@@ -13,6 +13,7 @@ ReactDOM.render(
     email="notpavol@gmail.com"
     password="ilovespongebob"
     isAdmin={true}
+    userId="notPavolId"
   />,
   document.getElementById('root')
 );
