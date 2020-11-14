@@ -1,0 +1,26 @@
+.UserSettingsPage {
+  width: 100%;
+}
+
+.header {
+  background-color: rgb(126,211,214);
+  padding: 16px;
+  width: 90%;
+  }
+
+  .headerTitle {
+    color: #ffffff;
+    font-weight: 300;
+  }
+
+  hr {
+    color: black;
+  }
+
+  .avatar {
+    padding: 2px;
+  }
+  
+  .ButtonGrid {
+    padding: 10px;
+  }
