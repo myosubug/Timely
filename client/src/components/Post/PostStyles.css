@@ -1,0 +1,40 @@
+#container{
+    max-width: 960px;
+    margin:auto;
+    border-style: solid;
+}
+
+.profile_info{
+    display: inline-block;
+}
+
+.action_btn{
+    display: block;
+    text-align: center;
+}
+
+.action_btn p{
+    display: inline;
+}
+
+
+#content img{
+    display: block;
+    margin: auto;
+    width: 90%;
+    height: auto;
+}
+
+#content p{
+    margin: auto;
+    width: 90%;
+}
+
+.no_overflow{
+    max-height: 300px;
+    overflow: hidden;
+}
+
+#content p{
+    word-wrap: break-word;
+}
