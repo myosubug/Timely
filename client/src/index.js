@@ -6,11 +6,6 @@ import { PostCreator } from './components/PostCreator/PostCreator';
 import { Post } from './components/Post/Post';
 
 ReactDOM.render(
-  <Post
-    type="img"
-    time={300}
-    MaxTime={300}
-
-  />,
+  <Post />,
   document.getElementById('root')
 );
