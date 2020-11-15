@@ -23,11 +23,11 @@ DeleteAccountModal.propTypes = {
 };
 
   const handleClose = () => {
-    this.props.onClose();
+    props.onClose();
   };
 
   const handleOnConfirmClick = () => {
-    if (this.props.password) {
+    if (props.password) {
       // TODO: DELETE ACCOUNT IN DB
     } else {
       // TODO: DON'T DO ANYTHING
@@ -36,9 +36,9 @@ DeleteAccountModal.propTypes = {
 
   return(
     <Dialog
-      open={this.props.isOpen}
-      onClose={this.handleClose}
-      onBackdropClick={this.handleClose}
+      open={props.isOpen}
+      onClose={handleClose}
+      onBackdropClick={handleClose}
       className="DeleteAccountModal"
       >
       <DialogTitle id="title">
@@ -66,7 +66,8 @@ DeleteAccountModal.propTypes = {
           Cancel
         </Button>
         <Button 
-          onClick={handleOnConfirmClick}
+          onClick={handleClose}
+          // onClick={handleOnConfirmClick}
           className="ConfirmButton"
         >
           Confirm
