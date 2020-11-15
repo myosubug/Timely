@@ -56,12 +56,38 @@ export default function TagFilterDialog() {
         input: ''
     });
 
+    const [tags, setTags] = React.useState({
+        tags: [
+            {
+                tag: 'Funny',
+                isSelected: false
+            }, {
+                tag: 'Memes',
+                isSelected: false
+            }, {
+                tag: 'Hot',
+                isSelected: false
+            }, {
+                tag: 'Animals',
+                isSelected: false
+            }, {
+                tag: 'Gaming',
+                isSelected: false
+            }
+        ],
+    });
+
     const handleClickOpen = () => {
         setValues({...values, open: true});
       };
     
     const handleClose = () => {
-        setValues({...values, open: false});
+        setValues({...values, open: false, input: ''});
+        let originalTags = [...tags.tags];
+        originalTags.forEach(tag => {
+            tag.isSelected = false;
+        });
+        setTags({tags: originalTags});
     };
 
     const handleClearInput = () => {
@@ -75,6 +101,12 @@ export default function TagFilterDialog() {
     const handleSearch = () => {
         console.log("Searching for: " + values.input);
         setValues({...values, open: false, input: ''});
+    }
+
+    const handleTagClick = (index) => {
+        let newTags = [...tags.tags];
+        newTags[index].isSelected = !newTags[index].isSelected;
+        setTags({tags: newTags});
     }
     
     return (
@@ -110,11 +142,14 @@ export default function TagFilterDialog() {
                         </IconButton>
                     </div>
                     <div id="tag-button-container" className={classes.tagContainerDiv}>
-                        <Button variant="outlined" className={classes.filterButton}>Funny</Button>
-                        <Button variant="outlined" className={classes.filterButton}>Memes</Button>
-                        <Button variant="outlined" className={classes.filterButton}>Hot</Button>
-                        <Button variant="outlined" className={classes.filterButton}>Animals</Button>
-                        <Button variant="outlined" className={classes.filterButton}>Gaming</Button>
+                        {tags.tags.map((tag, index) => {
+                            return(
+                                <Button variant="outlined" className={classes.filterButton} 
+                                    onClick={() => handleTagClick(index)} disabled={tag.isSelected}>
+                                    {tag.tag}
+                                </Button>
+                            );
+                        })}
                     </div>
                     <DialogActions className={classes.dialogActionDiv}>
                         <Button variant="contained" onClick={handleClose} color="secondary">
