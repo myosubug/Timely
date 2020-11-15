@@ -2,18 +2,13 @@ import React, { Component } from 'react';
 import {
   Avatar,
   Grid,
-  Button,
   Typography,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import DeleteAccountModal from '../DeleteAccountModal';
-import EditEmailModal from '../EditEmailModal';
-import EditUsernameModal from '../EditUsernameModal';
-import EditPasswordModal from '../EditPasswordModal';
 import * as avatarImg from './../../imgs/patrick.jpg';
 import './style.css';
 
-export class UserSettingsPage extends Component {
+export class UserOverviewPage extends Component {
   static propTypes = {
     // Could probably make some sort of user data structure to be passed in
     // Rather than passing in props for each field
@@ -22,7 +17,7 @@ export class UserSettingsPage extends Component {
     memberStatus: PropTypes.string.isRequired,
     posts: PropTypes.number.isRequired,
     email: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
+    postActivity: PropTypes.string.isRequired,
     isAdmin: PropTypes.bool.isRequired,
   }
 
@@ -96,24 +91,13 @@ export class UserSettingsPage extends Component {
         alignItems="center"
         spacing={1}
       >
-        <Grid item xs={9} className="ProfilePic">
+        <Grid item xs className="ProfilePic">
           <Avatar
             alt="Patrick"
             src={avatarImg}
             className="avatar"
           />
           {/* TODO Change profile pic button*/}
-        </Grid>
-
-        <Grid item xs={3} className="DeleteAccount">
-          <Button
-            variant="contained"
-            className="DeleteAccountButton"
-            onClick={this.openDeleteModal}
-            size="medium"
-          >
-            Delete
-          </Button>
         </Grid>
       </Grid>
     );
@@ -153,57 +137,18 @@ export class UserSettingsPage extends Component {
       <div>
         {/* Edit Email */}
         <Grid container spacing={1}>
-          <Grid item xs={8}>
+          <Grid item xs>
             <Typography variant="h6">Email</Typography>
             {this.props.email}
           </Grid>
-
-          <Grid item xs={4}>
-            <Button
-              variant="contained"
-              className="EditEmailButton"
-              onClick={this.openEmailModal}
-              size="medium"
-            >
-              Edit
-            </Button>
-          </Grid>
         </Grid>
 
-        {/* Edit Username */}
+        {/* Post Activity */}
         <Grid container spacing={1}>
-          <Grid item xs={8}>
-            <Typography variant="h6">Username</Typography>
-            {this.props.username}
-          </Grid>
-          <Grid item xs={4}>
-            <Button
-              variant="contained"
-              className="EditUsernameButton"
-              onClick={this.openUserModal}
-              size="medium"
-            >
-              Edit
-            </Button>
-          </Grid>
-        </Grid>
-
-        {/* Edit Password */}
-        <Grid container spacing={1}>
-          <Grid item xs={8}>
-            <Typography variant="h6">Password</Typography>
-            {this.props.password}
-          </Grid>
-          <Grid item xs={4}>
-            <Button
-              variant="contained"
-              className="EditPasswordButton"
-              onClick={this.openPassModal}
-              size="medium"
-            >
-              Edit
-            </Button>
-          </Grid>
+          <Grid item xs>
+            <Typography variant="h6">Post Activity</Typography>
+            {this.props.postActivity}
+            </Grid>
         </Grid>
       </div>
     );
@@ -211,10 +156,10 @@ export class UserSettingsPage extends Component {
 
   render() {
     return (
-      <div className="UserSettingsPage">
+      <div className="UserOverviewPage">
         <Grid container className="header">
           <Typography variant="h4" align="center" className="headerTitle">
-            User Settings Page
+            User Overview
           </Typography>
         </Grid>
 
@@ -223,7 +168,7 @@ export class UserSettingsPage extends Component {
           direction="row"
           justify="flex-start"
           alignItems="flex-start"
-          className="ButtonGrid"
+          className="DisplayGrid"
         >
           <Grid item xs={1} />
           <Grid item xs={3} className="ProfileGrid">
@@ -235,45 +180,7 @@ export class UserSettingsPage extends Component {
             {this.renderUserGrid()}
           </Grid>
           <Grid item xs={1} />
-        </Grid>
-
-        {/* DELETE ACCOUNT MODAL */}
-        <DeleteAccountModal
-          userId={this.props.userId}
-          password={this.props.password}
-          delete={() => {}}
-          isOpen={this.state.isDeleteOpen}
-          onClose={this.closeDeleteModal}
-        />
-
-        {/* EDIT EMAIL MODAL */}
-        <EditEmailModal
-          userId={this.props.userId}
-          password={this.props.password}
-          email={this.props.email}
-          update={() => {}}
-          isOpen={this.state.isEditEmailOpen}
-          onClose={this.closeEmailModal}
-        />
-
-        {/* EDIT USERNAME MODAL */}
-        <EditUsernameModal
-          userId={this.props.userId}
-          password={this.props.password}
-          username={this.props.username}
-          update={() => {}}
-          isOpen={this.state.isEditUserOpen}
-          onClose={this.closeUserModal}
-        />
-
-        {/* EDIT PASSWORD MODAL */}
-        <EditPasswordModal
-          userId={this.props.userId}
-          password={this.props.password}
-          update={() => {}}
-          isOpen={this.state.isEditPassOpen}
-          onClose={this.closePassModal}
-        />
+        </Grid>       
       </div>
     );
   }
