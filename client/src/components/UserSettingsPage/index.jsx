@@ -8,9 +8,10 @@ import {
 import PropTypes from 'prop-types';
 import DeleteAccountModal from '../DeleteAccountModal';
 import EditEmailModal from '../EditEmailModal';
-import './style.css';
 import EditUsernameModal from '../EditUsernameModal';
 import EditPasswordModal from '../EditPasswordModal';
+import * as avatarImg from './patrick.jpg';
+import './style.css';
 
 export class UserSettingsPage extends Component {
   static propTypes = {
@@ -98,7 +99,7 @@ export class UserSettingsPage extends Component {
         <Grid item xs={9} className="ProfilePic">
           <Avatar
             alt="Patrick"
-            src="./suprised_patrick.png"
+            src={avatarImg}
             className="avatar"
           />
           {/* TODO Change profile pic button*/}
@@ -152,7 +153,7 @@ export class UserSettingsPage extends Component {
         {/* Edit Email */}
         <Grid container spacing={1}>
           <Grid item xs={8}>
-            <Typography variant="body1">Email</Typography>
+            <Typography variant="h6">Email</Typography>
             {this.props.email}
           </Grid>
 
@@ -171,7 +172,7 @@ export class UserSettingsPage extends Component {
         {/* Edit Username */}
         <Grid container spacing={1}>
           <Grid item xs={8}>
-            <Typography variant="body1">Username</Typography>
+            <Typography variant="h6">Username</Typography>
             {this.props.username}
           </Grid>
           <Grid item xs={4}>
@@ -189,7 +190,7 @@ export class UserSettingsPage extends Component {
         {/* Edit Password */}
         <Grid container spacing={1}>
           <Grid item xs={8}>
-            <Typography variant="body1">Password</Typography>
+            <Typography variant="h6">Password</Typography>
             {this.props.password}
           </Grid>
           <Grid item xs={4}>

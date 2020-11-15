@@ -17,9 +17,10 @@
     color: black;
   }
 
-  .avatar {
-    padding: 2px;
-  }
+ .MuiAvatar-root {
+   height: 150px;
+   width: 150px;
+ }
   
   .ButtonGrid {
     padding: 10px;
