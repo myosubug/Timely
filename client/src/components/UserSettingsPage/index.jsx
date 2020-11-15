@@ -7,7 +7,10 @@ import {
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import DeleteAccountModal from '../DeleteAccountModal';
+import EditEmailModal from '../EditEmailModal';
 import './style.css';
+import EditUsernameModal from '../EditUsernameModal';
+import EditPasswordModal from '../EditPasswordModal';
 
 export class UserSettingsPage extends Component {
   static propTypes = {
@@ -32,6 +35,7 @@ export class UserSettingsPage extends Component {
     };
   }
 
+  // DELETE MODAL STATE HANDLER
   openDeleteModal = () => {
     this.setState({ 
       isDeleteOpen: true });
@@ -43,21 +47,43 @@ export class UserSettingsPage extends Component {
     });
   }
 
-  handleOnDeleteClick = () => {
-    console.log("delete clicked")
-  };
+  // EDIT EMAIL STATE HANDLER
+  openEmailModal = () => {
+    this.setState({ 
+      isEditEmailOpen: true });
+    };
+    
+    closeEmailModal = () => {
+      this.setState({
+        isEditEmailOpen: false,
+      });
+    }
 
-  handleOnEditEmailClick = () => {
-    console.log("edit email clicked")
-  }
+    // EDIT USERNAME STATE HANDLER
+  openUserModal = () => {
+    this.setState({ 
+      isEditUserOpen: true });
+    };
+    
+    closeUserModal = () => {
+      this.setState({
+        isEditUserOpen: false,
+      });
+    }
+    
+    // EDIT PASSWORD STATE HANDLER
+  openPassModal = () => {
+    this.setState({ 
+      isEditPassOpen: true });
+    };
+    
+    closePassModal = () => {
+      this.setState({
+        isEditPassOpen: false,
+      });
+    }
+    
 
-  handleOnEditUserClick = () => {
-    console.log("edit user clicked")
-  }
-
-  handleOnEditPassClick = () => {
-    console.log("edit pass clicked")
-  }
 
   renderProfileGrid = () => {
     return (
@@ -134,7 +160,7 @@ export class UserSettingsPage extends Component {
             <Button
               variant="contained"
               className="EditEmailButton"
-              onClick={this.handleOnEditEmailClick}
+              onClick={this.openEmailModal}
               size="medium"
             >
               Edit
@@ -152,7 +178,7 @@ export class UserSettingsPage extends Component {
             <Button
               variant="contained"
               className="EditUsernameButton"
-              onClick={this.handleOnEditUserClick}
+              onClick={this.openUserModal}
               size="medium"
             >
               Edit
@@ -169,8 +195,8 @@ export class UserSettingsPage extends Component {
           <Grid item xs={4}>
             <Button
               variant="contained"
-              className="EditUsernameButton"
-              onClick={this.handleOnEditUserClick}
+              className="EditPasswordButton"
+              onClick={this.openPassModal}
               size="medium"
             >
               Edit
@@ -208,6 +234,8 @@ export class UserSettingsPage extends Component {
           </Grid>
           <Grid item xs={1} />
         </Grid>
+
+        {/* DELETE ACCOUNT MODAL */}
         <DeleteAccountModal
           userId={this.props.userId}
           password={this.props.password}
@@ -215,6 +243,35 @@ export class UserSettingsPage extends Component {
           isOpen={this.state.isDeleteOpen}
           onClose={this.closeDeleteModal}
         />
+
+        {/* EDIT EMAIL MODAL */}
+        <EditEmailModal
+          userId={this.props.userId}
+          password={this.props.password}
+          email={this.props.email}
+          update={() => {}}
+          isOpen={this.state.isEditEmailOpen}
+          onClose={this.closeEmailModal}
+        />
+
+        {/* EDIT USERNAME MODAL */}
+        <EditUsernameModal
+          userId={this.props.userId}
+          password={this.props.password}
+          username={this.props.username}
+          update={() => {}}
+          isOpen={this.state.isEditUserOpen}
+          onClose={this.closeUserModal}
+        />
+
+        {/* EDIT PASSWORD MODAL */}
+        <EditPasswordModal
+          userId={this.props.userId}
+          password={this.props.password}
+          update={() => {}}
+          isOpen={this.state.isEditPassOpen}
+          onClose={this.closePassModal}
+        />ls
       </div>
     );
   }

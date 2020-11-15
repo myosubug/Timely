@@ -10,9 +10,7 @@ import {
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
-
 export const DeleteAccountModal = (props) => {
-
 
 DeleteAccountModal.propTypes = {
   userId: PropTypes.string.isRequired,
@@ -54,8 +52,8 @@ DeleteAccountModal.propTypes = {
             margin="dense"
             id="confirmPass"
             label="Confirm password"
-            type="password"
             fullWidth
+            required
           />
       </DialogContent>
       <DialogActions>

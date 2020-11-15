@@ -10,11 +10,12 @@ import {
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
-export const EditPasswordModal = (props) => {
+export const EditUsernameModal = (props) => {
 
-  EditPasswordModal.propTypes = {
+  EditUsernameModal.propTypes = {
   userId: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   update: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
@@ -24,8 +25,8 @@ export const EditPasswordModal = (props) => {
     props.onClose();
   };
 
-  const isPasswordValid = () => {
-  //  Check if passwords match
+  const isUsernameValid = () => {
+  //  Check if username is valid 
   }
 
   const handleOnConfirmClick = () => {
@@ -41,38 +42,29 @@ export const EditPasswordModal = (props) => {
       open={props.isOpen}
       onClose={handleClose}
       onBackdropClick={handleClose}
-      className="EditPasswordModal"
+      className="EditUsernameModal"
       >
       <DialogTitle id="title">
-        Change your password
+        Change your username
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Please enter your current and new password to confirm these changes.
+          Please enter your new username and password to confirm these changes.
         </DialogContentText>
         <TextField
             autoFocus
             margin="dense"
-            id="currentPass"
+            id="newUser"
+            label="New username"
+            value={props.username}
+            fullWidth
+            required
+          />
+        <TextField
+            autoFocus
+            margin="dense"
+            id="confirmPass"
             label="Current password"
-            value={props.password}
-            fullWidth
-            required
-          />
-        <TextField
-            autoFocus
-            margin="dense"
-            id="newPass"
-            label="New password"
-            // value={props.password}
-            fullWidth
-            required
-          />
-        <TextField
-            autoFocus
-            margin="dense"
-            id="confirmNewPass"
-            label="Re-enter new password"
             value={props.password}
             fullWidth
             required
@@ -97,4 +89,4 @@ export const EditPasswordModal = (props) => {
   );
 }
 
-export default EditPasswordModal;
+export default EditUsernameModal;
