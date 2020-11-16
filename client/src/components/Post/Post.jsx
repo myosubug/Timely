@@ -43,9 +43,13 @@ const Post = (props) => {
     useEffect(() => {
         const type = "text";
         const maxTime = 5 * 60; //in seconds
-        const time = 4 * 60; //in seconds
+        //const time = 4 * 60; //in seconds
         const username = "notPavol";
-        const timePosted = new Date().toDateString();
+        //Time calculation (get current time in UTC and subtract from the given time)
+        const dueDate = new Date().getTime() + 5 * 60000; //will be a date object instead
+        const timePosted = new Date(); //Will be a date object instead
+        const time = (dueDate - timePosted.getTime()) / 1000; //Time difference in seconds
+
         const likeCount = 21000;
         const dislikeCount = 50;
 
@@ -60,7 +64,7 @@ const Post = (props) => {
             maxTime: maxTime,
             time: time,
             username: username,
-            timePosted: timePosted,
+            timePosted: timePosted.toDateString(),
             likeCount: likeCount,
             dislikeCount: dislikeCount,
             textContent: text_content,
