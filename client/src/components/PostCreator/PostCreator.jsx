@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { DropzoneArea } from 'material-ui-dropzone'
 import { PostCreatorBase } from './PostCreatorBase';
 
-import "./PostCreatorStyles.css";
+import styles from "./PostCreatorStyles.module.css";
 
 const PostCreator = (props) => {
     const [isText, setIsText] = useState(true);
@@ -57,7 +57,7 @@ const PostCreator = (props) => {
     if (isText) {
         return (
             <PostCreatorBase isText={isText} handleRadioClick={handleRadioClick} handleTagsChange={handleTagsChange} onSubmit={onPostSubmit}>
-                <textarea id="text_input_area" placeholder="Start typing here..." onChange={handleTextChange}></textarea>
+                <textarea id={styles.text_input_area} placeholder="Start typing here..." onChange={handleTextChange}></textarea>
             </PostCreatorBase>
         );
     }
