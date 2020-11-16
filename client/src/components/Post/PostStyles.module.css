@@ -19,8 +19,9 @@
     opacity: 1;
 }
 
+
 .action_btn p{
-    display: inline;
+    display: inline-block;
 }
 
 .no_text_select{
