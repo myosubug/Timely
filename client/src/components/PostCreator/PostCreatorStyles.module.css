@@ -20,6 +20,11 @@
     resize: none;
 }
 
+#error_msg{
+    color: red;
+    margin-top: 20px;
+}
+
 #tags_input_area{
     width: 80%;
 }

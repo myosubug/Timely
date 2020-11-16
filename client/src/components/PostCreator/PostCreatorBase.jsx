@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -31,8 +32,9 @@ const PostCreatorBase = (props) => {
             <form onSubmit={props.onSubmit}>
                 <div id={styles.inputs_area}>
                     {props.children}
-                </div>
 
+                </div>
+                <pre id={styles.error_msg}> {props.errorMsg} </pre>
                 <h2> Tags </h2>
                 <input id={styles.tags_input_area} onChange={props.handleTagsChange}></input>
                 <div>
@@ -44,10 +46,19 @@ const PostCreatorBase = (props) => {
                     </div>
                 </div>
 
+
+
             </form>
         </div>
     );
 }
+
+PostCreatorBase.propTypes = {
+    isText: PropTypes.bool,
+    handleRadioClick: PropTypes.func,
+    onSubmit: PropTypes.func,
+    errorMsg: PropTypes.string,
+};
 
 
 export { PostCreatorBase };

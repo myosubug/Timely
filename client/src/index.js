@@ -6,6 +6,6 @@ import { PostCreator } from './components/PostCreator/PostCreator';
 import { Post } from './components/Post/Post';
 
 ReactDOM.render(
-  <Post />,
+  <PostCreator />,
   document.getElementById('root')
 );
