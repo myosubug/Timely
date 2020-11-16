@@ -21,8 +21,9 @@
 }
 
 #error_msg{
+    margin: auto;
     color: red;
-    margin-top: 20px;
+    overflow-wrap: break-word;
 }
 
 #tags_input_area{

@@ -34,7 +34,10 @@ const PostCreatorBase = (props) => {
                     {props.children}
 
                 </div>
-                <pre id={styles.error_msg}> {props.errorMsg} </pre>
+                <div id={styles.error_msg}>
+                    <p> {props.errorMsg === "" ? <span>&nbsp;</span> : props.errorMsg} </p>
+                </div>
+
                 <h2> Tags </h2>
                 <input id={styles.tags_input_area} onChange={props.handleTagsChange}></input>
                 <div>
