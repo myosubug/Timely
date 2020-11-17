@@ -42,7 +42,7 @@ const PostCreatorBase = (props) => {
                 <input id={styles.tags_input_area} onChange={props.handleTagsChange}></input>
                 <div>
                     <div className={styles.action_btn}>
-                        <Button variant="contained" color="secondary" > Cancel</Button>
+                        <Button variant="contained" color="secondary" onClick={props.onCancel}> Cancel</Button>
                     </div>
                     <div className={styles.action_btn}>
                         <Button variant="contained" color="primary" type="submit" > Submit </Button>
@@ -61,6 +61,7 @@ PostCreatorBase.propTypes = {
     handleRadioClick: PropTypes.func,
     onSubmit: PropTypes.func,
     errorMsg: PropTypes.string,
+    onCancel: PropTypes.func,
 };
 
 

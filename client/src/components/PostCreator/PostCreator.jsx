@@ -73,7 +73,7 @@ const PostCreator = (props) => {
     //If it is of type text, return with the text area
     if (isText) {
         return (
-            <PostCreatorBase isText={isText} handleRadioClick={handleRadioClick} handleTagsChange={handleTagsChange} onSubmit={onPostSubmit} errorMsg={errorMsg}>
+            <PostCreatorBase isText={isText} handleRadioClick={handleRadioClick} handleTagsChange={handleTagsChange} onSubmit={onPostSubmit} errorMsg={errorMsg} onCancel={props.onCancel}>
                 <textarea id={styles.text_input_area} placeholder="Start typing here..." onChange={handleTextChange}></textarea>
             </PostCreatorBase>
         );
@@ -81,7 +81,7 @@ const PostCreator = (props) => {
     //Else return with the image area
     else {
         return (
-            <PostCreatorBase isText={isText} handleRadioClick={handleRadioClick} handleTagsChange={handleTagsChange} onSubmit={onPostSubmit} errorMsg={errorMsg}>
+            <PostCreatorBase isText={isText} handleRadioClick={handleRadioClick} handleTagsChange={handleTagsChange} onSubmit={onPostSubmit} errorMsg={errorMsg} onCancel={props.onCancel}>
                 <DropzoneArea
                     acceptedFiles={['image/*']}
                     filesLimit={1}
