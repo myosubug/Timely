@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import './tailwind.output.css';
 import App from './App';
-import { PostCreator } from './components/PostCreator/PostCreator';
-import { Post } from './components/Post/Post';
+import { LandingPage } from './components/LandingPage/LandingPage';
 
 ReactDOM.render(
-  <Post />,
+  <LandingPage />,
   document.getElementById('root')
 );
