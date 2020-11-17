@@ -7,5 +7,5 @@ import { LandingPage } from './components/LandingPage/LandingPage';
 
 ReactDOM.render(
   <LandingPage />,
-  document.getElementById('root')
+    document.getElementById('root')
 );

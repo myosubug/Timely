@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { Button } from '@material-ui/core';
 
-import './PostStyles.css'
+import styles from './PostStyles.module.css';
 
 const BorderLinearProgress = withStyles((theme) => ({
     root: {
@@ -41,11 +41,15 @@ const Post = (props) => {
 
     //Gets all the necessary variables needed for the post
     useEffect(() => {
-        const type = "img";
+        const type = "text";
         const maxTime = 5 * 60; //in seconds
-        const time = 4 * 60; //in seconds
+        //const time = 4 * 60; //in seconds
         const username = "notPavol";
-        const timePosted = new Date().toDateString();
+        //Time calculation (get current time in UTC and subtract from the given time)
+        const dueDate = new Date().getTime() + 5 * 60000; //will be a date object instead
+        const timePosted = new Date(); //Will be a date object instead
+        const time = (dueDate - timePosted.getTime()) / 1000; //Time difference in seconds
+
         const likeCount = 21000;
         const dislikeCount = 50;
 
@@ -60,7 +64,7 @@ const Post = (props) => {
             maxTime: maxTime,
             time: time,
             username: username,
-            timePosted: timePosted,
+            timePosted: timePosted.toDateString(),
             likeCount: likeCount,
             dislikeCount: dislikeCount,
             textContent: text_content,
@@ -156,42 +160,42 @@ const Post = (props) => {
 
 
     return (
-        <div id="container">
+        <div id={styles.container}>
             <Grid container>
                 <Grid item xs={10}>
-                    <div className="profile_info" onClick={handleUserClick}>
+                    <div className={styles.profile_info} onClick={handleUserClick}>
                         <Avatar>P</Avatar>
                     </div>
 
-                    <h1 className="profile_info" onClick={handleUserClick}> {postDetails.username} </h1>
-                    <p className="profile_info"> {postDetails.timePosted} </p>
+                    <h1 className={styles.profile_info} onClick={handleUserClick}> {postDetails.username} </h1>
+                    <p className={styles.profile_info}> {postDetails.timePosted} </p>
                 </Grid>
                 <Grid item xs={2}>
-                    <div className={"action_btn no_text_select" + (isLikeSelected ? " action_btn_selected" : "")} onClick={handleLikeClick}>
+                    <div className={`${styles.action_btn} ${styles.no_text_select} ${isLikeSelected ? styles.action_btn_selected : ''}`} onClick={handleLikeClick}>
                         <p>👍</p>
                         <p> {renderLikeInfo(postDetails.likeCount)} </p>
                     </div>
 
-                    <div className={"action_btn no_text_select" + (isDislikeSelected ? " action_btn_selected" : "")} onClick={handleDislikeClick}>
+                    <div className={`${styles.action_btn} ${styles.no_text_select} ${isDislikeSelected ? styles.action_btn_selected : ''}`} onClick={handleDislikeClick}>
                         <p>👎</p>
                         <p> {renderLikeInfo(postDetails.dislikeCount)} </p>
                     </div>
                 </Grid>
-            </Grid>
 
-            <div id="content" className={isOverflow ? "" : "no_overflow"}>
-                {renderContent()}
-            </div>
 
-            <Grid container>
-                <Grid item xs={6} className="bottom_options">
-                    <Button id="show_more_btn" onClick={handleShowMoreClick}> {isOverflow ? "Show Less" : "Show More"} </Button>
+                <Grid item xs={12}>
+                    <div id={styles.content} className={isOverflow ? "" : styles.no_overflow}>
+                        {renderContent()}
+                    </div>
                 </Grid>
-                <Grid item xs={6} className="bottom_options">
-                    <p id="timer" className="no_text_select"> {renderTimeInfo()} </p>
+
+                <Grid item xs={6} className={styles.bottom_options}>
+                    <Button id={styles.show_more_btn} onClick={handleShowMoreClick}> {isOverflow ? "Show Less" : "Show More"} </Button>
+                </Grid>
+                <Grid item xs={6} className={styles.bottom_options}>
+                    <p id={styles.timer} className={styles.no_text_select}> {renderTimeInfo()} </p>
                 </Grid>
             </Grid>
-
 
             <BorderLinearProgress variant="determinate" value={(timeRemaining / postDetails.maxTime) * 100} />
 

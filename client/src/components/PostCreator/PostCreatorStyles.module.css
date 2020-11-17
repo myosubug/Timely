@@ -20,6 +20,12 @@
     resize: none;
 }
 
+#error_msg{
+    margin: auto;
+    color: red;
+    overflow-wrap: break-word;
+}
+
 #tags_input_area{
     width: 80%;
 }
