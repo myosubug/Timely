@@ -1,13 +1,28 @@
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import {
-    TextField, 
+    TextField, Button, DialogContentText
 } from '@material-ui/core';
 
-var x_button = {
+/* var x_button = {
     marginLeft: '10px',
-};
+}; */
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+      '& > *': {
+        margin: theme.spacing(1),
+      },
+    },
+
+    entireText: {
+        textAlign: 'center',
+        maxWidth: '1g'
+    }
+  }));
 
 export const ConfirmationPage = (props) => {
+    const classes = useStyles();
     //https://www.smashingmagazine.com/2020/08/mastering-props-proptypes-react/
     //https://stackoverflow.com/questions/54622005/component-is-declared-but-never-used
     //https://stackoverflow.com/questions/29791721/how-get-data-from-material-ui-textfield-dropdownmenu-components
@@ -35,22 +50,27 @@ export const ConfirmationPage = (props) => {
         stringTitle = "not a option";
     }
     return(
-        <div >
+        <div className={classes.entireText}>
             <h4>
                 {stringTitle}
-                <button style={x_button} onClick={closefunc}>X</button>
+                {/* <Button size="tiny" onClick={closefunc} color="secondary" variant="contained"><b>x</b></Button> */}
+                {/* <button style={x_button} onClick={closefunc}>X</button> */}
             </h4>
 
             <div>
-                <p>Are you sure you want to {props.pagetype} this user:</p>
-                <p><b>{props.userselected}</b></p>
-                <TextField label="enter password" id="passwordField" ></TextField>
+                <DialogContentText>Are you sure you want to {props.pagetype} this user:</DialogContentText>
+                <DialogContentText><b>{props.userselected}</b></DialogContentText>
+                {/* <p>Are you sure you want to {props.pagetype} this user:</p>
+                <p><b>{props.userselected}</b></p> */}
+                <TextField label="admin password" id="passwordField"></TextField>
             </div>
             <br></br>
 
-            <div>
-                <button style={x_button} onClick={openfunc}>Confirm</button>
-                <button style={x_button} onClick={closefunc}>Cancel</button>
+            <div className ={classes.root}>
+                <Button size="small" onClick={openfunc} color="secondary" variant="contained">Confirm</Button>
+                <Button size="small" onClick={closefunc} color="primary" variant="contained">Cancel</Button>
+                {/* <button style={x_button} onClick={openfunc}>Confirm</button>
+                <button style={x_button} onClick={closefunc}>Cancel</button> */}
             </div>
         </div>
     );
