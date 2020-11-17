@@ -1,0 +1,17 @@
+.menu-item:hover {
+    background-color: #e0e0e0;
+  }
+  .button {
+    background-color: #7ed3d6;
+    border-bottom: 5px solid #53b7bb;
+  }
+  .button:hover {
+    background-color: #71bdc0;
+    border-bottom: 5px solid #4ba4a8;
+  }
+
+  .navbar {
+    height: 5rem;
+    background-color: #7ed3d6;
+    border-bottom: 5px solid #53b7bb;
+  }
