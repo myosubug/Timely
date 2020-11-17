@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import './tailwind.output.css';
 import App from './App';
+import { LandingPage } from './components/LandingPage/LandingPage';
 
 ReactDOM.render(
-    <App />,
-  document.getElementById('root')
+  <LandingPage />,
+    document.getElementById('root')
 );
