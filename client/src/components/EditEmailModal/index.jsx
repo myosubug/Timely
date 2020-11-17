@@ -56,7 +56,6 @@ export const EditEmailModal = (props) => {
             margin="dense"
             id="newEmail"
             label="New email address"
-            value={props.email}
             fullWidth
             required
           />
@@ -65,7 +64,6 @@ export const EditEmailModal = (props) => {
             margin="dense"
             id="confirmPass"
             label="Current password"
-            value={props.password}
             fullWidth
             required
           />

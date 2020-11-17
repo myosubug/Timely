@@ -56,7 +56,6 @@ export const EditUsernameModal = (props) => {
             margin="dense"
             id="newUser"
             label="New username"
-            value={props.username}
             fullWidth
             required
           />
@@ -65,7 +64,6 @@ export const EditUsernameModal = (props) => {
             margin="dense"
             id="confirmPass"
             label="Current password"
-            value={props.password}
             fullWidth
             required
           />
