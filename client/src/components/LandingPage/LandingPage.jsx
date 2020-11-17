@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { Button } from '@material-ui/core';
 import { PostCreator } from '../PostCreator/PostCreator.jsx';
+import { Post } from '../Post/Post.jsx';
 
 import './LandingStyles.css'
 
@@ -45,6 +46,18 @@ const LandingPage = (props) => {
         setRenderModalObj(prev => ({...prev, arg:false}));
     }
 
+    function renderPosts() {
+        let posts = [];
+        for (let i = 0; i < 5; i++) {
+            posts.push(
+                <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full">
+                    <Post />
+                </div>
+            )
+        }
+        return posts;
+    }
+
 
     return (
         <div>
@@ -58,6 +71,7 @@ const LandingPage = (props) => {
             </div>
 
             {checkModalState()}
+
 
             <div className="flex">
 
@@ -96,13 +110,7 @@ const LandingPage = (props) => {
                     <div className="flex-grow justify-center px-56 pt-24 bg-white-300">
                     <div className="justify-center">
 
-                        <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-48"></div>
-                        <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-48"></div>
-                        <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-48"></div>
-                        <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-48"></div>
-                        <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-48"></div>
-                        <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-48"></div>
-                        <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-48"></div>
+                    {renderPosts()}
 
                     </div>
                     </div>
