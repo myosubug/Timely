@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(2, 0, 2),
   },
 }));
 
@@ -47,9 +47,16 @@ export default function SignUp() {
               <TextField variant="outlined" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password"/>
             </Grid>
           </Grid>
-          <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-            Sign Up
-          </Button>
+          <Grid item xs={12}>
+              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+                Sign Up
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+                Cancel
+              </Button>
+            </Grid>
           <Grid container justify="flex-end">
             <Grid item>
               <Link href="#" variant="body2">
