@@ -1,58 +1,23 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import SearchIcon from '@material-ui/icons/Search';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import ClearIcon from '@material-ui/icons/Clear';
-import DialogContent from '@material-ui/core/DialogContent'
 import IconButton from '@material-ui/core/IconButton';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container'
+import styles from './TagFilterStyles.module.css';
+
 
 /**
  * TagFilter Overlay used to filter posts by hashtag
  * When DB integration added, onEnter callback can be used to populate
  * tag list for buttons
  */
-
-const useStyles = makeStyles((theme) => ({
-    dialogActionDiv: {
-        width: '100%',
-        justifyContent: 'center',
-        marginTop: theme.spacing(3),
-    },
-
-    dialogContainer: {
-        background: '#efefef !important',
-        width: '100% !important'
-    },
-
-    tagContainerDiv: {
-        marginTop: theme.spacing(3),
-        display: 'flex',
-    },
-
-    inputWrapper: {
-        display: 'flex',
-        width: '100%',
-    },
-   
-    filterInput: {
-        flex: '1 1 auto',
-    },
-
-    filterButton: {
-        margin: '5px',
-    },
-
-  }));
   
-export default function TagFilterDialog() {
-    const classes = useStyles();
+export default function TagFilter(props) {
 
     const [values, setValues] = React.useState({
-        open: false,
         input: ''
     });
 
@@ -77,19 +42,6 @@ export default function TagFilterDialog() {
         ],
     });
 
-    const handleClickOpen = () => {
-        setValues({...values, open: true});
-      };
-    
-    const handleClose = () => {
-        setValues({...values, open: false, input: ''});
-        let originalTags = [...tags.tags];
-        originalTags.forEach(tag => {
-            tag.isSelected = false;
-        });
-        setTags({tags: originalTags});
-    };
-
     const handleClearInput = () => {
         setValues({...values, input: ''});
     }
@@ -101,6 +53,7 @@ export default function TagFilterDialog() {
     const handleSearch = () => {
         console.log("Searching for: " + values.input);
         setValues({...values, open: false, input: ''});
+        props.onCancel();
     }
 
     const handleTagClick = (index) => {
@@ -111,17 +64,14 @@ export default function TagFilterDialog() {
     
     return (
         <div>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                Tags
-            </Button>
-            <Dialog style={{backgroundColor: '#efefef !important'}} className={classes.dialogContainer} maxWidth="lg" open={values.open} onClose={handleClose}>
-                <DialogContent>
-                    <div id="input-wrapper" className={classes.inputWrapper}>
+            <Container id={styles.container} maxWidth="lg">
+                <div>
+                    <div id="input-wrapper" className={styles.inputWrapper}>
                         <OutlinedInput
                             autoFocus
                             margin="none"
                             id="name"
-                            className={classes.filterInput}
+                            className={styles.filterInput}
                             value={values.input}
                             onChange={handleInputChange}
                             placeholder="Search"
@@ -141,26 +91,26 @@ export default function TagFilterDialog() {
                             />
                         </IconButton>
                     </div>
-                    <div id="tag-button-container" className={classes.tagContainerDiv}>
+                    <div id="tag-button-container" className={styles.tagsWrapperDiv}>
                         {tags.tags.map((tag, index) => {
                             return(
-                                <Button variant="outlined" className={classes.filterButton} 
+                                <Button variant="outlined" className={styles.filterButton} 
                                     onClick={() => handleTagClick(index)} disabled={tag.isSelected}>
                                     {tag.tag}
                                 </Button>
                             );
                         })}
                     </div>
-                    <DialogActions className={classes.dialogActionDiv}>
-                        <Button variant="contained" onClick={handleClose} color="secondary">
+                    <div className={styles.tagFilterActionDiv}>
+                        <Button className={styles.actionButton} variant="contained" color="secondary" onClick={props.onCancel}>
                             Cancel
                         </Button>
-                        <Button variant="contained" onClick={handleClose} color="primary">
+                        <Button className={styles.actionButton} variant="contained" onClick={props.onCancel} color="primary">
                             Confirm
                         </Button>
-                    </DialogActions>
-                </DialogContent>
-            </Dialog>
+                    </div>
+                </div>
+            </Container>
         </div>
     );
 };

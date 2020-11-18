@@ -10,6 +10,7 @@ import { Button } from '@material-ui/core';
 import { PostCreator } from '../PostCreator/PostCreator.jsx';
 import { Post } from '../Post/Post.jsx';
 import {Sign} from '../SignInUp/Sign.jsx';
+import TagFilter from '../TagFilter/TagFilter';
 
 import './LandingStyles.css'
 
@@ -37,7 +38,7 @@ const LandingPage = (props) => {
         if (renderModalObj.post) {
             return renderModal(<PostCreator onCancel={() => cancelModal("post")} />);
         } else if (renderModalObj.tags) {
-            return renderModal(<PostCreator onCancel={() => cancelModal("tags")} />);
+            return renderModal(<TagFilter onCancel={() => cancelModal("tags")} />);
         } else if (renderModalObj.login) {
             return renderModal(<Sign onCancel={() => cancelModal("login")} />);
         }
@@ -110,7 +111,7 @@ const LandingPage = (props) => {
                             onClick={() => setRenderModalObj(prev => ({ ...prev, "tags": true }))}
                             className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
                             style={{ height: "3.2rem" }}>
-                            <p style={{ paddingTop: "0.18rem" }}>Tags</p>
+                            <p style={{ paddingTop: "0.18rem" }}>Tags</p> 
                         </div>
                     </div>
 
