@@ -1,11 +1,10 @@
 #container{
-    max-width: 960px;
+    width: 100%;
     margin:auto;
     border-style: solid;
 }
 
 .profile_info{
-    display: inline-block;
     cursor: pointer;
 }
 
