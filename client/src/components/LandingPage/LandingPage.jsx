@@ -52,7 +52,7 @@ const LandingPage = (props) => {
         for (let i = 0; i < 5; i++) {
             posts.push(
                 <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full">
-                    <Post />
+                    <Post isAdmin={i % 2 === 0} />
                 </div>
             )
         }

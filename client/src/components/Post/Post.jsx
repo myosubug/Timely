@@ -6,7 +6,14 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
+
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+
 import { Button } from '@material-ui/core';
+
+import { PostSubMenu } from './PostSubMenu.jsx';
 
 import styles from './PostStyles.module.css';
 
@@ -106,6 +113,54 @@ const Post = (props) => {
         alert("redirecting to user page");
     }
 
+    //Renders the header of the post (with or without the admin settings)
+    const renderHeader = () => {
+        const header = <CardHeader
+            avatar={<Avatar className={styles.profile_info} onClick={handleUserClick}>P</Avatar>}
+            title={<div className={styles.profile_info} onClick={handleUserClick}> {postDetails.username} </div>}
+            subheader={postDetails.timePosted}
+            action={
+                <div>
+                    <div className={`${styles.action_btn} ${styles.no_text_select} ${isLikeSelected ? styles.action_btn_selected : ''}`} onClick={handleLikeClick}>
+                        <p>👍</p>
+                        <p> {renderLikeInfo(postDetails.likeCount)} </p>
+                    </div>
+
+                    <div className={`${styles.action_btn} ${styles.no_text_select} ${isDislikeSelected ? styles.action_btn_selected : ''}`} onClick={handleDislikeClick}>
+                        <p>👎</p>
+                        <p> {renderLikeInfo(postDetails.dislikeCount)} </p>
+                    </div>
+                </div>
+            }
+        />;
+
+        if (!props.isAdmin) {
+            return (
+                <Grid container>
+                    <Grid item xs={1}>
+
+                    </Grid>
+                    <Grid item xs={10}>
+                        {header}
+                    </Grid>
+                </Grid>
+            );
+        }
+
+        else {
+            return (
+                <Grid container>
+                    <Grid item xs={1}>
+                        <PostSubMenu />
+                    </Grid>
+                    <Grid item xs={10}>
+                        {header}
+                    </Grid>
+                </Grid>
+            );
+        }
+    }
+
     //Renders the content depending on the type of post
     const renderContent = () => {
         if (postDetails.type === "img") {
@@ -161,44 +216,31 @@ const Post = (props) => {
 
     return (
         <div id={styles.container}>
-            <Grid container>
-                <Grid item xs={10}>
-                    <div className={styles.profile_info} onClick={handleUserClick}>
-                        <Avatar>P</Avatar>
-                    </div>
+            <Card>
+                {renderHeader()}
+                <CardContent>
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <div id={styles.content} className={isOverflow ? "" : styles.no_overflow}>
+                                {renderContent()}
+                            </div>
+                        </Grid>
 
-                    <h1 className={styles.profile_info} onClick={handleUserClick}> {postDetails.username} </h1>
-                    <p className={styles.profile_info}> {postDetails.timePosted} </p>
-                </Grid>
-                <Grid item xs={2}>
-                    <div className={`${styles.action_btn} ${styles.no_text_select} ${isLikeSelected ? styles.action_btn_selected : ''}`} onClick={handleLikeClick}>
-                        <p>👍</p>
-                        <p> {renderLikeInfo(postDetails.likeCount)} </p>
-                    </div>
+                        <Grid item xs={6} className={styles.bottom_options}>
+                            <Button id={styles.show_more_btn} onClick={handleShowMoreClick}> {isOverflow ? "Show Less" : "Show More"} </Button>
+                        </Grid>
+                        <Grid item xs={6} className={styles.bottom_options}>
+                            <p id={styles.timer} className={styles.no_text_select}> {renderTimeInfo()} </p>
+                        </Grid>
 
-                    <div className={`${styles.action_btn} ${styles.no_text_select} ${isDislikeSelected ? styles.action_btn_selected : ''}`} onClick={handleDislikeClick}>
-                        <p>👎</p>
-                        <p> {renderLikeInfo(postDetails.dislikeCount)} </p>
-                    </div>
-                </Grid>
+                        <Grid item xs={12}>
+                            <BorderLinearProgress variant="determinate" value={(timeRemaining / postDetails.maxTime) * 100} />
+                        </Grid>
 
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <div id={styles.content} className={isOverflow ? "" : styles.no_overflow}>
-                        {renderContent()}
-                    </div>
-                </Grid>
-
-                <Grid item xs={6} className={styles.bottom_options}>
-                    <Button id={styles.show_more_btn} onClick={handleShowMoreClick}> {isOverflow ? "Show Less" : "Show More"} </Button>
-                </Grid>
-                <Grid item xs={6} className={styles.bottom_options}>
-                    <p id={styles.timer} className={styles.no_text_select}> {renderTimeInfo()} </p>
-                </Grid>
-            </Grid>
-
-            <BorderLinearProgress variant="determinate" value={(timeRemaining / postDetails.maxTime) * 100} />
-
+                </CardContent>
+            </Card>
         </div>
     );
 
