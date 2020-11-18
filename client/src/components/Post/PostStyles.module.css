@@ -1,0 +1,78 @@
+#container{
+    max-width: 960px;
+    margin:auto;
+    border-style: solid;
+}
+
+.profile_info{
+    display: inline-block;
+    cursor: pointer;
+}
+
+.action_btn{
+    display: block;
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.action_btn_selected{
+    opacity: 1;
+}
+
+
+.action_btn p{
+    display: inline-block;
+}
+
+.no_text_select{
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.action_btn:hover{
+    opacity: 1;
+}
+
+
+#content img{
+    display: block;
+    margin: auto;
+    width: 90%;
+    height: auto;
+}
+
+#content p{
+    margin: auto;
+    width: 90%;
+}
+
+.no_overflow{
+    max-height: 300px;
+    overflow: hidden;
+}
+
+#content p{
+    word-wrap: break-word;
+}
+
+#show_more_btn{
+    padding: 10px;
+    margin-left: 5%;
+}
+
+#timer{
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 5%;
+    text-align: right;
+    padding: 10px;
+}
+
+.bottom_options{
+    padding: 10px;
+}
