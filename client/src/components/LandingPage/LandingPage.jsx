@@ -9,6 +9,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { Button } from '@material-ui/core';
 import { PostCreator } from '../PostCreator/PostCreator.jsx';
 import { Post } from '../Post/Post.jsx';
+import {Sign} from '../SignInUp/Sign.jsx';
 
 import './LandingStyles.css'
 
@@ -38,7 +39,7 @@ const LandingPage = (props) => {
         } else if (renderModalObj.tags) {
             return renderModal(<PostCreator onCancel={() => cancelModal("tags")} />);
         } else if (renderModalObj.login) {
-            return renderModal(<PostCreator onCancel={() => cancelModal("login")} />);
+            return renderModal(<Sign onCancel={() => cancelModal("login")} />);
         }
     }
 
@@ -66,6 +67,12 @@ const LandingPage = (props) => {
                 <div className="p-2 mt-0 fixed w-full z-10 top-0 shadow-lg navbar">
                     <div className="flex justify-center text-white font-medium text-3xl">
                         <img width="150px" draggable="false" src="https://i.imgur.com/ATuMhih.png"></img>
+                        <div
+                            onClick={() => setRenderModalObj(prev => ({ ...prev, "login": true }))}
+                            className="button text-white text-2xl font-semibold mb-2 text-right rounded cursor-pointer"
+                            style={{ height: "3.2rem" }}>
+                            <p style={{ paddingTop: "0.18rem" }}>Sign In/Up</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -78,6 +85,8 @@ const LandingPage = (props) => {
                 <div className="h-screen top-0 pt-24 sticky p-4 w-2/12 border-r-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
                     <div className="flex justify-center text-white mt-4 font-medium text-3xl">
                         <img width="150px;" draggable="false" src="https://i.imgur.com/ATuMhih.png"></img>
+                        <div className="flex justify-center px-6">
+                    </div>
                     </div>
 
                     <div className="selector mt-4 ml-12 mb-8">
