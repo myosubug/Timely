@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { DropzoneArea } from 'material-ui-dropzone'
 import { PostCreatorBase } from './PostCreatorBase';
 
+import axios from 'axios';
+
 import styles from "./PostCreatorStyles.module.css";
 
 const PostCreator = (props) => {
@@ -41,6 +43,20 @@ const PostCreator = (props) => {
 
         //If we reach this stage the post has been validated
         setErrorMsg("");
+
+        const post = {
+            username: "Lior",
+            dateCreated: new Date().toUTCString(),
+            type: isText ? "text" : "img",
+            textContent: isText ? postText : "",
+            tags: postTags
+        };
+
+        axios.post("http://localhost:5000/posts/add", post)
+            .catch((err) => console.log(err));
+
+
+
 
         //TODO: Push changes to database
         console.log(postText);
