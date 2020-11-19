@@ -1,13 +1,19 @@
 import React from "react";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import Grow from "@material-ui/core/Grow";
-import Paper from "@material-ui/core/Paper";
-import Popper from "@material-ui/core/Popper";
-import MenuItem from "@material-ui/core/MenuItem";
-import MenuList from "@material-ui/core/MenuList";
-import IconButton from '@material-ui/core/IconButton';
+import {
+    ClickAwayListener,
+    Grow,
+    Paper,
+    Popper,
+    MenuItem,
+    MenuList,
+    IconButton,
+    makeStyles,
+} from "@material-ui/core";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { makeStyles } from "@material-ui/core/styles";
+import PromotePost from "../AdminPostPopUps/PromotePost";
+import AddTime from "../AdminPostPopUps/AddTime";
+import RemovePost from "../AdminPostPopUps/RemovePost";
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,12 +27,16 @@ const useStyles = makeStyles((theme) => ({
 const PostSubMenu = () => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [addTimeOpen, setAddTimeOpen] = React.useState(false);
+    const [promotePostOpen, setPromotePostOpen] = React.useState(false);
+    const [removePost, setRemovePostOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
 
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
     };
 
+    // Takes click event and closes the sub-menu
     const handleClose = (event) => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
             return;
@@ -34,6 +44,61 @@ const PostSubMenu = () => {
 
         setOpen(false);
     };
+
+
+    // Note: we can make these all anonymous functions if we wanted to
+    
+    // Sets the state to open the Promote Post Modal 
+    const handleOpenPromotePost = () => {
+        setPromotePostOpen(true);
+    };
+    
+    // Sets the state to close the Promote Post Modal  
+    // when the user is done
+    const handleClosePromotePost = () => {
+        setPromotePostOpen(false);
+    };
+
+    // This would be the db call to promote the post based on its id
+    // This function would be passed in as a prop to the modal
+    const handlePromotePost = () => {
+
+    };
+
+    // Sets the state to open the Add Time Modal 
+    const handleOpenAddTimePost = () => {
+        setAddTimeOpen(true);
+    };
+    
+    // Sets the state to close the Add Time Modal 
+    // when the user is done
+    const handleCloseAddTimePost = () => {
+        setAddTimeOpen(false);
+    };
+
+    // This would be the db call to add time to the post based its id
+    // This function would be passed in as a prop to the modal
+    const handleAddTime = () => {
+
+    };
+
+    // Sets the state to open the Remove Post Modal
+    const handleOpenRemovePost = () => {
+        setRemovePostOpen(true);
+    };
+    
+    // Sets the state to close the Remove Post Modal 
+    // when the user is done
+    const handleCloseRemovePost = () => {
+        setRemovePostOpen(false);
+    };
+
+    // This would be the db call to remove the post based on its id
+    // This function would be passed in as a prop to the modal
+    const handleRemovePost = () => {
+
+    };
+
 
     // return focus to the button when we transitioned from !open -> open
     const prevOpen = React.useRef(open);
@@ -44,6 +109,7 @@ const PostSubMenu = () => {
 
         prevOpen.current = open;
     }, [open]);
+
 
     return (
         <div className={classes.root}>
@@ -79,9 +145,9 @@ const PostSubMenu = () => {
                                         autoFocusItem={open}
                                         id="menu-list-grow"
                                     >
-                                        <MenuItem onClick={handleClose}>Promote Post</MenuItem>
-                                        <MenuItem onClick={handleClose}>Remove Post</MenuItem>
-                                        <MenuItem onClick={handleClose}>Add Time</MenuItem>
+                                        <MenuItem onClick={handleOpenPromotePost}>Promote Post</MenuItem>
+                                        <MenuItem onClick={handleOpenRemovePost}>Remove Post</MenuItem>
+                                        <MenuItem onClick={handleOpenAddTimePost}>Add Time</MenuItem>
                                     </MenuList>
                                 </ClickAwayListener>
                             </Paper>
@@ -89,6 +155,30 @@ const PostSubMenu = () => {
                     )}
                 </Popper>
             </div>
+
+            {/* These will only appear when the state is set to true */}
+            {/* PROMOTE POST */}
+            <PromotePost
+                id={'1'}
+                update={handlePromotePost}
+                isOpen={promotePostOpen}
+                onClose={handleClosePromotePost}
+            />
+
+            {/* ADD TIME */}
+            <AddTime
+                id={'1'}
+                update={handleAddTime}
+                isOpen={addTimeOpen}
+                onClose={handleCloseAddTimePost}
+            />
+            {/* REMOVE POST */}
+            <RemovePost
+                id={'1'}
+                update={handleRemovePost}
+                isOpen={removePost}
+                onClose={handleCloseRemovePost}
+            />
         </div>
     );
 }
