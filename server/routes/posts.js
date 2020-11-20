@@ -2,12 +2,21 @@ const router = require('express').Router();
 let Post = require('../models/post.model');
 
 
+const IMAGE_DIR = require('path').dirname(require.main.filename) + "/images/";
+
 router.route('/').get((req, res) => {
     Post.find()
         .then(posts => res.json(posts))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/upload-post').post((req, res) => {
+    const image = req.files.myFile;
+    const fileName = req.files.myFile.name;
+
+    const path = IMAGE_DIR + "posts/" + fileName;
+    image.mv(path); //Move the file to the specified path
+});
 
 router.route('/add').post((req, res) => {
     console.log(req.body);
@@ -32,6 +41,8 @@ router.route('/add').post((req, res) => {
         textContent: textContent,
         tags: tags
     });
+
+    //Save the file if we uploaded a file
 
 
     newPost.save()

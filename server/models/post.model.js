@@ -11,7 +11,7 @@ const postSchema = new Schema({
     likeCount: { type: Number, required: true },
     dislikeCount: { type: Number, required: true },
     type: { type: String, maxlength: 4, minlength: 3, required: true },
-    textContent: { type: String, minlength: 1 },
+    textContent: { type: String },
     imageURL: { type: String },
     tags: { type: Array }
 });
