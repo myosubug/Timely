@@ -9,14 +9,42 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { Button } from '@material-ui/core';
 import { PostCreator } from '../PostCreator/PostCreator.jsx';
 import { Post } from '../Post/Post.jsx';
-import {Sign} from '../SignInUp/Sign.jsx';
+import { Sign } from '../SignInUp/Sign.jsx';
 import TagFilter from '../TagFilter/TagFilter';
+
+import axios from 'axios';
+import { SERVER_ADDRESS } from '../../AppConfig.js'
 
 import './LandingStyles.css'
 
 const LandingPage = (props) => {
 
     const [renderModalObj, setRenderModalObj] = useState({ "tags": false, "login": false, "post": false });
+    const [posts, setPosts] = useState([]);
+
+
+    useEffect(() => {
+        function renderPostsDefault() {
+            let posts = [];
+            axios.get(SERVER_ADDRESS + "/posts/")
+                .then(res => {
+                    console.log(res.data);
+                    for (let post of res.data) {
+                        console.log(post);
+                        posts.push(
+                            <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full">
+                                <Post isAdmin={false} id={post._id} />
+                            </div>
+                        )
+                    }
+
+                    setPosts(posts);
+                })
+                .catch(err => console.log(err));
+        }
+
+        renderPostsDefault();
+    }, [])
 
     function renderModal(content) {
         return (
@@ -48,17 +76,7 @@ const LandingPage = (props) => {
         setRenderModalObj(prev => ({ ...prev, [name]: false }));
     }
 
-    function renderPosts() {
-        let posts = [];
-        for (let i = 0; i < 5; i++) {
-            posts.push(
-                <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full">
-                    <Post isAdmin={i % 2 === 0} />
-                </div>
-            )
-        }
-        return posts;
-    }
+
 
 
     return (
@@ -87,7 +105,7 @@ const LandingPage = (props) => {
                     <div className="flex justify-center text-white mt-4 font-medium text-3xl">
                         <img width="150px;" draggable="false" src="https://i.imgur.com/ATuMhih.png"></img>
                         <div className="flex justify-center px-6">
-                    </div>
+                        </div>
                     </div>
 
                     <div className="selector mt-4 ml-12 mb-8">
@@ -111,7 +129,7 @@ const LandingPage = (props) => {
                             onClick={() => setRenderModalObj(prev => ({ ...prev, "tags": true }))}
                             className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
                             style={{ height: "3.2rem" }}>
-                            <p style={{ paddingTop: "0.18rem" }}>Tags</p> 
+                            <p style={{ paddingTop: "0.18rem" }}>Tags</p>
                         </div>
                     </div>
 
@@ -120,7 +138,8 @@ const LandingPage = (props) => {
                 <div className="flex-grow justify-center px-56 pt-24 bg-white-300">
                     <div className="justify-center">
 
-                        {renderPosts()}
+
+                        {posts}
 
                     </div>
                 </div>

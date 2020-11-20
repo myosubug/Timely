@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { DropzoneArea } from 'material-ui-dropzone'
 import { PostCreatorBase } from './PostCreatorBase';
 
+import { SERVER_ADDRESS } from '../../AppConfig.js'
+
+import axios from 'axios';
+
 import styles from "./PostCreatorStyles.module.css";
 
 const PostCreator = (props) => {
@@ -42,10 +46,24 @@ const PostCreator = (props) => {
         //If we reach this stage the post has been validated
         setErrorMsg("");
 
-        //TODO: Push changes to database
-        console.log(postText);
-        console.log(postImage);
+        //If the data is of type image, upload it in a seperate request
+        if (!isText) {
+            const imgData = new FormData();
+            imgData.append('myFile', postImage);
+            axios.post(SERVER_ADDRESS + "/posts/upload-post", imgData);
+        }
 
+        //Prepare basic post data
+        const post = {
+            username: "Lior",
+            dateCreated: new Date().toUTCString(),
+            type: isText ? "text" : "img",
+            textContent: isText ? postText : "",
+            tags: postTags
+        };
+
+        axios.post(SERVER_ADDRESS + "/posts/add", post)
+            .catch((err) => console.log(err));
     }
 
     //Validates the tags and sets the current tags
