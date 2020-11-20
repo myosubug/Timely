@@ -15,6 +15,9 @@ import { Button } from '@material-ui/core';
 
 import { PostSubMenu } from './PostSubMenu.jsx';
 
+import axios from 'axios';
+import { SERVER_ADDRESS } from '../../AppConfig.js'
+
 import styles from './PostStyles.module.css';
 
 const BorderLinearProgress = withStyles((theme) => ({
@@ -48,35 +51,48 @@ const Post = (props) => {
 
     //Gets all the necessary variables needed for the post
     useEffect(() => {
-        const type = "text";
-        const maxTime = 5 * 60; //in seconds
-        //const time = 4 * 60; //in seconds
-        const username = "notPavol";
-        //Time calculation (get current time in UTC and subtract from the given time)
-        const dueDate = new Date().getTime() + 5 * 60000; //will be a date object instead
-        const timePosted = new Date(); //Will be a date object instead
-        const time = (dueDate - timePosted.getTime()) / 1000; //Time difference in seconds
 
-        const likeCount = 21000;
-        const dislikeCount = 50;
+        const populateDate = () => {
+            axios.get(SERVER_ADDRESS + "/posts/" + props.id)
+                .then(res => {
+                    const obj = res.data;
 
-        const text_content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam feugiat, tellus eu tempus facilisis, odio mi luctus ante, et malesuada ligula eros nec nisi. Aenean a porta neque. Sed posuere sollicitudin magna quis varius. Aenean ultrices justo id arcu commodo, sit amet ullamcorper nibh placerat. Nunc id tincidunt magna. Sed vel egestas nisi. Quisque condimentum interdum hendrerit. Sed nec convallis augue. Duis pellentesque semper ullamcorper. Nullam nec nisl justo. Nam sed ante id enim rutrum scelerisque. Quisque tincidunt dolor odio. Cras maximus, lacus at lobortis porta, metus ipsum maximus odio, quis suscipit elit dui id mi. Morbi congue elementum purus, nec dignissim massa fringilla id. Duis mauris elit, gravida at mattis nec, convallis eu eros. Praesent pharetra tortor nec lectus scelerisque feugiat. Ut ac ligula quis nunc pharetra feugiat. Nulla at dui scelerisque, dapibus purus in, ultrices mi. Vestibulum quis ligula posuere, efficitur augue in, dignissim dolor. Phasellus maximus, nulla eu sollicitudin aliquet, purus arcu varius libero, quis egestas tortor risus et ipsum. Integer dolor nisi, hendrerit ut dolor ut, tincidunt volutpat quam. Phasellus a ultrices sem, in vehicula nulla. Sed consectetur tellus quis turpis mollis eleifend. Nunc tincidunt porttitor consectetur. Nunc a nunc vel lacus dignissim egestas ut at tortor. Praesent nec magna eget nisl molestie rutrum quis id metus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis consectetur lorem erat, a ultricies purus sodales eu. Praesent scelerisque sollicitudin justo non suscipit. Morbi sit amet posuere tortor, at bibendum dolor.  Fusce sodales varius sagittis. Sed mi magna, interdum sit amet convallis id, mattis vel urna. In sagittis maximus porta. Maecenas non mi id tellus blandit porttitor vitae et justo. Curabitur interdum imperdiet dolor sed eleifend. Donec eu aliquam urna, id pretium risus. Vestibulum tristique efficitur purus, at venenatis mauris volutpat non. Nulla scelerisque ex in purus convallis volutpat. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aenean sit amet lacus tincidunt, congue dui quis, facilisis ex. Aenean convallis pulvinar erat, eget molestie diam lacinia nec. Ut vitae metus purus. Duis tristique nec felis sed sodales. Maecenas aliquet mi dictum urna venenatis, ac pharetra dui gravida. Sed vel enim urna. Donec ante neque, viverra eget nulla a, feugiat condimentum lectus. Ut euismod dolor quis ligula ultrices euismod. Mauris suscipit euismod auctor. Fusce semper mi vel elit posuere, eget accumsan massa placerat. Sed cursus odio sit amet dui placerat, eget luctus eros commodo. Vivamus eleifend, arcu pulvinar ornare egestas, ex tellus hendrerit erat, ut interdum magna odio id massa. Nulla lacinia, lorem sit amet egestas faucibus, nibh eros iaculis lorem, a pulvinar elit felis eu enim. Proin vel consequat nisl, ac lacinia est.";
-        const img_src = "https://i.kym-cdn.com/photos/images/newsfeed/001/295/524/cda.jpg";
+                    console.log(obj);
+                    const username = obj.username;
+                    const type = obj.type;
+                    const expiryDate = obj.expiryDate;
+                    const timePosted = new Date(obj.dateCreated);
 
-        //Set the time reamining to what the time
-        setTimeRemaining(time);
+                    const maxTime = obj.maxTime;
+                    const time = (new Date(expiryDate) - new Date()) / 1000; //Time difference in seconds
+                    console.log(time);
+                    setTimeRemaining(time);
 
-        setPostDetails({
-            type: type,
-            maxTime: maxTime,
-            time: time,
-            username: username,
-            timePosted: timePosted.toDateString(),
-            likeCount: likeCount,
-            dislikeCount: dislikeCount,
-            textContent: text_content,
-            imgSrc: img_src,
-        });
+                    const likeCount = obj.likeCount;
+                    const dislikeCount = obj.dislikeCount;
+                    const text_content = obj.textContent;
+
+                    //Set the date
+                    setPostDetails({
+                        type: type,
+                        maxTime: maxTime,
+                        time: time,
+                        username: username,
+                        timePosted: timePosted.toDateString(),
+                        likeCount: likeCount,
+                        dislikeCount: dislikeCount,
+                        textContent: text_content
+                    });
+
+                    //TODO: Work on image content
+
+
+
+                })
+                .catch(err => console.log(err));
+        }
+
+        populateDate();
     }, []);
 
     //Sets the interval for the timer
@@ -187,7 +203,7 @@ const Post = (props) => {
     //Renders the amount of time remaining on the post
     const renderTimeInfo = () => {
         const min = Math.floor(timeRemaining / 60);
-        const sec = timeRemaining % 60;
+        const sec = Math.floor(timeRemaining % 60);
 
         return min.toString() + "m " + sec.toString() + "s";
     }
@@ -248,8 +264,8 @@ const Post = (props) => {
 }
 
 Post.propTypes = {
-    id: PropTypes.number,
-    isAdmin: PropTypes.bool,
+    id: PropTypes.string.isRequired,
+    isAdmin: PropTypes.bool.isRequired,
 };
 
 export { Post };
