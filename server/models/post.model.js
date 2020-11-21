@@ -14,7 +14,9 @@ const postSchema = new Schema({
     type: { type: String, maxlength: 4, minlength: 3, required: true },
     textContent: { type: String },
     imageURL: { type: String },
-    tags: { type: Array }
+    tags: { type: Array },
+    likedUsers: { type: Map, required: true },
+    dislikedUsers: { type: Map, required: true }
 });
 
 

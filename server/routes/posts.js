@@ -18,6 +18,95 @@ router.route('/:id').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+
+//Handles disliking the post and updates the db
+router.route('/action-post/:action/:id/:username').post((req, res) => {
+    const id = req.params.id;
+    const username = req.params.username;
+    const action = req.params.action;
+
+    const ADD_TIME = 0.5 * 60000; //30 seconds to add
+
+    //Find the post
+    Post.findById(id)
+        .then(post => {
+            //Get db info that we need to update
+            let likedUsers = post.likedUsers;
+            let dislikedUsers = post.dislikedUsers;
+            let likeCount = post.likeCount;
+            let dislikeCount = post.dislikeCount;
+            let expiryDate = new Date(post.expiryDate).getTime();
+
+
+            //Check if we are liking a post
+            if (action === "like") {
+
+                if (dislikedUsers.has(username)) {
+                    dislikedUsers.delete(username);
+                    dislikeCount--;
+                    expiryDate += ADD_TIME;
+                }
+
+                //Check if the user already liked, as to not like twice, if he exists, remove him and subtract the time
+                if (likedUsers.has(username)) {
+                    likedUsers.delete(username);
+                    likeCount--;
+                    expiryDate -= ADD_TIME;
+                }
+                else {
+                    likedUsers.set(username);
+                    likeCount++;
+                    expiryDate += ADD_TIME;
+                }
+
+            }
+            else if (action === "dislike") {
+                //Check if the user has disliked the post previously, and if so, remove him and update the time
+                if (likedUsers.has(username)) {
+                    likedUsers.delete(username);
+                    likeCount--;
+                    expiryDate -= ADD_TIME;
+                }
+
+                if (dislikedUsers.has(username)) {
+                    dislikedUsers.delete(username);
+                    dislikeCount--;
+                    expiryDate += ADD_TIME;
+                }
+                else {
+                    dislikedUsers.set(username);
+                    dislikeCount++;
+                    expiryDate -= ADD_TIME;
+                }
+
+            }
+
+
+
+            //Find the post and update
+            Post.findOneAndUpdate({ _id: id }, {
+                $set: {
+                    likedUsers: likedUsers,
+                    dislikedUsers: dislikedUsers,
+                    likeCount: likeCount,
+                    dislikeCount: dislikeCount,
+                    expiryDate: new Date(expiryDate).toUTCString()
+                },
+            }, { upsert: false }, (err) => { if (err) { console.log(err) } })
+                .then(() => {
+                    //TODO: Notify with a socket
+                    res.status(200).json(action + " post")
+                }
+                );
+
+
+        }
+
+        ).catch(err => res.status(400).json('Error: ' + err));
+
+});
+
+
 router.route('/upload-post').post((req, res) => {
     const image = req.files.myFile;
     const fileName = req.files.myFile.name;
@@ -40,6 +129,8 @@ router.route('/add').post((req, res) => {
 
     const expiryDate = new Date(new Date(dateCreated).getTime() + MAX_TIME_ADD).toUTCString();
 
+    const likedUsers = new Map();
+    const dislikedUsers = new Map();
     const newPost = new Post({
         username: username,
         expiryDate: expiryDate,
@@ -49,7 +140,9 @@ router.route('/add').post((req, res) => {
         dislikeCount: 0,
         type: type,
         textContent: textContent,
-        tags: tags
+        tags: tags,
+        likedUsers: likedUsers,
+        dislikedUsers: dislikedUsers
     });
 
     //Save the file if we uploaded a file

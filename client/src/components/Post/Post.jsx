@@ -38,6 +38,7 @@ const BorderLinearProgress = withStyles((theme) => ({
     Props:
         id -> id of the post
         isAdmin -> true/false for if the user is in admin mode
+        thisUsername -> the name of the current user (used to determine like/dislike display), set it to undefined if user is not logged in
         
 */
 const Post = (props) => {
@@ -58,6 +59,7 @@ const Post = (props) => {
                     const obj = res.data;
 
                     console.log(obj);
+                    const id = obj._id;
                     const username = obj.username;
                     const type = obj.type;
                     const expiryDate = obj.expiryDate;
@@ -74,6 +76,7 @@ const Post = (props) => {
 
                     //Set the date
                     setPostDetails({
+                        id: id,
                         type: type,
                         maxTime: maxTime,
                         time: time,
@@ -83,6 +86,16 @@ const Post = (props) => {
                         dislikeCount: dislikeCount,
                         textContent: text_content
                     });
+
+                    console.log(obj.likedUsers);
+
+                    //Check if we have already liked the post
+                    if (props.thisUsername in obj.likedUsers) {
+                        setIsLikeSelected(true);
+                    }
+                    else if (props.thisUsername in obj.dislikedUsers) {
+                        setIsDislikeSelected(true);
+                    }
 
                     //TODO: Work on image content
 
@@ -131,12 +144,11 @@ const Post = (props) => {
 
     //Renders the header of the post (with or without the admin settings)
     const renderHeader = () => {
-        const header = <CardHeader
-            avatar={<Avatar className={styles.profile_info} onClick={handleUserClick}>P</Avatar>}
-            title={<div className={styles.profile_info} onClick={handleUserClick}> {postDetails.username} </div>}
-            subheader={postDetails.timePosted}
-            action={
-                <div>
+
+        const renderActions = () => {
+            //If the user is logged in
+            if (props.thisUsername !== undefined) {
+                return (<div>
                     <div className={`${styles.action_btn} ${styles.no_text_select} ${isLikeSelected ? styles.action_btn_selected : ''}`} onClick={handleLikeClick}>
                         <p>👍</p>
                         <p> {renderLikeInfo(postDetails.likeCount)} </p>
@@ -147,7 +159,16 @@ const Post = (props) => {
                         <p> {renderLikeInfo(postDetails.dislikeCount)} </p>
                     </div>
                 </div>
+                );
+
             }
+        }
+
+        const header = <CardHeader
+            avatar={<Avatar className={styles.profile_info} onClick={handleUserClick}>P</Avatar>}
+            title={<p className={styles.profile_info} onClick={handleUserClick}> {postDetails.username} </p>}
+            subheader={postDetails.timePosted}
+            action={renderActions()}
         />;
 
         if (!props.isAdmin) {
@@ -217,6 +238,8 @@ const Post = (props) => {
             setIsDislikeSelected(false);
         }
         setIsLikeSelected(prev => !prev);
+
+        axios.post(SERVER_ADDRESS + "/posts/action-post/like/" + postDetails.id + "/" + props.thisUsername);
     }
 
     //Handles dislike click
@@ -227,6 +250,8 @@ const Post = (props) => {
             setIsLikeSelected(false);
         }
         setIsDislikeSelected(prev => !prev);
+
+        axios.post(SERVER_ADDRESS + "/posts/action-post/dislike/" + postDetails.id + "/" + props.thisUsername);
     }
 
 
@@ -250,7 +275,7 @@ const Post = (props) => {
                         </Grid>
 
                         <Grid item xs={12}>
-                            <BorderLinearProgress variant="determinate" value={(timeRemaining / postDetails.maxTime) * 100} />
+                            <BorderLinearProgress variant="determinate" value={(timeRemaining / postDetails.maxTime) * 100 > 100 ? 100 : (timeRemaining / postDetails.maxTime) * 100} />
                         </Grid>
 
                     </Grid>
@@ -266,6 +291,7 @@ const Post = (props) => {
 Post.propTypes = {
     id: PropTypes.string.isRequired,
     isAdmin: PropTypes.bool.isRequired,
+    thisUsername: PropTypes.string.isRequired
 };
 
 export { Post };
