@@ -33,7 +33,7 @@ const LandingPage = (props) => {
                         console.log(post);
                         posts.push(
                             <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full">
-                                <Post isAdmin={false} id={post._id} />
+                                <Post isAdmin={false} id={post._id} thisUsername={"lior"} />
                             </div>
                         )
                     }
