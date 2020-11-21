@@ -13,7 +13,7 @@ import { Sign } from '../SignInUp/Sign.jsx';
 import TagFilter from '../TagFilter/TagFilter';
 
 import axios from 'axios';
-import { SERVER_ADDRESS } from '../../AppConfig.js'
+import { SERVER_ADDRESS, socket } from '../../AppConfig.js'
 
 import './LandingStyles.css'
 
@@ -24,7 +24,7 @@ const LandingPage = (props) => {
 
 
     useEffect(() => {
-        function renderPostsDefault() {
+        const renderPostsDefault = () => {
             let posts = [];
             axios.get(SERVER_ADDRESS + "/posts/")
                 .then(res => {
@@ -42,6 +42,11 @@ const LandingPage = (props) => {
                 })
                 .catch(err => console.log(err));
         }
+
+        socket.on('update post list', () => {
+            //TODO: Figure out the state, so we can render sorted posts
+            renderPostsDefault();
+        });
 
         renderPostsDefault();
     }, [])

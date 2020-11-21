@@ -1,5 +1,6 @@
 const router = require('express').Router();
 let Post = require('../models/post.model');
+let io = require('../server.js').io;
 
 
 const IMAGE_DIR = require('path').dirname(require.main.filename) + "/images/";
@@ -95,7 +96,9 @@ router.route('/action-post/:action/:id/:username').post((req, res) => {
             }, { upsert: false }, (err) => { if (err) { console.log(err) } })
                 .then(() => {
                     //TODO: Notify with a socket
-                    res.status(200).json(action + " post")
+                    const update_event_name = "update post " + id;
+                    io.emit(update_event_name);
+                    res.status(200).json(action + " post");
                 }
                 );
 
@@ -149,7 +152,10 @@ router.route('/add').post((req, res) => {
 
 
     newPost.save()
-        .then(() => res.json('Post added!'))
+        .then(() => {
+            io.emit('update post list');
+            res.json('Post added!');
+        })
         .catch(err => res.status(400).json('Error: ' + err));
 });
 

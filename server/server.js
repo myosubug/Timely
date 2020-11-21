@@ -3,12 +3,19 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const fileupload = require('express-fileupload');
 
-
 require('dotenv').config();
 
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+//For Socket.io
+const http = require("http").createServer(app);
+const io = exports.io = require("socket.io")(http, {
+    cors: {
+        origin: '*',
+    }
+});
 
 
 app.use(cors());
@@ -32,6 +39,6 @@ const postsRouter = require('./routes/posts');
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
 
-app.listen(port, () => {
-    console.log(`Server is running on port: ${port}`);
+http.listen(port, () => {
+    console.log("Listening on port " + port);
 });
