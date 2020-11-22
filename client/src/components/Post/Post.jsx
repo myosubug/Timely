@@ -65,7 +65,12 @@ const Post = (props) => {
                     const timePosted = new Date(obj.dateCreated);
 
                     const maxTime = obj.maxTime;
-                    const time = (new Date(expiryDate) - new Date()) / 1000; //Time difference in seconds
+                    let time = (new Date(expiryDate) - new Date()) / 1000; //Time difference in seconds
+
+                    //Check if the difference is less than 0, and if so, set it to 0 (compensating for post removal lag)
+                    if (time < 0) {
+                        time = 0;
+                    }
                     setTimeRemaining(time);
 
                     const likeCount = obj.likeCount;
@@ -120,8 +125,10 @@ const Post = (props) => {
                 if (prev > 0) {
                     ret = prev - 1;
                 }
+                //If the times is less than 0, then set it to 0, and stop counting down
                 else {
-                    ret = prev;
+                    ret = 0;
+                    clearInterval(bar_interval);
                 }
                 return ret;
             });
@@ -226,8 +233,16 @@ const Post = (props) => {
 
     //Renders the amount of time remaining on the post
     const renderTimeInfo = () => {
-        const min = Math.floor(timeRemaining / 60);
-        const sec = Math.floor(timeRemaining % 60);
+        let min;
+        let sec;
+        if (timeRemaining > 0) {
+            min = Math.floor(timeRemaining / 60);
+            sec = Math.floor(timeRemaining % 60);
+        }
+        else {
+            min = 0;
+            sec = 0
+        }
 
         return min.toString() + "m " + sec.toString() + "s";
     }
@@ -240,7 +255,8 @@ const Post = (props) => {
         }
         setIsLikeSelected(prev => !prev);
 
-        axios.post(SERVER_ADDRESS + "/posts/action-post/like/" + postDetails.id + "/" + props.thisUsername);
+        axios.post(SERVER_ADDRESS + "/posts/action-post/like/" + postDetails.id + "/" + props.thisUsername)
+            .catch(err => console.log(err));
     }
 
     //Handles dislike click
@@ -252,7 +268,8 @@ const Post = (props) => {
         }
         setIsDislikeSelected(prev => !prev);
 
-        axios.post(SERVER_ADDRESS + "/posts/action-post/dislike/" + postDetails.id + "/" + props.thisUsername);
+        axios.post(SERVER_ADDRESS + "/posts/action-post/dislike/" + postDetails.id + "/" + props.thisUsername)
+            .catch(err => console.log(err));
     }
 
 

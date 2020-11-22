@@ -21,35 +21,64 @@ const LandingPage = (props) => {
 
     const [renderModalObj, setRenderModalObj] = useState({ "tags": false, "login": false, "post": false });
     const [posts, setPosts] = useState([]);
+    const [postQuery, setPostQuery] = useState('/posts/');
 
 
     useEffect(() => {
-        const renderPostsDefault = () => {
-            let posts = [];
-            axios.get(SERVER_ADDRESS + "/posts/")
-                .then(res => {
-                    console.log(res.data);
-                    for (let post of res.data) {
-                        console.log(post);
-                        posts.push(
-                            <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full">
-                                <Post isAdmin={false} id={post._id} thisUsername={"lior"} />
-                            </div>
-                        )
-                    }
-
-                    setPosts(posts);
-                })
-                .catch(err => console.log(err));
-        }
 
         socket.on('update post list', () => {
             //TODO: Figure out the state, so we can render sorted posts
-            renderPostsDefault();
+            renderPosts();
         });
 
-        renderPostsDefault();
-    }, [])
+        socket.on('update post list delete', () => {
+            deletePosts();
+        });
+
+        renderPosts();
+    }, []);
+
+
+    //Gets the posts from specified query, and sets the state
+    const renderPosts = () => {
+        axios.get(SERVER_ADDRESS + postQuery)
+            .then(res => {
+                let new_posts = [];
+                for (let post of res.data) {
+                    new_posts.push(
+                        <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full">
+                            <Post isAdmin={false} id={post._id} thisUsername={"lior"} />
+                        </div>
+                    )
+                }
+                setPosts(new_posts);
+
+            })
+            .catch(err => console.log(err));
+
+
+
+    }
+
+    //Gets the posts from the specified query and sets the state (for some reason I had to set it to an empty array to work properly for deletion)
+    const deletePosts = () => {
+        axios.get(SERVER_ADDRESS + postQuery)
+            .then(res => {
+                let new_posts = [];
+                for (let post of res.data) {
+                    new_posts.push(
+                        <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full">
+                            <Post isAdmin={false} id={post._id} thisUsername={"lior"} />
+                        </div>
+                    )
+                }
+
+                setPosts([]);
+                setPosts(new_posts);
+
+            })
+            .catch(err => console.log(err));
+    }
 
     function renderModal(content) {
         return (
