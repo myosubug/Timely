@@ -39,6 +39,9 @@ const postsRouter = require('./routes/posts');
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
 
+//Call the post purger script to execute
+require('./postPurger.js');
+
 http.listen(port, () => {
     console.log("Listening on port " + port);
 });
