@@ -1,4 +1,5 @@
-const SERVER_ADDRESS = "http://localhost:5000"; //Define dynamic server address
+import io from 'socket.io-client';
 
-//Exports
-module.exports.SERVER_ADDRESS = SERVER_ADDRESS;
+export const SERVER_ADDRESS = "http://localhost:5000"; //Define dynamic server address
+
+export const socket = io.connect(SERVER_ADDRESS);

@@ -16,7 +16,7 @@ import { Button } from '@material-ui/core';
 import { PostSubMenu } from './PostSubMenu.jsx';
 
 import axios from 'axios';
-import { SERVER_ADDRESS } from '../../AppConfig.js'
+import { SERVER_ADDRESS, socket } from '../../AppConfig.js'
 
 import styles from './PostStyles.module.css';
 
@@ -58,7 +58,6 @@ const Post = (props) => {
                 .then(res => {
                     const obj = res.data;
 
-                    console.log(obj);
                     const id = obj._id;
                     const username = obj.username;
                     const type = obj.type;
@@ -67,7 +66,6 @@ const Post = (props) => {
 
                     const maxTime = obj.maxTime;
                     const time = (new Date(expiryDate) - new Date()) / 1000; //Time difference in seconds
-                    console.log(time);
                     setTimeRemaining(time);
 
                     const likeCount = obj.likeCount;
@@ -87,8 +85,6 @@ const Post = (props) => {
                         textContent: text_content
                     });
 
-                    console.log(obj.likedUsers);
-
                     //Check if we have already liked the post
                     if (props.thisUsername in obj.likedUsers) {
                         setIsLikeSelected(true);
@@ -105,6 +101,13 @@ const Post = (props) => {
                 .catch(err => console.log(err));
         }
 
+        //Setup event for re-rendering this specific post (using the id of the post)
+        const update_event_name = "update post " + props.id;
+        socket.on(update_event_name, () => {
+            populateDate();
+        });
+
+        //On the first render, get the data
         populateDate();
     }, []);
 
@@ -231,8 +234,6 @@ const Post = (props) => {
 
     //Handles like click
     const handleLikeClick = () => {
-        //TODO: Add/remove like
-
         //Check if the dislike was selected, and if so, disable it
         if (isDislikeSelected) {
             setIsDislikeSelected(false);

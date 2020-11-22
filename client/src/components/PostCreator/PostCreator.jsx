@@ -63,6 +63,7 @@ const PostCreator = (props) => {
         };
 
         axios.post(SERVER_ADDRESS + "/posts/add", post)
+            .then((res) => { props.onCancel() })
             .catch((err) => console.log(err));
     }
 
