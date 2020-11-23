@@ -1,8 +1,5 @@
 const mongoose = require('mongoose');
-
-
 const Schema = mongoose.Schema;
-
 
 const userSchema = new Schema({
     username: {
@@ -12,10 +9,22 @@ const userSchema = new Schema({
         trim: true,
         minlength: 3
     },
+    password: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 3
+    },
+    isAdmin:{
+        type: Boolean
+    },
+    profileImage:{
+        type: String,
+        unique: true
+    }
 }, {
     timestamps: true,
 });
-
 
 const User = mongoose.model('User', userSchema);
 

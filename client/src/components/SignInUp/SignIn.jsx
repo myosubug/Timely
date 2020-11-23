@@ -7,6 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+import { SERVER_ADDRESS } from '../../AppConfig.js'
+import { loggedInUser } from '../../AppConfig.js'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -30,6 +33,22 @@ export default function SignIn(props) {
 
   function handleSignIn(e){
     e.preventDefault();
+    const signInRequest = {
+      username: document.getElementById('username').value,
+      password: document.getElementById('password').value
+    }
+    axios.post(SERVER_ADDRESS +"/users/signin", signInRequest)
+    .then(res => {
+      loggedInUser.id = res.data.userInfo._id;
+      loggedInUser.username = res.data.userInfo.username;
+      loggedInUser.isAdmin = res.data.userInfo.isAdmin;
+      loggedInUser.profileImage = res.data.userInfo.profileImage;
+      alert("login successful");
+      props.onCancel();
+    }).catch(err => {
+      alert("username or password is wrong!");
+    })
+    
   }
 
   return (
@@ -40,7 +59,7 @@ export default function SignIn(props) {
           Sign in
         </Typography>
         <form onSubmit={handleSignIn} className={classes.form} noValidate>
-          <TextField variant="outlined" margin="normal" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" autoFocus/>
+          <TextField variant="outlined" margin="normal" required fullWidth id="username" label="User Name" name="email" autoComplete="email" autoFocus/>
           <TextField variant="outlined" margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password"/>
             <Grid item xs={12}>
               <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>

@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+import { SERVER_ADDRESS } from '../../AppConfig.js'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,6 +32,17 @@ export default function SignUp(props) {
 
   function handleSignUp(e){
     e.preventDefault();
+    const signUpRequest = {
+      username: document.getElementById('username').value,
+      password: document.getElementById('password').value
+    }
+    axios.post(SERVER_ADDRESS +"/users/signup", signUpRequest)
+    .then(res => {
+      alert("your account is created");
+      props.onCancel();
+    }).catch(err => {
+      alert("Error occured while creating account, user name already exists or uername is too short");
+    })
   }
 
   return (
@@ -42,10 +55,7 @@ export default function SignUp(props) {
         <form onSubmit={handleSignUp} className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField autoComplete="uname" name="userName" variant="outlined" required fullWidth id="userName" label="User Name" autoFocus/>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField variant="outlined" required fullWidth id="email" label="Email Address" name="email" autoComplete="email"/>
+              <TextField variant="outlined" required fullWidth id="username" label="User Name" name="email" autoComplete="email"/>
             </Grid>
             <Grid item xs={12}>
               <TextField variant="outlined" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password"/>
