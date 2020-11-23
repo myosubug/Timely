@@ -23,7 +23,7 @@ router.route('/signup').post((req, res) => {
         username: username, 
         password: password,
         isAdmin: false,
-        profileImage: "www.fillerURL/address"
+        profileImage: ""
     });
 
     newUser.save()
@@ -40,7 +40,7 @@ router.route('/signin').post((req, res) => {
             if (user.password === password){
                 res.status(200).json({userInfo: user});
             } else{
-                res.status(200).send({message: "username or password is wrong!"});
+                res.status(400).send("password is wrong!");
             }
         })
         .catch(err => res.status(400).json('Error: ' + err));
