@@ -9,6 +9,7 @@ import Container from '@material-ui/core/Container';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../../AppConfig.js'
+import { loggedInUserId } from '../../AppConfig.js'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,10 +39,10 @@ export default function SignIn(props) {
     }
     axios.post(SERVER_ADDRESS +"/users/signin", signInRequest)
     .then(res => {
-      console.log(res.data);
+      loggedInUserId = res.data.userInfo._id;
       props.onCancel();
     }).catch(err => {
-      alert("password is wrong!");
+      alert("username/password is wrong!");
     })
     
   }

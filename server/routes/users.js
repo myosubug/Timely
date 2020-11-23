@@ -22,7 +22,8 @@ router.route('/signup').post((req, res) => {
     const newUser = new User({ 
         username: username, 
         password: password,
-        isAdmin: false 
+        isAdmin: false,
+        profileImage: "www.fillerURL/address"
     });
 
     newUser.save()
@@ -39,7 +40,7 @@ router.route('/signin').post((req, res) => {
             if (user.password === password){
                 res.status(200).json({userInfo: user});
             } else{
-                res.status(400).send({message: "password is wrong!"});
+                res.status(200).send({message: "username or password is wrong!"});
             }
         })
         .catch(err => res.status(400).json('Error: ' + err));
