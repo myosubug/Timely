@@ -78,6 +78,25 @@ const Post = (props) => {
                     const text_content = obj.textContent;
                     const img_src = obj.imageURL;
 
+
+                    //Adapated from https://stackoverflow.com/questions/25275696/javascript-format-date-time/25276435 
+                    const formatDate = (date) => {
+
+                        let hours = date.getHours();
+                        let minutes = date.getMinutes();
+                        let ampm = hours >= 12 ? 'PM' : 'AM';
+                        hours = hours % 12;
+                        hours = hours ? hours : 12; // the hour '0' should be '12'
+                        minutes = minutes < 10 ? '0' + minutes : minutes;
+                        let strTime = hours + ':' + minutes + ' ' + ampm;
+
+                        return date.toDateString() + " at " + strTime;
+
+
+                    }
+
+                    const date_display = formatDate(timePosted);
+
                     //Set the date
                     setPostDetails({
                         id: id,
@@ -85,7 +104,7 @@ const Post = (props) => {
                         maxTime: maxTime,
                         time: time,
                         username: username,
-                        timePosted: timePosted.toDateString(),
+                        timePosted: date_display,
                         likeCount: likeCount,
                         dislikeCount: dislikeCount,
                         textContent: text_content,
@@ -158,7 +177,7 @@ const Post = (props) => {
 
         const renderActions = () => {
             //If the user is logged in
-            if (props.thisUsername !== undefined) {
+            if (props.thisUsername !== "") {
                 return (<div>
                     <div className={`${styles.action_btn} ${styles.no_text_select} ${isLikeSelected ? styles.action_btn_selected : ''}`} onClick={handleLikeClick}>
                         <p>👍</p>
@@ -175,6 +194,8 @@ const Post = (props) => {
             }
         }
 
+        const date_display = new Date(postDetails.timePosted).toDateString();
+        console.log(postDetails.timePosted);
         const header = <CardHeader
             avatar={<Avatar className={styles.profile_info} onClick={handleUserClick}>P</Avatar>}
             title={<p className={styles.profile_info} onClick={handleUserClick}> {postDetails.username} </p>}
