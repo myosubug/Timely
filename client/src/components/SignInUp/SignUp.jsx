@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   form: {
-    width: '100%', 
+    width: '100%',
     marginTop: theme.spacing(3),
   },
   submit: {
@@ -30,19 +30,21 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUp(props) {
   const classes = useStyles();
 
-  function handleSignUp(e){
+  function handleSignUp(e) {
     e.preventDefault();
     const signUpRequest = {
       username: document.getElementById('username').value,
       password: document.getElementById('password').value
     }
-    axios.post(SERVER_ADDRESS +"/users/signup", signUpRequest)
-    .then(res => {
-      alert("your account is created");
-      props.onCancel();
-    }).catch(err => {
-      alert("Error occured while creating account, user name already exists or uername is too short");
-    })
+    axios.post(SERVER_ADDRESS + "/users/signup", signUpRequest)
+      .then(res => {
+        alert("your account is created");
+        props.setLoggedIn(true);
+        props.onCancel();
+      }).catch(err => {
+        console.log(err);
+        alert("Error occured while creating account, user name already exists or uername is too short");
+      })
   }
 
   return (
@@ -55,22 +57,22 @@ export default function SignUp(props) {
         <form onSubmit={handleSignUp} className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField variant="outlined" required fullWidth id="username" label="User Name" name="email" autoComplete="email"/>
+              <TextField variant="outlined" required fullWidth id="username" label="User Name" name="email" autoComplete="email" />
             </Grid>
             <Grid item xs={12}>
-              <TextField variant="outlined" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password"/>
+              <TextField variant="outlined" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
             </Grid>
           </Grid>
           <Grid item xs={12}>
-              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-                Sign Up
+            <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+              Sign Up
               </Button>
-            </Grid>
-            <Grid item xs={12}>
-              <Button fullWidth variant="contained" color="primary" onClick={props.onCancel} className={classes.submit}>
-                Cancel
+          </Grid>
+          <Grid item xs={12}>
+            <Button fullWidth variant="contained" color="primary" onClick={props.onCancel} className={classes.submit}>
+              Cancel
               </Button>
-            </Grid>
+          </Grid>
         </form>
       </div>
     </Container>
@@ -82,4 +84,4 @@ SignUp.propTypes = {
   onCancel: PropTypes.func
 };
 
-export {SignUp};
+export { SignUp };

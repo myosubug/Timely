@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { DropzoneArea } from 'material-ui-dropzone'
 import { PostCreatorBase } from './PostCreatorBase';
 
-import { SERVER_ADDRESS } from '../../AppConfig.js'
+import { SERVER_ADDRESS, loggedInUser } from '../../AppConfig.js'
 
 import axios from 'axios';
 
@@ -50,7 +50,7 @@ const PostCreator = (props) => {
 
         //Prepare basic post data
         const post = {
-            username: "Lior",
+            username: loggedInUser.username,
             dateCreated: new Date().toUTCString(),
             type: isText ? "text" : "img",
             textContent: isText ? postText : "",

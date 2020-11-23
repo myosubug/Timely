@@ -24,26 +24,26 @@ const Sign = (props) => {
     if (isSignIn) {
         return (
             <div>
-            <Button type="submit" color="primary"  onClick={handleSignIn}>
-                Sign In
+                <Button type="submit" color="primary" onClick={handleSignIn}>
+                    Sign In
               </Button>
-            <Button type="submit" color="primary"  onClick={handleSignUp}>
-                Sign Up
+                <Button type="submit" color="primary" onClick={handleSignUp}>
+                    Sign Up
             </Button>
-            <SignIn onCancel={props.onCancel}/>
+                <SignIn onCancel={props.onCancel} setLoggedIn={props.setLoggedIn} />
             </div>
         );
     }
     else {
         return (
             <div>
-            <Button type="submit" color="primary" onClick={handleSignIn}>
-                Sign In
+                <Button type="submit" color="primary" onClick={handleSignIn}>
+                    Sign In
               </Button>
-            <Button type="submit" color="primary" onClick={handleSignUp}>
-                Sign Up
+                <Button type="submit" color="primary" onClick={handleSignUp} >
+                    Sign Up
             </Button>
-            <SignUp onCancel={props.onCancel}/>
+                <SignUp onCancel={props.onCancel} setLoggedIn={props.setLoggedIn} />
             </div>
         );
     }
