@@ -38,10 +38,10 @@ export default function SignUp(props) {
     }
     axios.post(SERVER_ADDRESS +"/users/signup", signUpRequest)
     .then(res => {
-      console.log(res.data);
+      alert("your account is created");
       props.onCancel();
     }).catch(err => {
-      alert(err);
+      alert("Error occured while creating account, user name already exists or uername is too short");
     })
   }
 
