@@ -194,8 +194,6 @@ const Post = (props) => {
             }
         }
 
-        const date_display = new Date(postDetails.timePosted).toDateString();
-        console.log(postDetails.timePosted);
         const header = <CardHeader
             avatar={<Avatar className={styles.profile_info} onClick={handleUserClick}>P</Avatar>}
             title={<p className={styles.profile_info} onClick={handleUserClick}> {postDetails.username} </p>}
