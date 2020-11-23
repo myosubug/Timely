@@ -76,6 +76,7 @@ const Post = (props) => {
                     const likeCount = obj.likeCount;
                     const dislikeCount = obj.dislikeCount;
                     const text_content = obj.textContent;
+                    const img_src = obj.imageURL;
 
                     //Set the date
                     setPostDetails({
@@ -87,7 +88,9 @@ const Post = (props) => {
                         timePosted: timePosted.toDateString(),
                         likeCount: likeCount,
                         dislikeCount: dislikeCount,
-                        textContent: text_content
+                        textContent: text_content,
+                        imgSrc: img_src
+
                     });
 
                     //Check if we have already liked the post
@@ -97,8 +100,6 @@ const Post = (props) => {
                     else if (props.thisUsername in obj.dislikedUsers) {
                         setIsDislikeSelected(true);
                     }
-
-                    //TODO: Work on image content
 
 
 

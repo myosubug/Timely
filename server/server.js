@@ -39,6 +39,12 @@ const postsRouter = require('./routes/posts');
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
 
+//Serve files (or images)
+app.get('/images/:type/:filename', (req, res) => {
+
+    res.sendFile(__dirname + '/images/' + req.params.type + '/' + req.params.filename);
+});
+
 //Call the post purger script to execute
 require('./postPurger.js');
 
