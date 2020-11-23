@@ -1,19 +1,12 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
-import Grid from '@material-ui/core/Grid';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import { Button } from '@material-ui/core';
 import { PostCreator } from '../PostCreator/PostCreator.jsx';
 import { Post } from '../Post/Post.jsx';
 import { Sign } from '../SignInUp/Sign.jsx';
 import TagFilter from '../TagFilter/TagFilter';
 
 import axios from 'axios';
-import { SERVER_ADDRESS, socket } from '../../AppConfig.js'
+import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
 
 import './LandingStyles.css'
 
@@ -22,6 +15,7 @@ const LandingPage = (props) => {
     const [renderModalObj, setRenderModalObj] = useState({ "tags": false, "login": false, "post": false });
     const [posts, setPosts] = useState([]);
     const [postQuery, setPostQuery] = useState('/posts/');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 
     useEffect(() => {
@@ -47,7 +41,7 @@ const LandingPage = (props) => {
                 for (let post of res.data) {
                     new_posts.push(
                         <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full">
-                            <Post isAdmin={false} id={post._id} thisUsername={"lior"} />
+                            <Post isAdmin={loggedInUser.isAdmin} id={post._id} thisUsername={loggedInUser.username} />
                         </div>
                     )
                 }
@@ -68,7 +62,7 @@ const LandingPage = (props) => {
                 for (let post of res.data) {
                     new_posts.push(
                         <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full">
-                            <Post isAdmin={false} id={post._id} thisUsername={"lior"} />
+                            <Post isAdmin={loggedInUser.isAdmin} id={post._id} thisUsername={loggedInUser.username} />
                         </div>
                     )
                 }
@@ -96,19 +90,26 @@ const LandingPage = (props) => {
         )
     }
 
+    function setLoggedIn(val) {
+        setIsLoggedIn(val);
+        renderPosts();
+    }
+
     function checkModalState() {
         if (renderModalObj.post) {
             return renderModal(<PostCreator onCancel={() => cancelModal("post")} />);
         } else if (renderModalObj.tags) {
             return renderModal(<TagFilter onCancel={() => cancelModal("tags")} />);
         } else if (renderModalObj.login) {
-            return renderModal(<Sign onCancel={() => cancelModal("login")} />);
+            return renderModal(<Sign onCancel={() => cancelModal("login")} setLoggedIn={(val) => setLoggedIn(val)} />);
         }
     }
 
     function cancelModal(name) {
         setRenderModalObj(prev => ({ ...prev, [name]: false }));
     }
+
+
 
 
 

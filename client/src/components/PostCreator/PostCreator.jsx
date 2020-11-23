@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { DropzoneArea } from 'material-ui-dropzone'
 import { PostCreatorBase } from './PostCreatorBase';
 
-import { SERVER_ADDRESS } from '../../AppConfig.js'
+import { SERVER_ADDRESS, loggedInUser } from '../../AppConfig.js'
 
 import axios from 'axios';
 
@@ -46,16 +46,11 @@ const PostCreator = (props) => {
         //If we reach this stage the post has been validated
         setErrorMsg("");
 
-        //If the data is of type image, upload it in a seperate request
-        if (!isText) {
-            const imgData = new FormData();
-            imgData.append('myFile', postImage);
-            axios.post(SERVER_ADDRESS + "/posts/upload-post", imgData);
-        }
+
 
         //Prepare basic post data
         const post = {
-            username: "Lior",
+            username: loggedInUser.username,
             dateCreated: new Date().toUTCString(),
             type: isText ? "text" : "img",
             textContent: isText ? postText : "",
@@ -63,7 +58,19 @@ const PostCreator = (props) => {
         };
 
         axios.post(SERVER_ADDRESS + "/posts/add", post)
-            .then((res) => { props.onCancel() })
+            .then((res) => {
+
+                const name = res.data;
+                //now that the post has been added, add the image
+                //If the data is of type image, upload it in a seperate request
+                if (!isText) {
+                    const imgData = new FormData();
+                    imgData.append('myFile', postImage);
+                    axios.post(SERVER_ADDRESS + "/posts/upload-post/" + name, imgData)
+                        .catch(err => console.log(err));
+                }
+                props.onCancel()
+            })
             .catch((err) => console.log(err));
     }
 

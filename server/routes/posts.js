@@ -109,13 +109,29 @@ router.route('/action-post/:action/:id/:username').post((req, res) => {
 
 });
 
-
-router.route('/upload-post').post((req, res) => {
+//uploads a post for the specified post id
+router.route('/upload-post/:postid').post((req, res) => {
     const image = req.files.myFile;
-    const fileName = req.files.myFile.name;
+    const post_id = req.params.postid;
+
+    const ext_ar = image.name.split('.');
+    const ext = ext_ar[ext_ar.length - 1]; //Get the last element
+    image.name = post_id + "." + ext;
+    const fileName = image.name;
 
     const path = IMAGE_DIR + "posts/" + fileName;
     image.mv(path); //Move the file to the specified path
+
+    //Get the URL for the post
+    const img_url = req.protocol + '://' + req.get('host') + "/images/posts/" + fileName;
+    //update the post with the specified id
+    Post.findOneAndUpdate({ _id: post_id }, { $set: { imageURL: img_url } })
+        .then(() => {
+            //Update the post in case of race conditions
+            const event_name = "update post " + post_id;
+            io.emit(event_name);
+        })
+        .catch(err => console.log(err));
 });
 
 //Adds a post to the db
@@ -143,6 +159,7 @@ router.route('/add').post((req, res) => {
         dislikeCount: 0,
         type: type,
         textContent: textContent,
+        imageURL: '',
         tags: tags,
         likedUsers: likedUsers,
         dislikedUsers: dislikedUsers
@@ -152,9 +169,9 @@ router.route('/add').post((req, res) => {
 
 
     newPost.save()
-        .then(() => {
+        .then((post) => {
             io.emit('update post list');
-            res.json('Post added!');
+            res.json(post._id);
         })
         .catch(err => res.status(400).json('Error: ' + err));
 });

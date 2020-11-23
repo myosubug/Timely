@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   form: {
-    width: '100%', 
+    width: '100%',
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -31,24 +31,26 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn(props) {
   const classes = useStyles();
 
-  function handleSignIn(e){
+  function handleSignIn(e) {
     e.preventDefault();
     const signInRequest = {
       username: document.getElementById('username').value,
       password: document.getElementById('password').value
     }
-    axios.post(SERVER_ADDRESS +"/users/signin", signInRequest)
-    .then(res => {
-      loggedInUser.id = res.data.userInfo._id;
-      loggedInUser.username = res.data.userInfo.username;
-      loggedInUser.isAdmin = res.data.userInfo.isAdmin;
-      loggedInUser.profileImage = res.data.userInfo.profileImage;
-      alert("login successful");
-      props.onCancel();
-    }).catch(err => {
-      alert("username or password is wrong!");
-    })
-    
+    axios.post(SERVER_ADDRESS + "/users/signin", signInRequest)
+      .then(res => {
+        loggedInUser.id = res.data.userInfo._id;
+        loggedInUser.username = res.data.userInfo.username;
+        loggedInUser.isAdmin = res.data.userInfo.isAdmin;
+        loggedInUser.profileImage = res.data.userInfo.profileImage;
+        alert("login successful");
+        props.setLoggedIn(true);
+        props.onCancel();
+      }).catch(err => {
+        console.log(err);
+        alert("username or password is wrong!");
+      })
+
   }
 
   return (
@@ -59,18 +61,18 @@ export default function SignIn(props) {
           Sign in
         </Typography>
         <form onSubmit={handleSignIn} className={classes.form} noValidate>
-          <TextField variant="outlined" margin="normal" required fullWidth id="username" label="User Name" name="email" autoComplete="email" autoFocus/>
-          <TextField variant="outlined" margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password"/>
-            <Grid item xs={12}>
-              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-                Sign In
+          <TextField variant="outlined" margin="normal" required fullWidth id="username" label="User Name" name="email" autoComplete="email" autoFocus />
+          <TextField variant="outlined" margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
+          <Grid item xs={12}>
+            <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+              Sign In
               </Button>
-            </Grid>
-            <Grid item xs={12}>
-              <Button fullWidth variant="contained" color="primary" onClick={props.onCancel} className={classes.submit}>
-                Cancel
+          </Grid>
+          <Grid item xs={12}>
+            <Button fullWidth variant="contained" color="primary" onClick={props.onCancel} className={classes.submit}>
+              Cancel
               </Button>
-            </Grid>
+          </Grid>
         </form>
       </div>
     </Container>
@@ -82,4 +84,4 @@ SignIn.propTypes = {
 };
 
 
-export {SignIn};
+export { SignIn };
