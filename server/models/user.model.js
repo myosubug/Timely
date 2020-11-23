@@ -17,6 +17,10 @@ const userSchema = new Schema({
     },
     isAdmin:{
         type: Boolean
+    },
+    profileImage:{
+        type: String,
+        unique: true
     }
 }, {
     timestamps: true,
