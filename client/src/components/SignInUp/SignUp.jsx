@@ -9,6 +9,7 @@ import Container from '@material-ui/core/Container';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../../AppConfig.js'
+import { loggedInUser } from '../../AppConfig.js'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -38,7 +39,11 @@ export default function SignUp(props) {
     }
     axios.post(SERVER_ADDRESS +"/users/signup", signUpRequest)
     .then(res => {
-      alert("your account is created");
+      loggedInUser.id = res.data.userInfo._id;
+      loggedInUser.username = res.data.userInfo.username;
+      loggedInUser.isAdmin = res.data.userInfo.isAdmin;
+      loggedInUser.profileImage = res.data.userInfo.profileImage;
+      alert("your account is created and you are logged in now");
       props.onCancel();
     }).catch(err => {
       alert("Error occured while creating account, user name already exists or uername is too short");
