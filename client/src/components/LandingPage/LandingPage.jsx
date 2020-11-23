@@ -62,7 +62,7 @@ const LandingPage = (props) => {
                 for (let post of res.data) {
                     new_posts.push(
                         <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full">
-                            <Post isAdmin={false} id={post._id} thisUsername={"lior"} />
+                            <Post isAdmin={loggedInUser.isAdmin} id={post._id} thisUsername={loggedInUser.username} />
                         </div>
                     )
                 }
