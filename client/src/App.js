@@ -7,6 +7,7 @@ function App() {
       timley
     </div>
   );
+
 }
 
 export default App;
