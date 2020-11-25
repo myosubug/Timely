@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Avatar,
   Grid,
@@ -12,10 +12,8 @@ import EditPasswordModal from '../EditPasswordModal';
 import * as avatarImg from './../../imgs/patrick.jpg';
 import './style.css';
 
-export class UserSettingsPage extends Component {
-  static propTypes = {
-    // Could probably make some sort of user data structure to be passed in
-    // Rather than passing in props for each field
+const UserSettingsPage = (props) => {
+  UserSettingsPage.propTypes = {
     username: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
     isAdmin: PropTypes.bool.isRequired,
@@ -23,70 +21,24 @@ export class UserSettingsPage extends Component {
 
     joinDate: PropTypes.string.isRequired,
     posts: PropTypes.number.isRequired,
-    // email: PropTypes.string.isRequired,
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      isDeleteOpen: false,
-      // isEditEmailOpen: false,
-      isEditUserOpen: false,
-      isEditPassOpen: false,
-    };
-  }
-
-  // DELETE MODAL STATE HANDLER
-  openDeleteModal = () => {
-    this.setState({ 
-      isDeleteOpen: true });
   };
 
-  closeDeleteModal = () => {
-    this.setState({
-      isDeleteOpen: false,
-    });
-  }
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isUserModalOpen, setUserModalOpen] = useState(false);
+  const [isPassModalOpen, setPassModalOpen] = useState(false);
+  // const [isEmailModalOpen, setEmailModalOpen] = useState(false);
 
-  // EDIT EMAIL STATE HANDLER
-  // openEmailModal = () => {
-  //   this.setState({ 
-  //     isEditEmailOpen: true });
-  //   };
-    
-  //   closeEmailModal = () => {
-  //     this.setState({
-  //       isEditEmailOpen: false,
-  //     });
-  //   }
+  // Function the makes the axios call to delete an account from the db
+  const handleDeleteAccount = () => {};
 
-    // EDIT USERNAME STATE HANDLER
-  openUserModal = () => {
-    this.setState({ 
-      isEditUserOpen: true });
-    };
-    
-    closeUserModal = () => {
-      this.setState({
-        isEditUserOpen: false,
-      });
-    }
-    
-    // EDIT PASSWORD STATE HANDLER
-  openPassModal = () => {
-    this.setState({ 
-      isEditPassOpen: true });
-    };
-    
-    closePassModal = () => {
-      this.setState({
-        isEditPassOpen: false,
-      });
-    }
-    
+  // Function that makes the axios call to update the specified account's username
+  const handleUpdateUsername = () => {};
 
+  // Function that makes the axios call to update the user's password
+  const handleUpdatePassword = () => {};
 
-  renderProfileGrid = () => {
+  // Renders the profile pic and the delete account button
+  const renderProfileGrid = () => {
     return (
       <Grid
         container
@@ -109,7 +61,7 @@ export class UserSettingsPage extends Component {
           <Button
             variant="contained"
             className="DeleteAccountButton"
-            onClick={this.openDeleteModal}
+            onClick={() => setDeleteModalOpen(true)}
             size="medium"
           >
             Delete
@@ -119,7 +71,8 @@ export class UserSettingsPage extends Component {
     );
   }
 
-  renderUserGrid = () => {
+  // Renders the users information
+  const renderUserGrid = () => {
     return (
       <Grid
         container
@@ -130,39 +83,40 @@ export class UserSettingsPage extends Component {
       >
         <Grid item xs className="UserInfo">
           <Typography variant="h5" component="span">
-            {"@" + this.props.username}
+            {"@" + props.username}
           </Typography>
-            {this.props.isAdmin ? " 👑 " : ""}
+            {props.isAdmin ? " 👑 " : ""}
           <Typography variant="body1">
-            {"Member since " + this.props.joinDate}
+            {"Member since " + props.joinDate}
           </Typography>
           <Typography variant="body1">
-            {this.props.posts + " posts"}
+            {props.posts + " posts"}
           </Typography>
         </Grid>
 
         <Grid item xs className="UserActions">
-          {this.renderUserActions()}
+          {renderUserActions()}
         </Grid>
       </Grid>
     )
   }
 
-  renderUserActions = () => {
+  // Renders the action buttons: edit username, edit password
+  const renderUserActions = () => {
     return (
       <div>
         {/* Edit Email */}
         {/* <Grid container spacing={1}>
           <Grid item xs={8}>
             <Typography variant="h6">Email</Typography>
-            {this.props.email}
+            {props.email}
           </Grid>
 
           <Grid item xs={4}>
             <Button
               variant="contained"
               className="EditEmailButton"
-              onClick={this.openEmailModal}
+              onClick={openEmailModal}
               size="medium"
             >
               Edit
@@ -174,13 +128,13 @@ export class UserSettingsPage extends Component {
         <Grid container spacing={1}>
           <Grid item xs={8}>
             <Typography variant="h6">Username</Typography>
-            {this.props.username}
+            {props.username}
           </Grid>
           <Grid item xs={4}>
             <Button
               variant="contained"
               className="EditUsernameButton"
-              onClick={this.openUserModal}
+              onClick={() => setUserModalOpen(true)}
               size="medium"
             >
               Edit
@@ -192,13 +146,13 @@ export class UserSettingsPage extends Component {
         <Grid container spacing={1}>
           <Grid item xs={8}>
             <Typography variant="h6">Password</Typography>
-            {this.props.password}
+            {props.password}
           </Grid>
           <Grid item xs={4}>
             <Button
               variant="contained"
               className="EditPasswordButton"
-              onClick={this.openPassModal}
+              onClick={() => setPassModalOpen(true)}
               size="medium"
             >
               Edit
@@ -209,73 +163,72 @@ export class UserSettingsPage extends Component {
     );
   }
 
-  render() {
-    return (
-      <div className="UserSettingsPage">
-        <Grid container className="header">
-          <Typography variant="h4" align="center" className="headerTitle">
-            User Settings Page
-          </Typography>
+  return (
+    <div className="UserSettingsPage">
+      <Grid container className="header">
+        <Typography variant="h4" align="center" className="headerTitle">
+          User Settings Page
+        </Typography>
+      </Grid>
+
+      <Grid
+        container
+        direction="row"
+        justify="flex-start"
+        alignItems="flex-start"
+        className="ButtonGrid"
+      >
+        <Grid item xs={1} />
+        <Grid item xs={3} className="ProfileGrid">
+          {/* Profile picture Grid and delete account button */}
+          {renderProfileGrid()}
         </Grid>
-
-        <Grid
-          container
-          direction="row"
-          justify="flex-start"
-          alignItems="flex-start"
-          className="ButtonGrid"
-        >
-          <Grid item xs={1} />
-          <Grid item xs={3} className="ProfileGrid">
-            {/* 1. Profile picture Grid and delete account button */}
-            {this.renderProfileGrid()}
-          </Grid>
-          <Grid item xs={7} className="UserInfoGrid">
-            {/* 2. User Info */}
-            {this.renderUserGrid()}
-          </Grid>
-          <Grid item xs={1} />
+        <Grid item xs={7} className="UserInfoGrid">
+          {/* User Info */}
+          {renderUserGrid()}
         </Grid>
+        <Grid item xs={1} />
+      </Grid>
 
-        {/* DELETE ACCOUNT MODAL */}
-        <DeleteAccountModal
-          username={this.props.username}
-          password={this.props.password}
-          delete={() => {}}
-          isOpen={this.state.isDeleteOpen}
-          onClose={this.closeDeleteModal}
-        />
+      {/* DELETE ACCOUNT MODAL */}
+      <DeleteAccountModal
+        username={props.username}
+        password={props.password}
+        delete={handleDeleteAccount}
+        isOpen={isDeleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+      />
 
-        {/* EDIT EMAIL MODAL */}
-        {/* <EditEmailModal
-          username={this.props.username}
-          password={this.props.password}
-          email={this.props.email}
-          update={() => {}}
-          isOpen={this.state.isEditEmailOpen}
-          onClose={this.closeEmailModal}
-        /> */}
+      {/* EDIT EMAIL MODAL */}
+      {/* <EditEmailModal
+        username={props.username}
+        password={props.password}
+        email={props.email}
+        update={() => {}}
+        isOpen={state.isEditEmailOpen}
+        onClose={closeEmailModal}
+      /> */}
 
-        {/* EDIT USERNAME MODAL */}
-        <EditUsernameModal
-          username={this.props.username}
-          password={this.props.password}
-          username={this.props.username}
-          update={() => {}}
-          isOpen={this.state.isEditUserOpen}
-          onClose={this.closeUserModal}
-        />
+      {/* EDIT USERNAME MODAL */}
+      <EditUsernameModal
+        username={props.username}
+        password={props.password}
+        update={handleUpdateUsername}
+        isOpen={isUserModalOpen}
+        onClose={() => setUserModalOpen(false)}
+      />
 
-        {/* EDIT PASSWORD MODAL */}
-        <EditPasswordModal
-          username={this.props.username}
-          password={this.props.password}
-          update={() => {}}
-          isOpen={this.state.isEditPassOpen}
-          onClose={this.closePassModal}
-        />
-      </div>
-    );
-  }
+      {/* EDIT PASSWORD MODAL */}
+      <EditPasswordModal
+        username={props.username}
+        password={props.password}
+        update={handleUpdatePassword}
+        isOpen={isPassModalOpen}
+        onClose={() => setPassModalOpen(false)}
+      />
+    </div>
+  );
+
 }
 
+export { UserSettingsPage };
