@@ -51,6 +51,11 @@ export default function SignUp(props) {
         setCookie('isAdmin', loggedInUser.isAdmin, 10);
         setCookie('profileImage', loggedInUser.profileImage, 10);
 
+        //Store in sessionStorage (in case we refresh after cookie expiration time)
+        sessionStorage.setItem('id', loggedInUser.id);
+        sessionStorage.setItem('username', loggedInUser.username);
+        sessionStorage.setItem('isAdmin', loggedInUser.isAdmin);
+        sessionStorage.setItem('profileImage', loggedInUser.profileImage);
 
         alert("your account is created and you are logged in now");
         props.setLoggedIn(true);
