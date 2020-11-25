@@ -52,6 +52,7 @@ DeleteAccountModal.propTypes = {
             margin="dense"
             id="confirmPass"
             label="Confirm password"
+            type="password"
             fullWidth
             required
           />

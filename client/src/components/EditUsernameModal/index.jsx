@@ -84,6 +84,7 @@ export const EditUsernameModal = (props) => {
             margin="dense"
             id="confirmPass"
             label="Current password"
+            type="password"
             fullWidth
             required
           />

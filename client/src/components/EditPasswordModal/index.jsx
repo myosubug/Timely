@@ -55,6 +55,7 @@ export const EditPasswordModal = (props) => {
             margin="dense"
             id="currentPass"
             label="Current password"
+            type="password"
             fullWidth
             required
           />
@@ -63,6 +64,7 @@ export const EditPasswordModal = (props) => {
             margin="dense"
             id="newPass"
             label="New password"
+            type="password"
             fullWidth
             required
           />
@@ -71,6 +73,7 @@ export const EditPasswordModal = (props) => {
             margin="dense"
             id="confirmNewPass"
             label="Re-enter new password"
+            type="password"
             fullWidth
             required
           />
