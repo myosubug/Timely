@@ -17,20 +17,21 @@ export class UserSettingsPage extends Component {
   static propTypes = {
     // Could probably make some sort of user data structure to be passed in
     // Rather than passing in props for each field
-    userId: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
-    memberStatus: PropTypes.string.isRequired,
-    posts: PropTypes.number.isRequired,
-    email: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
     isAdmin: PropTypes.bool.isRequired,
+    profileImage: PropTypes.string.isRequired,
+
+    joinDate: PropTypes.string.isRequired,
+    posts: PropTypes.number.isRequired,
+    // email: PropTypes.string.isRequired,
   }
 
   constructor(props) {
     super(props);
     this.state = {
       isDeleteOpen: false,
-      isEditEmailOpen: false,
+      // isEditEmailOpen: false,
       isEditUserOpen: false,
       isEditPassOpen: false,
     };
@@ -239,7 +240,7 @@ export class UserSettingsPage extends Component {
 
         {/* DELETE ACCOUNT MODAL */}
         <DeleteAccountModal
-          userId={this.props.userId}
+          username={this.props.username}
           password={this.props.password}
           delete={() => {}}
           isOpen={this.state.isDeleteOpen}
@@ -247,18 +248,18 @@ export class UserSettingsPage extends Component {
         />
 
         {/* EDIT EMAIL MODAL */}
-        <EditEmailModal
-          userId={this.props.userId}
+        {/* <EditEmailModal
+          username={this.props.username}
           password={this.props.password}
           email={this.props.email}
           update={() => {}}
           isOpen={this.state.isEditEmailOpen}
           onClose={this.closeEmailModal}
-        />
+        /> */}
 
         {/* EDIT USERNAME MODAL */}
         <EditUsernameModal
-          userId={this.props.userId}
+          username={this.props.username}
           password={this.props.password}
           username={this.props.username}
           update={() => {}}
@@ -268,7 +269,7 @@ export class UserSettingsPage extends Component {
 
         {/* EDIT PASSWORD MODAL */}
         <EditPasswordModal
-          userId={this.props.userId}
+          username={this.props.username}
           password={this.props.password}
           update={() => {}}
           isOpen={this.state.isEditPassOpen}

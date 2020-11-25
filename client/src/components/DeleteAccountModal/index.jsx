@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 export const DeleteAccountModal = (props) => {
 
 DeleteAccountModal.propTypes = {
-  userId: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
   delete: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,

@@ -12,7 +12,6 @@ export class UserOverviewPage extends Component {
   static propTypes = {
     // Could probably make some sort of user data structure to be passed in
     // Rather than passing in props for each field
-    userId: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     memberStatus: PropTypes.string.isRequired,
     posts: PropTypes.number.isRequired,
