@@ -177,4 +177,46 @@ router.route('/add').post((req, res) => {
 });
 
 
+//ADMIN FUNCTIONALITY
+
+//Add or subtract time from post
+router.route('/time/:action').post((req, res) => {
+
+    const id = req.body.id;
+    const time_mil = req.body.time * 1000;
+
+    //Get the post by id, and get its expiry time
+    Post.findById(id)
+        .then(post => {
+            let expiryDate = new Date(post.expiryDate).getTime();
+
+            if (req.params.action === "add") {
+                expiryDate += time_mil;
+            }
+            else if (req.params.action === "subtract") {
+                expiryDate -= time_mil;
+            }
+
+            //Update the expirty time with the new value
+            Post.findByIdAndUpdate(id, { $set: { expiryDate: new Date(expiryDate).toUTCString() } })
+                .then(post => {
+                    res.status(200).json("Updated post " + req.params.action);
+                    io.emit('update post ' + req.body.id)
+                })
+                .catch(err => res.status(400).json('Error: ' + err));
+
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
+//Delete post
+router.route('/delete').post((req, res) => {
+    Post.findByIdAndDelete(req.body.id)
+        .then(post => {
+            res.status(200).json("Deleted post " + post);
+            io.emit('update post list delete');
+        })
+        .catch(err => res.status(400).json('Error: ' + err))
+});
+
 module.exports = router;
