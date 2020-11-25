@@ -119,6 +119,7 @@ const LandingPage = (props) => {
 
             <div>
                 <div className="p-2 mt-0 fixed w-full z-10 top-0 shadow-lg navbar">
+                    {/* Sign in/up button */}
                     <div className="flex justify-center text-white font-medium text-3xl">
                         <img width="150px" draggable="false" src="https://i.imgur.com/ATuMhih.png"></img>
                         <div
@@ -126,6 +127,14 @@ const LandingPage = (props) => {
                             className="button text-white text-2xl font-semibold mb-2 text-right rounded cursor-pointer"
                             style={{ height: "3.2rem" }}>
                             <p style={{ paddingTop: "0.18rem" }}>Sign In/Up</p>
+                        </div>
+                        {/* User settings button */}
+                        <div
+                            // TODO: Reroute to user settings page
+                            onClick={() => {console.log("user settings clicke")}}
+                            className="button text-white text-2xl font-semibold mb-2 text-right rounded cursor-pointer"
+                            style={{ height: "3.2rem" }}>
+                            <p style={{ paddingTop: "0.18rem" }}>⚙️</p>
                         </div>
                     </div>
                 </div>
