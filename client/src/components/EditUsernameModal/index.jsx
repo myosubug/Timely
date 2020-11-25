@@ -20,23 +20,42 @@ export const EditUsernameModal = (props) => {
   onClose: PropTypes.func.isRequired,
 };
 
-  const [newUserName, setUsername] = useState('');
+  const [newUsername, setUsername] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
+  // Reset the state when the modal is closed
   const handleClose = () => {
     props.onClose();
+    setUsername('');
+    setConfirmPassword('');
   };
 
+  // Check if the username is valid
   const isUsernameValid = () => {
-  //  Check if username is valid 
-  }
+    if(!newUsername || newUsername.length < 3) {
+      console.log("FF " + newUsername);
+      console.log("New username must be at least 3 characters.");
+      return false;
+    }
+    if(confirmPassword !== props.password) {
+      console.log("ya here");
+      console.log(document.getElementById('confirmPass').value);
+      return false;
+    }
+    return true;
+  };
 
+  // Function that handles the update of a username
   const handleOnConfirmClick = () => {
-    if (props.password) {
-      // TODO: UPDATE ACCOUNT IN DB
+    if (isUsernameValid()) {
+      console.log("here");
+      props.update(newUsername, props.username);
     } else {
-      // TODO: DON'T DO ANYTHING
+      console.log("Username failed to update!");
     }
   };
+
+
 
   return(
     <Dialog
@@ -77,8 +96,7 @@ export const EditUsernameModal = (props) => {
           Cancel
         </Button>
         <Button 
-          onClick={handleClose}
-          // onClick={handleOnConfirmClick}
+          onClick={handleOnConfirmClick}
           className="ConfirmButton"
         >
           Confirm
