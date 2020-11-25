@@ -74,6 +74,7 @@ const LandingPage = (props) => {
             .catch(err => console.log(err));
     }
 
+    // Renders the modal based on the content passed in
     function renderModal(content) {
         return (
             <div className="fixed z-10 inset-0 overflow-y-auto">
@@ -90,11 +91,13 @@ const LandingPage = (props) => {
         )
     }
 
+    // Once the user is logged in, render all the live posts
     function setLoggedIn(val) {
         setIsLoggedIn(val);
         renderPosts();
     }
 
+    // Function that determines what modal to render
     function checkModalState() {
         if (renderModalObj.post) {
             return renderModal(<PostCreator onCancel={() => cancelModal("post")} />);
@@ -105,6 +108,7 @@ const LandingPage = (props) => {
         }
     }
 
+    // If the cancel button is clicked, reset the state and close the modal
     function cancelModal(name) {
         setRenderModalObj(prev => ({ ...prev, [name]: false }));
     }
