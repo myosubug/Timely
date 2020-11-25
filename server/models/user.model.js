@@ -15,15 +15,15 @@ const userSchema = new Schema({
         trim: true,
         minlength: 3
     },
-    isAdmin:{
+    isAdmin: {
         type: Boolean
     },
-    profileImage:{
+    profileImage: {
         type: String,
         unique: true
-    }
+    },
 }, {
-    timestamps: true,
+    timestamps: true
 });
 
 const User = mongoose.model('User', userSchema);
