@@ -21,7 +21,7 @@ export const EditUsernameModal = (props) => {
 };
 
   const [newUsername, setUsername] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [password, setConfirmPassword] = useState('');
 
   // Reset the state when the modal is closed
   const handleClose = () => {
@@ -30,16 +30,14 @@ export const EditUsernameModal = (props) => {
     setConfirmPassword('');
   };
 
-  // Check if the username is valid
+  // Check if the username is valid and password is correct
   const isUsernameValid = () => {
-    if(!newUsername || newUsername.length < 3) {
-      console.log("FF " + newUsername);
+    if(!document.getElementById('newUser').value || document.getElementById('newUser').value.length < 3) {
       console.log("New username must be at least 3 characters.");
       return false;
     }
-    if(confirmPassword !== props.password) {
-      console.log("ya here");
-      console.log(document.getElementById('confirmPass').value);
+    if(document.getElementById('confirmPass').value !== props.password) {
+      console.log('Password is incorrect.');
       return false;
     }
     return true;
@@ -48,13 +46,13 @@ export const EditUsernameModal = (props) => {
   // Function that handles the update of a username
   const handleOnConfirmClick = () => {
     if (isUsernameValid()) {
-      console.log("here");
+      console.log("Username successfully updated!");
       props.update(newUsername, props.username);
+      handleClose();
     } else {
       console.log("Username failed to update!");
     }
   };
-
 
 
   return(

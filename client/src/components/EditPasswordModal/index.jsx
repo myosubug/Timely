@@ -20,19 +20,46 @@ export const EditPasswordModal = (props) => {
   onClose: PropTypes.func.isRequired,
 };
 
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
+    setPassword('');
+    setConfirmPassword('');
+    setCurrentPassword('');
   };
 
+  // Checks if the password is valid and checks if the passwords match
   const isPasswordValid = () => {
-  //  Check if passwords match
+    if (props.password !== document.getElementById('currentPass').value) {
+    // if(props.password !== currentPass) {
+      console.log("Current password is incorrect.");
+      return false;
+    }
+    if (!document.getElementById('newPass').value || document.getElementById('newPass').value.length < 3) {
+      // if(!newPass || newPass < 3) {
+        console.log("New password must be at least 3 characters.");
+        return false;
+      }
+    if (document.getElementById('newPass').value !== document.getElementById('confirmPass').value) {
+    // if(newPass !== confirmPass) {
+      console.log("Passwords must match.");
+      return false;
+    }
+    return true;
   }
-
+  
+  // Function that handles the password change
   const handleOnConfirmClick = () => {
-    if (props.password) {
-      // TODO: UPDATE ACCOUNT IN DB
+    if (isPasswordValid()) {
+      console.log("Password successfully updated!");
+      props.update(newPassword, props.username);
+      handleClose();
     } else {
-      // TODO: DON'T DO ANYTHING
+      console.log("Password failed to update!");
     }
   };
 
@@ -56,6 +83,7 @@ export const EditPasswordModal = (props) => {
             id="currentPass"
             label="Current password"
             type="password"
+            // onInput={(event) => setConfirmPassword(event.target.value)}
             fullWidth
             required
           />
@@ -65,15 +93,17 @@ export const EditPasswordModal = (props) => {
             id="newPass"
             label="New password"
             type="password"
+            // onInput={(event) => setConfirmPassword(event.target.value)}
             fullWidth
             required
           />
         <TextField
             autoFocus
             margin="dense"
-            id="confirmNewPass"
+            id="confirmPass"
             label="Re-enter new password"
             type="password"
+            // onInput={(event) => setConfirmPassword(event.target.value)}
             fullWidth
             required
           />
@@ -86,8 +116,7 @@ export const EditPasswordModal = (props) => {
           Cancel
         </Button>
         <Button 
-          onClick={handleClose}
-          // onClick={handleOnConfirmClick}
+          onClick={handleOnConfirmClick}
           className="ConfirmButton"
         >
           Confirm

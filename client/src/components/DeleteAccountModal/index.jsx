@@ -12,23 +12,41 @@ import PropTypes from 'prop-types';
 
 export const DeleteAccountModal = (props) => {
 
-DeleteAccountModal.propTypes = {
-  username: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
-  delete: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
-
-  const handleClose = () => {
-    props.onClose();
+  DeleteAccountModal.propTypes = {
+    username: PropTypes.string.isRequired,
+    password: PropTypes.string.isRequired,
+    delete: PropTypes.func.isRequired,
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
   };
 
+  const [confirmPass, setConfirmPass] = useState('');
+
+  // Resets the state when the modal is closed
+  const handleClose = () => {
+    props.onClose();
+    setConfirmPass('');
+  };
+
+  // Checks if the password is valid
+  const isPasswordValid = () => {
+    if (!document.getElementById('confirmPass').value || props.password !== document.getElementById('confirmPass').value) {
+      console.log(document.getElementById('confirmPass'));
+      console.log("Password is incorrect.");
+      return false;
+    }
+    return true;
+  }
+
+  // Function that handles account deletion
   const handleOnConfirmClick = () => {
-    if (props.password) {
-      // TODO: DELETE ACCOUNT IN DB
+    if (isPasswordValid()) {
+      console.log("Account successfully deleted!");
+      props.delete(props.username);
+      handleClose();
+      // TODO: NEED TO REROUTE THE USER OR SOMETHING
     } else {
-      // TODO: DON'T DO ANYTHING
+      console.log("Account failed to delete!");
     }
   };
 
@@ -65,8 +83,7 @@ DeleteAccountModal.propTypes = {
           Cancel
         </Button>
         <Button 
-          onClick={handleClose}
-          // onClick={handleOnConfirmClick}
+          onClick={handleOnConfirmClick}
           className="ConfirmButton"
         >
           Confirm
