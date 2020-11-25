@@ -6,7 +6,7 @@ import './index.css';
 import './tailwind.output.css';
 import App from './App';
 import { LandingPage } from './components/LandingPage/LandingPage';
-import { UserSettingsPage } from '././components/UserSettingsPage/UserSettingsPage.jsx';
+import { UserSettingsPage } from '././components/UserSettingsPage';
 
 ReactDOM.render(
   <BrowserRouter>
