@@ -10,6 +10,9 @@ import DeleteAccountModal from '../DeleteAccountModal';
 import EditUsernameModal from '../EditUsernameModal';
 import EditPasswordModal from '../EditPasswordModal';
 import * as avatarImg from './../../imgs/patrick.jpg';
+import NavBar from '../NavBar';
+import axios from 'axios';
+import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
 import './style.css';
 
 const UserSettingsPage = (props) => {
@@ -29,13 +32,17 @@ const UserSettingsPage = (props) => {
   // const [isEmailModalOpen, setEmailModalOpen] = useState(false);
 
   // Function the makes the axios call to delete an account from the db
-  const handleDeleteAccount = () => {};
+  const handleDeleteAccount = () => {
+    // 
+  };
 
   // Function that makes the axios call to update the specified account's username
-  const handleUpdateUsername = () => {};
+  const handleUpdateUsername = () => { 
+
+  };
 
   // Function that makes the axios call to update the user's password
-  const handleUpdatePassword = () => {};
+  const handleUpdatePassword = () => { };
 
   // Renders the profile pic and the delete account button
   const renderProfileGrid = () => {
@@ -199,8 +206,8 @@ const UserSettingsPage = (props) => {
 
         {/* DELETE ACCOUNT MODAL */}
         <DeleteAccountModal
-          username={props.username}
-          password={props.password}
+          username={"username"}
+          password={"123"}
           delete={handleDeleteAccount}
           isOpen={isDeleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
@@ -218,8 +225,8 @@ const UserSettingsPage = (props) => {
 
         {/* EDIT USERNAME MODAL */}
         <EditUsernameModal
-          username={props.username}
-          password={props.password}
+          username={"username"}
+          password={"123"}
           update={handleUpdateUsername}
           isOpen={isUserModalOpen}
           onClose={() => setUserModalOpen(false)}
@@ -227,8 +234,8 @@ const UserSettingsPage = (props) => {
 
         {/* EDIT PASSWORD MODAL */}
         <EditPasswordModal
-          username={props.username}
-          password={props.password}
+          username={"username"}
+          password={"123"}
           update={handleUpdatePassword}
           isOpen={isPassModalOpen}
           onClose={() => setPassModalOpen(false)}

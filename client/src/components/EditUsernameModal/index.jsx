@@ -47,7 +47,7 @@ export const EditUsernameModal = (props) => {
   const handleOnConfirmClick = () => {
     if (isUsernameValid()) {
       console.log("Username successfully updated!");
-      props.update(newUsername, props.username);
+      props.update({newUser: newUsername, username: props.username});
       handleClose();
     } else {
       console.log("Username failed to update!");
