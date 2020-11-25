@@ -33,12 +33,16 @@ const UserSettingsPage = (props) => {
 
   // Function the makes the axios call to delete an account from the db
   const handleDeleteAccount = () => {
-    // 
+    console.log(props.username);
+    axios.post(SERVER_ADDRESS + '/users/delete/' + props.username )
+      .then(console.log("Successfully deleted!"))
+      .catch(err => (console.log(err)));
   };
 
   // Function that makes the axios call to update the specified account's username
   const handleUpdateUsername = () => { 
-
+    // .find
+    // .update
   };
 
   // Function that makes the axios call to update the user's password

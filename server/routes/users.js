@@ -8,6 +8,13 @@ router.route('/').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+// Returns a list of all users from db
+router.route('/finduser/:username').get((req, res) => {
+    User.findOne({ username: req.params.username })
+        .then(users => res.json(users))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
 // Returns a user object by their ID
 router.route('/:id').get((req, res) => {
     User.findById(req.params.id)
@@ -50,9 +57,11 @@ router.route('/signin').post((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+
+
 // Delete account
-router.route('/:id').delete((req, res) => {
-    User.findByIdAndDelete(req.params.id)
+router.route('/delete/:username').post((req, res) => {
+    User.findOneAndDelete({ username: req.params.username })
         .then(() => res.json('user successfully deleted!'))
         .catch(err => res.status(400).json('Error: ' + err));
 });
