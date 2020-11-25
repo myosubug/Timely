@@ -85,7 +85,7 @@ const UserSettingsPage = (props) => {
           <Typography variant="h5" component="span">
             {"@" + props.username}
           </Typography>
-            {props.isAdmin ? " 👑 " : ""}
+          {props.isAdmin ? " 👑 " : ""}
           <Typography variant="body1">
             {"Member since " + props.joinDate}
           </Typography>
@@ -165,42 +165,49 @@ const UserSettingsPage = (props) => {
 
   return (
     <div className="UserSettingsPage">
-      <Grid container className="header">
-        <Typography variant="h4" align="center" className="headerTitle">
-          User Settings Page
-        </Typography>
-      </Grid>
-
       <Grid
         container
-        direction="row"
-        justify="flex-start"
-        alignItems="flex-start"
-        className="ButtonGrid"
+        direction="column"
+        justify="center"
+        alignItems="stretch"
+        spacing={10}
       >
-        <Grid item xs={1} />
-        <Grid item xs={3} className="ProfileGrid">
-          {/* Profile picture Grid and delete account button */}
-          {renderProfileGrid()}
+        <Grid item xs={1}>
+          <NavBar isLandingPg={false} />
         </Grid>
-        <Grid item xs={7} className="UserInfoGrid">
-          {/* User Info */}
-          {renderUserGrid()}
+
+        <Grid
+          item
+          container
+          xs={11}
+          direction="row"
+          justify="flex-start"
+          alignItems="flex-start"
+          className="ButtonGrid"
+        >
+          <Grid item xs={1} />
+          <Grid item xs={3} className="ProfileGrid">
+            {/* Profile picture Grid and delete account button */}
+            {renderProfileGrid()}
+          </Grid>
+          <Grid item xs={7} className="UserInfoGrid">
+            {/* User Info */}
+            {renderUserGrid()}
+          </Grid>
+          <Grid item xs={1} />
         </Grid>
-        <Grid item xs={1} />
-      </Grid>
 
-      {/* DELETE ACCOUNT MODAL */}
-      <DeleteAccountModal
-        username={props.username}
-        password={props.password}
-        delete={handleDeleteAccount}
-        isOpen={isDeleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
-      />
+        {/* DELETE ACCOUNT MODAL */}
+        <DeleteAccountModal
+          username={props.username}
+          password={props.password}
+          delete={handleDeleteAccount}
+          isOpen={isDeleteModalOpen}
+          onClose={() => setDeleteModalOpen(false)}
+        />
 
-      {/* EDIT EMAIL MODAL */}
-      {/* <EditEmailModal
+        {/* EDIT EMAIL MODAL */}
+        {/* <EditEmailModal
         username={props.username}
         password={props.password}
         email={props.email}
@@ -209,23 +216,24 @@ const UserSettingsPage = (props) => {
         onClose={closeEmailModal}
       /> */}
 
-      {/* EDIT USERNAME MODAL */}
-      <EditUsernameModal
-        username={props.username}
-        password={props.password}
-        update={handleUpdateUsername}
-        isOpen={isUserModalOpen}
-        onClose={() => setUserModalOpen(false)}
-      />
+        {/* EDIT USERNAME MODAL */}
+        <EditUsernameModal
+          username={props.username}
+          password={props.password}
+          update={handleUpdateUsername}
+          isOpen={isUserModalOpen}
+          onClose={() => setUserModalOpen(false)}
+        />
 
-      {/* EDIT PASSWORD MODAL */}
-      <EditPasswordModal
-        username={props.username}
-        password={props.password}
-        update={handleUpdatePassword}
-        isOpen={isPassModalOpen}
-        onClose={() => setPassModalOpen(false)}
-      />
+        {/* EDIT PASSWORD MODAL */}
+        <EditPasswordModal
+          username={props.username}
+          password={props.password}
+          update={handleUpdatePassword}
+          isOpen={isPassModalOpen}
+          onClose={() => setPassModalOpen(false)}
+        />
+      </Grid>
     </div>
   );
 

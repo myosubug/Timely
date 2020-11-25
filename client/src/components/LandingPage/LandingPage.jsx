@@ -4,6 +4,7 @@ import { PostCreator } from '../PostCreator/PostCreator.jsx';
 import { Post } from '../Post/Post.jsx';
 import { Sign } from '../SignInUp/Sign.jsx';
 import TagFilter from '../TagFilter/TagFilter';
+import NavBar from '../NavBar';
 
 import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
@@ -120,29 +121,10 @@ const LandingPage = (props) => {
 
     return (
         <div>
-
-            <div>
-                <div className="p-2 mt-0 fixed w-full z-10 top-0 shadow-lg navbar">
-                    {/* Sign in/up button */}
-                    <div className="flex justify-center text-white font-medium text-3xl">
-                        <img width="150px" draggable="false" src="https://i.imgur.com/ATuMhih.png"></img>
-                        <div
-                            onClick={() => setRenderModalObj(prev => ({ ...prev, "login": true }))}
-                            className="button text-white text-2xl font-semibold mb-2 text-right rounded cursor-pointer"
-                            style={{ height: "3.2rem" }}>
-                            <p style={{ paddingTop: "0.18rem" }}>Sign In/Up</p>
-                        </div>
-                        {/* User settings button */}
-                        <div
-                            // TODO: Reroute to user settings page
-                            onClick={() => {console.log("user settings clicke")}}
-                            className="button text-white text-2xl font-semibold mb-2 text-right rounded cursor-pointer"
-                            style={{ height: "3.2rem" }}>
-                            <p style={{ paddingTop: "0.18rem" }}>⚙️</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <NavBar
+                openSignInModal={() => setRenderModalObj(prev => ({ ...prev, "login": true }))}
+                isLandingPg={true}
+            />
 
             {checkModalState()}
 
