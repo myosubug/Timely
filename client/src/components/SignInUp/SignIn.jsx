@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../../AppConfig.js'
 import { loggedInUser } from '../../AppConfig.js'
+import { setCookie } from '../../cookieHandler.js';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -43,6 +44,13 @@ export default function SignIn(props) {
         loggedInUser.username = res.data.userInfo.username;
         loggedInUser.isAdmin = res.data.userInfo.isAdmin;
         loggedInUser.profileImage = res.data.userInfo.profileImage;
+
+        //Store in storage
+        setCookie('id', loggedInUser.id, 10);
+        setCookie('username', loggedInUser.username, 10);
+        setCookie('isAdmin', loggedInUser.isAdmin, 10);
+        setCookie('profileImage', loggedInUser.profileImage, 10);
+
         alert("login successful");
         props.setLoggedIn(true);
         props.onCancel();
