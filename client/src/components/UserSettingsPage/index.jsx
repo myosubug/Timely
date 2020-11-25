@@ -7,7 +7,6 @@ import {
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import DeleteAccountModal from '../DeleteAccountModal';
-import EditEmailModal from '../EditEmailModal';
 import EditUsernameModal from '../EditUsernameModal';
 import EditPasswordModal from '../EditPasswordModal';
 import * as avatarImg from './../../imgs/patrick.jpg';
@@ -50,16 +49,16 @@ export class UserSettingsPage extends Component {
   }
 
   // EDIT EMAIL STATE HANDLER
-  openEmailModal = () => {
-    this.setState({ 
-      isEditEmailOpen: true });
-    };
+  // openEmailModal = () => {
+  //   this.setState({ 
+  //     isEditEmailOpen: true });
+  //   };
     
-    closeEmailModal = () => {
-      this.setState({
-        isEditEmailOpen: false,
-      });
-    }
+  //   closeEmailModal = () => {
+  //     this.setState({
+  //       isEditEmailOpen: false,
+  //     });
+  //   }
 
     // EDIT USERNAME STATE HANDLER
   openUserModal = () => {
@@ -135,7 +134,7 @@ export class UserSettingsPage extends Component {
           </Typography>
             {this.props.isAdmin ? " 👑 " : ""}
           <Typography variant="body1">
-            {"Member since " + this.props.memberStatus}
+            {"Member since " + this.props.joinDate}
           </Typography>
           <Typography variant="body1">
             {this.props.posts + " posts"}
@@ -153,7 +152,7 @@ export class UserSettingsPage extends Component {
     return (
       <div>
         {/* Edit Email */}
-        <Grid container spacing={1}>
+        {/* <Grid container spacing={1}>
           <Grid item xs={8}>
             <Typography variant="h6">Email</Typography>
             {this.props.email}
@@ -169,7 +168,7 @@ export class UserSettingsPage extends Component {
               Edit
             </Button>
           </Grid>
-        </Grid>
+        </Grid> */}
 
         {/* Edit Username */}
         <Grid container spacing={1}>
