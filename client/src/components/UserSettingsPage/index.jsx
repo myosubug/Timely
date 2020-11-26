@@ -59,6 +59,7 @@ const UserSettingsPage = (props) => {
     }
   };
 
+  // Handling when avatar image is clicked
   const handleAvatarClick = (event) => {
     if (image) {
       event.preventDefault();
@@ -266,16 +267,20 @@ const UserSettingsPage = (props) => {
 
         {/* EDIT USERNAME MODAL */}
         <EditUsernameModal
-          username={props.username}
-          password={props.password}
+          // username={props.username}
+          // password={props.password}
+          username={"username"}
+          password={"123"}        
           isOpen={isUserModalOpen}
           onClose={() => setUserModalOpen(false)}
         />
 
         {/* EDIT PASSWORD MODAL */}
         <EditPasswordModal
-          username={props.username}
-          password={props.password}
+          // username={props.username}
+          // password={props.password}
+          username={"username"}
+          password={"123"}
           isOpen={isPassModalOpen}
           onClose={() => setPassModalOpen(false)}
         />
