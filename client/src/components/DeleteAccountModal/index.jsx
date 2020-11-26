@@ -47,39 +47,39 @@ export const DeleteAccountModal = (props) => {
     }
   };
 
-  return(
+  return (
     <Dialog
       open={props.isOpen}
       onClose={handleClose}
       onBackdropClick={handleClose}
       className="DeleteAccountModal"
-      >
+    >
       <DialogTitle id="title">
         🚨 Delete account 🚨
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Are you sure you want to delete your account? 
-          This cannot be undone. 
+          Are you sure you want to delete your account?
+          This cannot be undone.
         </DialogContentText>
         <TextField
-            autoFocus
-            margin="dense"
-            id="confirmPass"
-            label="Confirm password"
-            type="password"
-            fullWidth
-            required
-          />
+          autoFocus
+          margin="dense"
+          id="confirmPass"
+          label="Confirm password"
+          type="password"
+          fullWidth
+          required
+        />
       </DialogContent>
       <DialogActions>
-        <Button 
+        <Button
           onClick={handleClose}
           className="ConfirmButton"
         >
           Cancel
         </Button>
-        <Button 
+        <Button
           onClick={handleOnConfirmClick}
           className="ConfirmButton"
         >

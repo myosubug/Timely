@@ -15,11 +15,11 @@ import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
 export const EditPasswordModal = (props) => {
 
   EditPasswordModal.propTypes = {
-  username: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
+    username: PropTypes.string.isRequired,
+    password: PropTypes.string.isRequired,
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+  };
 
   // Resets the state when the modal is closed
   const handleClose = () => {
@@ -33,41 +33,41 @@ export const EditPasswordModal = (props) => {
       return false;
     }
     if (!document.getElementById('newPass').value || document.getElementById('newPass').value.length < 3) {
-        console.log("New password must be at least 3 characters.");
-        return false;
-      }
+      console.log("New password must be at least 3 characters.");
+      return false;
+    }
     if (document.getElementById('newPass').value !== document.getElementById('confirmPass').value) {
       console.log("Passwords must match.");
       return false;
     }
     return true;
   }
-  
+
   // Function that handles the password change
   const handleOnConfirmClick = () => {
     if (isPasswordValid()) {
       const data = { password: document.getElementById('newPass').value };
       console.log(data);
       // axios call 
-        axios.post(SERVER_ADDRESS + '/users/update/pass/' + props.username, data)
-          .then(res => {
-            console.log(res.data);
-            console.log("Axios: password successfully updated!")
-          })
-          .catch(err => (console.log(err)))
+      axios.post(SERVER_ADDRESS + '/users/update/pass/' + props.username, data)
+        .then(res => {
+          console.log(res.data);
+          console.log("Axios: password successfully updated!")
+        })
+        .catch(err => (console.log(err)))
       handleClose();
     } else {
       console.log("Password failed to update!");
     }
   };
 
-  return(
+  return (
     <Dialog
       open={props.isOpen}
       onClose={handleClose}
       onBackdropClick={handleClose}
       className="EditPasswordModal"
-      >
+    >
       <DialogTitle id="title">
         Change your password
       </DialogTitle>
@@ -76,41 +76,41 @@ export const EditPasswordModal = (props) => {
           Please enter your current and new password to confirm these changes.
         </DialogContentText>
         <TextField
-            autoFocus
-            margin="dense"
-            id="currentPass"
-            label="Current password"
-            type="password"
-            fullWidth
-            required
-          />
+          autoFocus
+          margin="dense"
+          id="currentPass"
+          label="Current password"
+          type="password"
+          fullWidth
+          required
+        />
         <TextField
-            autoFocus
-            margin="dense"
-            id="newPass"
-            label="New password"
-            type="password"
-            fullWidth
-            required
-          />
+          autoFocus
+          margin="dense"
+          id="newPass"
+          label="New password"
+          type="password"
+          fullWidth
+          required
+        />
         <TextField
-            autoFocus
-            margin="dense"
-            id="confirmPass"
-            label="Re-enter new password"
-            type="password"
-            fullWidth
-            required
-          />
+          autoFocus
+          margin="dense"
+          id="confirmPass"
+          label="Re-enter new password"
+          type="password"
+          fullWidth
+          required
+        />
       </DialogContent>
       <DialogActions>
-        <Button 
+        <Button
           onClick={handleClose}
           className="ConfirmButton"
         >
           Cancel
         </Button>
-        <Button 
+        <Button
           onClick={handleOnConfirmClick}
           className="ConfirmButton"
         >
