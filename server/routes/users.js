@@ -67,8 +67,8 @@ router.route('/delete/:username').post((req, res) => {
 });
 
 // Update password
-router.route('/updatepass/:id').post((req, res) => {
-    User.findById(req.params.id)
+router.route('/updatepass/:username').post((req, res) => {
+    User.findById(req.params.username)
         .then(user => {
             user.password = req.body.password;
 
@@ -80,8 +80,8 @@ router.route('/updatepass/:id').post((req, res) => {
 });
 
 // Update username
-router.route('/updateuser/:id').post((req, res) => {
-    User.findById(req.params.id)
+router.route('/updateuser/:username').post((req, res) => {
+    User.findById(req.params.username)
         .then(user => {
             user.username = req.body.username;
             user.password = user.password;
