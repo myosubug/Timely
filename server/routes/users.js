@@ -120,4 +120,12 @@ router.route('/upload-profile/:username').post((req, res) => {
         .catch(err => console.log(err));
 });
 
+// Determines the join date of the user
+// Finds user by their username
+router.route('/finduser/join-date/:username').get((req, res) => {
+    User.findOne({ username: req.params.createdAt })
+        .then(users => res.json(users))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
 module.exports = router;

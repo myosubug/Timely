@@ -84,6 +84,16 @@ const UserSettingsPage = (props) => {
       .catch(err => (console.log(err)));
   };
 
+  // Function that gets the join date of the user
+  // const handleFetchJoinDate = () => {
+  //   console.log(loggedInUser.username);
+  //   axios.get(SERVER_ADDRESS +  '/users/finduser/join-date' + loggedInUser.username)
+  //     .then(res => {
+  //       const joinDate = res.createdAt;
+
+  //     })
+  // }
+
   // Renders the profile pic and the delete account button
   const renderProfileGrid = () => {
     return (
