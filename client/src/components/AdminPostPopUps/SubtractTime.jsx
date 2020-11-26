@@ -52,7 +52,7 @@ export const SubTime = (props) => {
       className="AddTime"
     >
       <DialogTitle id="title">
-        Add Time
+        Subtract Time
       </DialogTitle>
       <DialogContent>
         <DialogContentText>

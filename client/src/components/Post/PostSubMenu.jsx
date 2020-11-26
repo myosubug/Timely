@@ -22,11 +22,13 @@ import { SERVER_ADDRESS } from "../../AppConfig";
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
-        zIndex: 1000,
-        position: "absolute"
     },
     paper: {
         marginRight: theme.spacing(2)
+    },
+    menu: {
+        zIndex: 1000,
+        position: "absolute"
     }
 }));
 
@@ -154,6 +156,7 @@ const PostSubMenu = (props) => {
                 </IconButton>
 
                 <Popper
+                    className={classes.menu}
                     open={open}
                     anchorEl={anchorRef.current}
                     role={undefined}
