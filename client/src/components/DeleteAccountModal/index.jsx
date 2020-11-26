@@ -20,12 +20,9 @@ export const DeleteAccountModal = (props) => {
     onClose: PropTypes.func.isRequired,
   };
 
-  const [confirmPass, setConfirmPass] = useState('');
-
   // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
-    setConfirmPass('');
   };
 
   // Checks if the password is valid

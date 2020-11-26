@@ -8,7 +8,7 @@ router.route('/').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-// Returns a list of all users from db
+// Finds user by their username
 router.route('/finduser/:username').get((req, res) => {
     User.findOne({ username: req.params.username })
         .then(users => res.json(users))
@@ -67,8 +67,8 @@ router.route('/delete/:username').post((req, res) => {
 });
 
 // Update password
-router.route('/updatepass/:username').post((req, res) => {
-    User.findById(req.params.username)
+router.route('/update/pass/:username').post((req, res) => {
+    User.findOne({ username: req.params.username })
         .then(user => {
             user.password = req.body.password;
 
@@ -80,12 +80,10 @@ router.route('/updatepass/:username').post((req, res) => {
 });
 
 // Update username
-router.route('/updateuser/:username').post((req, res) => {
-    User.findById(req.params.username)
+router.route('/update/username/:username').post((req, res) => {
+    User.findOne({ username: req.params.username })
         .then(user => {
             user.username = req.body.username;
-            user.password = user.password;
-
             user.save()
                 .then(() => res.json('username successfully updated!'))
                 .catch(err => res.status(400).json('Error: ' + err));

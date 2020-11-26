@@ -9,25 +9,22 @@ import {
   Button,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
+
 
 export const EditUsernameModal = (props) => {
 
   EditUsernameModal.propTypes = {
   username: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
-  update: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
-  const [newUsername, setUsername] = useState('');
-  const [password, setConfirmPassword] = useState('');
-
   // Reset the state when the modal is closed
   const handleClose = () => {
     props.onClose();
-    setUsername('');
-    setConfirmPassword('');
   };
 
   // Check if the username is valid and password is correct
@@ -46,8 +43,16 @@ export const EditUsernameModal = (props) => {
   // Function that handles the update of a username
   const handleOnConfirmClick = () => {
     if (isUsernameValid()) {
-      console.log("Username successfully updated!");
-      props.update({newUser: newUsername, username: props.username});
+      const data = { username: document.getElementById('newUser').value };
+      console.log(data);
+      // axios call 
+        axios.post(SERVER_ADDRESS + '/users/update/username/' + props.username, data)
+          .then(res => {
+            console.log(res.data);
+            console.log("Axios: user successfully updated!")
+            // TODO: PAGE SHOULD RERENDER WITH NEW USERNAME
+          })
+          .catch(err => (console.log(err)))
       handleClose();
     } else {
       console.log("Username failed to update!");

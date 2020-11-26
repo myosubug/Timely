@@ -9,43 +9,34 @@ import {
   Button,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
 
 export const EditPasswordModal = (props) => {
 
   EditPasswordModal.propTypes = {
   username: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
-  update: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
   // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
-    setPassword('');
-    setConfirmPassword('');
-    setCurrentPassword('');
   };
 
   // Checks if the password is valid and checks if the passwords match
   const isPasswordValid = () => {
     if (props.password !== document.getElementById('currentPass').value) {
-    // if(props.password !== currentPass) {
       console.log("Current password is incorrect.");
       return false;
     }
     if (!document.getElementById('newPass').value || document.getElementById('newPass').value.length < 3) {
-      // if(!newPass || newPass < 3) {
         console.log("New password must be at least 3 characters.");
         return false;
       }
     if (document.getElementById('newPass').value !== document.getElementById('confirmPass').value) {
-    // if(newPass !== confirmPass) {
       console.log("Passwords must match.");
       return false;
     }
@@ -55,8 +46,15 @@ export const EditPasswordModal = (props) => {
   // Function that handles the password change
   const handleOnConfirmClick = () => {
     if (isPasswordValid()) {
-      console.log("Password successfully updated!");
-      props.update(newPassword, props.username);
+      const data = { password: document.getElementById('newPass').value };
+      console.log(data);
+      // axios call 
+        axios.post(SERVER_ADDRESS + '/users/update/pass/' + props.username, data)
+          .then(res => {
+            console.log(res.data);
+            console.log("Axios: password successfully updated!")
+          })
+          .catch(err => (console.log(err)))
       handleClose();
     } else {
       console.log("Password failed to update!");
@@ -83,7 +81,6 @@ export const EditPasswordModal = (props) => {
             id="currentPass"
             label="Current password"
             type="password"
-            // onInput={(event) => setConfirmPassword(event.target.value)}
             fullWidth
             required
           />
@@ -93,7 +90,6 @@ export const EditPasswordModal = (props) => {
             id="newPass"
             label="New password"
             type="password"
-            // onInput={(event) => setConfirmPassword(event.target.value)}
             fullWidth
             required
           />
@@ -103,7 +99,6 @@ export const EditPasswordModal = (props) => {
             id="confirmPass"
             label="Re-enter new password"
             type="password"
-            // onInput={(event) => setConfirmPassword(event.target.value)}
             fullWidth
             required
           />

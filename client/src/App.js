@@ -16,7 +16,7 @@ function App() {
     <UserSettingsPage 
       username="test2"
       password="123"
-      isAdmin={true}
+      isAdmin={false}
       profileImage=""
       joinDate=""
       posts={3}

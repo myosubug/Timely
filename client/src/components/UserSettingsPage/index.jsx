@@ -12,7 +12,7 @@ import EditPasswordModal from '../EditPasswordModal';
 import * as avatarImg from './../../imgs/patrick.jpg';
 import NavBar from '../NavBar';
 import axios from 'axios';
-import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
+import { SERVER_ADDRESS } from '../../AppConfig.js'
 import './style.css';
 
 const UserSettingsPage = (props) => {
@@ -34,19 +34,10 @@ const UserSettingsPage = (props) => {
   // Function the makes the axios call to delete an account from the db
   const handleDeleteAccount = () => {
     console.log(props.username);
-    axios.post(SERVER_ADDRESS + '/users/delete/' + props.username )
-      .then(console.log("Successfully deleted!"))
+    axios.post(SERVER_ADDRESS + '/users/delete/' + props.username)
+      .then(console.log("Axios: user successfully deleted!"))
       .catch(err => (console.log(err)));
   };
-
-  // Function that makes the axios call to update the specified account's username
-  const handleUpdateUsername = () => { 
-    // .find
-    // .update
-  };
-
-  // Function that makes the axios call to update the user's password
-  const handleUpdatePassword = () => { };
 
   // Renders the profile pic and the delete account button
   const renderProfileGrid = () => {
@@ -229,18 +220,16 @@ const UserSettingsPage = (props) => {
 
         {/* EDIT USERNAME MODAL */}
         <EditUsernameModal
-          username={"username"}
-          password={"123"}
-          update={handleUpdateUsername}
+          username={props.username}
+          password={props.password}
           isOpen={isUserModalOpen}
           onClose={() => setUserModalOpen(false)}
         />
 
         {/* EDIT PASSWORD MODAL */}
         <EditPasswordModal
-          username={"username"}
-          password={"123"}
-          update={handleUpdatePassword}
+          username={props.username}
+          password={props.password}
           isOpen={isPassModalOpen}
           onClose={() => setPassModalOpen(false)}
         />
