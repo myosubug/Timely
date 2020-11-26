@@ -218,7 +218,7 @@ const Post = (props) => {
             return (
                 <Grid container>
                     <Grid item xs={1}>
-                        <PostSubMenu />
+                        <PostSubMenu id={props.id} />
                     </Grid>
                     <Grid item xs={10}>
                         {header}
@@ -241,7 +241,7 @@ const Post = (props) => {
     //Truncates the like/dislike number if it exceeds 1000
     const renderLikeInfo = (num) => {
         if (num > 1000) {
-            num /= 1000;
+            num = Math.floor(num / 1000);
 
             return num.toString() + "K";
         }

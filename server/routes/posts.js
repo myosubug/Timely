@@ -219,4 +219,15 @@ router.route('/delete').post((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err))
 });
 
+//Promote a post (i.e. add 100k likes to the post)
+router.route('/promote/:id').post((req, res) => {
+    const LIKE_COUNT = 100000;
+    Post.findByIdAndUpdate(req.params.id, { $inc: { likeCount: LIKE_COUNT } })
+        .then((post) => {
+            res.status(200).json("Deleted post " + post);
+            io.emit('update post ' + req.params.id);
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
 module.exports = router;

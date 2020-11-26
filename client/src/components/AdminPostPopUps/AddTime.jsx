@@ -10,12 +10,15 @@ import {
   InputAdornment,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 export const AddTime = (props) => {
 
+  const [time, setTime] = useState(0);
+  const [errorMsg, setErrormsg] = useState("");
+
   AddTime.propTypes = {
-    id: PropTypes.string.isRequired,
-    update: PropTypes.func.isRequired,
+    onConfirm: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
   };
@@ -25,14 +28,21 @@ export const AddTime = (props) => {
   };
 
   const handleOnConfirmClick = () => {
-    // call update()
-    // TODO: Add increase time
-    // use the update prop passed in to handle the new lifetime
-    // Cast the event coming into a number
-    // Update this number in the db
-    // Re-render the timer with new value
-    // Should time be passed in as a prop or should we update it's state?
+    if (time <= 0) {
+      setErrormsg("Number of seconds must be a postive number");
+      return;
+    }
+
+    setErrormsg("");
+    setTime(0);
+    props.onConfirm(time);
+    props.onClose();
+
   };
+
+  const onTextChange = (e) => {
+    setTime(e.target.value);
+  }
 
   return (
     <Dialog
@@ -56,8 +66,11 @@ export const AddTime = (props) => {
           type="number"
           required
           InputProps={{
-            endAdornment: <InputAdornment position="end">sec</InputAdornment>,
+            endAdornment: <InputAdornment position="end">sec</InputAdornment>
           }}
+          error={errorMsg !== ""}
+          helperText={errorMsg}
+          onChange={onTextChange}
         >
         </TextField>
       </DialogContent>
@@ -69,7 +82,7 @@ export const AddTime = (props) => {
           Cancel
         </Button>
         <Button
-          onClick={handleClose}
+          onClick={handleOnConfirmClick}
           // onClick={handleOnConfirmClick}
           className="ConfirmButton"
         >
