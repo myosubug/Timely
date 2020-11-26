@@ -13,9 +13,8 @@ export class UserOverviewPage extends Component {
     // Could probably make some sort of user data structure to be passed in
     // Rather than passing in props for each field
     username: PropTypes.string.isRequired,
-    memberStatus: PropTypes.string.isRequired,
+    joinDate: PropTypes.string.isRequired,
     posts: PropTypes.number.isRequired,
-    email: PropTypes.string.isRequired,
     postActivity: PropTypes.string.isRequired,
     isAdmin: PropTypes.bool.isRequired,
   }
@@ -117,7 +116,7 @@ export class UserOverviewPage extends Component {
           </Typography>
             {this.props.isAdmin ? " 👑 " : ""}
           <Typography variant="body1">
-            {"Member since " + this.props.memberStatus}
+            {"Member since " + this.props.joinDate}
           </Typography>
           <Typography variant="body1">
             {this.props.posts + " posts"}

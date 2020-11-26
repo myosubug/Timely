@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Dialog,
   DialogActions,
@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
+import { SERVER_ADDRESS } from '../../AppConfig.js'
 
 export const EditPasswordModal = (props) => {
 
