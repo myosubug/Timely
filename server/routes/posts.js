@@ -12,6 +12,35 @@ router.route('/').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+//Returns all most-liked posts in descending order
+router.route('/trending').get((req, res) => {
+    Post.find().sort({likeCount: -1})
+        .then(posts => res.json(posts))
+        .catch(err => res.status(400).json('Error: ' + err));
+        
+});
+
+//finds and sorts the posts based on expiration date(posts with expiry date soon appear first)
+router.route('/expiring-soon').get((req,res)=>{
+    Post.find().sort({expiryDate: 1})
+        .then(posts => res.json(posts))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
+//finds and sorts the posts based on creation date(newest posts appear first)
+router.route('/newest-posts').get((req,res)=>{
+    Post.find().sort({dateCreated: -1})
+        .then(posts => res.json(posts))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
+//finds and sorts the posts based on the amount of time remaining(?)
+router.route('/time-remaining').get((req,res)=>{
+    Post.find().sort({expiryDate: -1})
+        .then(posts => res.json(posts))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
 //Returns a Post object by ID
 router.route('/:id').get((req, res) => {
     Post.findById(req.params.id)

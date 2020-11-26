@@ -10,14 +10,12 @@ import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
 
 import './LandingStyles.css'
-
 const LandingPage = (props) => {
 
     const [renderModalObj, setRenderModalObj] = useState({ "tags": false, "login": false, "post": false });
-    const [posts, setPosts] = useState([]);
-    const [postQuery, setPostQuery] = useState('/posts/');
+    let [posts, setPosts] = useState([]);
+    let [postQuery, setPostQuery] = useState('/posts/');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
 
     useEffect(() => {
 
@@ -30,8 +28,12 @@ const LandingPage = (props) => {
             deletePosts();
         });
 
-        renderPosts();
+       renderPosts();
     }, []);
+
+    useEffect(() => {
+        deletePosts();
+    }, [postQuery])
 
 
     //Gets the posts from specified query, and sets the state
@@ -114,6 +116,21 @@ const LandingPage = (props) => {
         setRenderModalObj(prev => ({ ...prev, [name]: false }));
     }
 
+    const changePostQuery = (query) => {
+        
+      // setPostQuery('/posts/trending');
+      // postQuery = '/posts/trending'
+       setPostQuery(query);
+       //onsole.log("state of postquery after " + postQuery);
+        deletePosts();
+        //setPosts([]);
+       // deletePosts();
+        // let arr = this.posts;
+        // arr.map(post => {
+        //     console.log("hi");
+        // });
+        // console.log("Trending button being clicked");
+    }
 
 
 
@@ -148,10 +165,25 @@ const LandingPage = (props) => {
                             <i className="far fa-bell pr-3" style={{ fontSize: "1.6rem" }}></i> Notifications
                         </div>
 
-                        <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer">
+                        <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
+                            onClick={() => changePostQuery('/posts/trending')}>
                             <i className="fas fa-fire pr-3" style={{ fontSize: "1.6rem" }}></i> Trending
                         </div>
 
+                        <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
+                            onClick={() => changePostQuery('/posts/newest-posts')}>
+                            <i className="fas fa-fire pr-3" style={{ fontSize: "1.6rem" }}></i> Newest
+                        </div>
+
+                        <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
+                            onClick={() => changePostQuery('/posts/expiring-soon')}>
+                            <i className="fas fa-fire pr-3" style={{ fontSize: "1.6rem" }}></i> Expiring
+                        </div>
+
+                        <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
+                            onClick={() => changePostQuery('/posts/time-remaining')}>
+                            <i className="fas fa-fire pr-3" style={{ fontSize: "1.6rem" }}></i> Longest
+                        </div>
                     </div>
 
                     <div className="flex justify-center px-6">
