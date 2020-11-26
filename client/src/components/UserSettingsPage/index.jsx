@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { createRef, useState } from 'react';
 import {
   Avatar,
   Grid,
   Button,
   Typography,
+  IconButton,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import DeleteAccountModal from '../DeleteAccountModal';
 import EditUsernameModal from '../EditUsernameModal';
 import EditPasswordModal from '../EditPasswordModal';
-import * as avatarImg from './../../imgs/patrick.jpg';
+import * as avatarImg from './../../images/patrick.jpg';
 import NavBar from '../NavBar';
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../../AppConfig.js'
@@ -26,10 +27,44 @@ const UserSettingsPage = (props) => {
     posts: PropTypes.number.isRequired,
   };
 
+  const inputFileRef = createRef(null);
+  const [image, _setImage] = useState(null);
+
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isUserModalOpen, setUserModalOpen] = useState(false);
   const [isPassModalOpen, setPassModalOpen] = useState(false);
   // const [isEmailModalOpen, setEmailModalOpen] = useState(false);
+
+  // Function that cleans up avatar image
+  const cleanup = () => {
+    URL.revokeObjectURL(image);
+    inputFileRef.current.value = null;
+  };
+
+  // Function that sets avatar image
+  const setImage = (newImage) => {
+    if (image) {
+      cleanup();
+    }
+    _setImage(newImage);
+    console.log(inputFileRef);
+  };
+
+  // Takes uploaded img and passes it to setImg function to be set
+  const handleOnImgChange = (event) => {
+    const newImage = event.target?.files?.[0];
+
+    if (newImage) {
+      setImage(URL.createObjectURL(newImage));
+    }
+  };
+
+  const handleAvatarClick = (event) => {
+    if (image) {
+      event.preventDefault();
+      setImage(null);
+    }
+  };
 
   // Function the makes the axios call to delete an account from the db
   const handleDeleteAccount = () => {
@@ -51,12 +86,23 @@ const UserSettingsPage = (props) => {
         spacing={1}
       >
         <Grid item xs={9} className="ProfilePic">
-          <Avatar
-            alt="Patrick"
-            src={avatarImg}
-            className="avatar"
-          />
-          {/* TODO Change profile pic button*/}
+          <IconButton color="primary" onClick={handleAvatarClick}>
+            <input
+              accept="image/*"
+              ref={inputFileRef}
+              hidden
+              id="avatar-image-upload"
+              type="file"
+              onChange={handleOnImgChange}
+            />
+            <label htmlFor="avatar-image-upload">
+              <Avatar
+                alt="Avatar"
+                src={image || avatarImg}
+                className="avatar"
+              />
+            </label>
+          </IconButton>
         </Grid>
 
         <Grid item xs={3} className="DeleteAccount">
