@@ -4,6 +4,7 @@ import { PostCreator } from '../PostCreator/PostCreator.jsx';
 import { Post } from '../Post/Post.jsx';
 import { Sign } from '../SignInUp/Sign.jsx';
 import TagFilter from '../TagFilter/TagFilter';
+import NavBar from '../NavBar';
 
 import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
@@ -74,6 +75,7 @@ const LandingPage = (props) => {
             .catch(err => console.log(err));
     }
 
+    // Renders the modal based on the content passed in
     function renderModal(content) {
         return (
             <div className="fixed z-10 inset-0 overflow-y-auto">
@@ -90,11 +92,13 @@ const LandingPage = (props) => {
         )
     }
 
+    // Once the user is logged in, render all the live posts
     function setLoggedIn(val) {
         setIsLoggedIn(val);
         renderPosts();
     }
 
+    // Function that determines what modal to render
     function checkModalState() {
         if (renderModalObj.post) {
             return renderModal(<PostCreator onCancel={() => cancelModal("post")} />);
@@ -105,6 +109,7 @@ const LandingPage = (props) => {
         }
     }
 
+    // If the cancel button is clicked, reset the state and close the modal
     function cancelModal(name) {
         setRenderModalObj(prev => ({ ...prev, [name]: false }));
     }
@@ -116,20 +121,10 @@ const LandingPage = (props) => {
 
     return (
         <div>
-
-            <div>
-                <div className="p-2 mt-0 fixed w-full z-10 top-0 shadow-lg navbar">
-                    <div className="flex justify-center text-white font-medium text-3xl">
-                        <img width="150px" draggable="false" src="https://i.imgur.com/ATuMhih.png"></img>
-                        <div
-                            onClick={() => setRenderModalObj(prev => ({ ...prev, "login": true }))}
-                            className="button text-white text-2xl font-semibold mb-2 text-right rounded cursor-pointer"
-                            style={{ height: "3.2rem" }}>
-                            <p style={{ paddingTop: "0.18rem" }}>Sign In/Up</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <NavBar
+                openSignInModal={() => setRenderModalObj(prev => ({ ...prev, "login": true }))}
+                isLandingPg={true}
+            />
 
             {checkModalState()}
 

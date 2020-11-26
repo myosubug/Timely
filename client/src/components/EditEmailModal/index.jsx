@@ -13,9 +13,8 @@ import PropTypes from 'prop-types';
 export const EditEmailModal = (props) => {
 
   EditEmailModal.propTypes = {
-  userId: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired, 
   update: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,

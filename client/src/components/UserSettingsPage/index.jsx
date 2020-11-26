@@ -1,92 +1,82 @@
-import React, { Component } from 'react';
+import React, { createRef, useState } from 'react';
 import {
   Avatar,
   Grid,
   Button,
   Typography,
+  IconButton,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import DeleteAccountModal from '../DeleteAccountModal';
-import EditEmailModal from '../EditEmailModal';
 import EditUsernameModal from '../EditUsernameModal';
 import EditPasswordModal from '../EditPasswordModal';
-import * as avatarImg from './../../imgs/patrick.jpg';
+import * as avatarImg from './../../images/patrick.jpg';
+import NavBar from '../NavBar';
+import axios from 'axios';
+import { SERVER_ADDRESS } from '../../AppConfig.js'
 import './style.css';
 
-export class UserSettingsPage extends Component {
-  static propTypes = {
-    // Could probably make some sort of user data structure to be passed in
-    // Rather than passing in props for each field
-    userId: PropTypes.string.isRequired,
+const UserSettingsPage = (props) => {
+  UserSettingsPage.propTypes = {
     username: PropTypes.string.isRequired,
-    memberStatus: PropTypes.string.isRequired,
-    posts: PropTypes.number.isRequired,
-    email: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
     isAdmin: PropTypes.bool.isRequired,
-  }
+    profileImage: PropTypes.string.isRequired,
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isDeleteOpen: false,
-      isEditEmailOpen: false,
-      isEditUserOpen: false,
-      isEditPassOpen: false,
-    };
-  }
-
-  // DELETE MODAL STATE HANDLER
-  openDeleteModal = () => {
-    this.setState({ 
-      isDeleteOpen: true });
+    joinDate: PropTypes.string.isRequired,
+    posts: PropTypes.number.isRequired,
   };
 
-  closeDeleteModal = () => {
-    this.setState({
-      isDeleteOpen: false,
-    });
-  }
+  const inputFileRef = createRef(null);
+  const [image, _setImage] = useState(null);
 
-  // EDIT EMAIL STATE HANDLER
-  openEmailModal = () => {
-    this.setState({ 
-      isEditEmailOpen: true });
-    };
-    
-    closeEmailModal = () => {
-      this.setState({
-        isEditEmailOpen: false,
-      });
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isUserModalOpen, setUserModalOpen] = useState(false);
+  const [isPassModalOpen, setPassModalOpen] = useState(false);
+  // const [isEmailModalOpen, setEmailModalOpen] = useState(false);
+
+  // Function that cleans up avatar image
+  const cleanup = () => {
+    URL.revokeObjectURL(image);
+    inputFileRef.current.value = null;
+  };
+
+  // Function that sets avatar image
+  const setImage = (newImage) => {
+    if (image) {
+      cleanup();
     }
+    _setImage(newImage);
+    console.log(inputFileRef);
+  };
 
-    // EDIT USERNAME STATE HANDLER
-  openUserModal = () => {
-    this.setState({ 
-      isEditUserOpen: true });
-    };
-    
-    closeUserModal = () => {
-      this.setState({
-        isEditUserOpen: false,
-      });
+  // Takes uploaded img and passes it to setImg function to be set
+  const handleOnImgChange = (event) => {
+    const newImage = event.target?.files?.[0];
+
+    if (newImage) {
+      setImage(URL.createObjectURL(newImage));
     }
-    
-    // EDIT PASSWORD STATE HANDLER
-  openPassModal = () => {
-    this.setState({ 
-      isEditPassOpen: true });
-    };
-    
-    closePassModal = () => {
-      this.setState({
-        isEditPassOpen: false,
-      });
+  };
+
+  // Handling when avatar image is clicked
+  const handleAvatarClick = (event) => {
+    if (image) {
+      event.preventDefault();
+      setImage(null);
     }
-    
+  };
 
+  // Function the makes the axios call to delete an account from the db
+  const handleDeleteAccount = () => {
+    console.log(props.username);
+    axios.post(SERVER_ADDRESS + '/users/delete/' + props.username)
+      .then(console.log("Axios: user successfully deleted!"))
+      .catch(err => (console.log(err)));
+  };
 
-  renderProfileGrid = () => {
+  // Renders the profile pic and the delete account button
+  const renderProfileGrid = () => {
     return (
       <Grid
         container
@@ -97,19 +87,30 @@ export class UserSettingsPage extends Component {
         spacing={1}
       >
         <Grid item xs={9} className="ProfilePic">
-          <Avatar
-            alt="Patrick"
-            src={avatarImg}
-            className="avatar"
-          />
-          {/* TODO Change profile pic button*/}
+          <IconButton color="primary" onClick={handleAvatarClick}>
+            <input
+              accept="image/*"
+              ref={inputFileRef}
+              hidden
+              id="avatar-image-upload"
+              type="file"
+              onChange={handleOnImgChange}
+            />
+            <label htmlFor="avatar-image-upload">
+              <Avatar
+                alt="Avatar"
+                src={image || avatarImg}
+                className="avatar"
+              />
+            </label>
+          </IconButton>
         </Grid>
 
         <Grid item xs={3} className="DeleteAccount">
           <Button
             variant="contained"
             className="DeleteAccountButton"
-            onClick={this.openDeleteModal}
+            onClick={() => setDeleteModalOpen(true)}
             size="medium"
           >
             Delete
@@ -119,7 +120,8 @@ export class UserSettingsPage extends Component {
     );
   }
 
-  renderUserGrid = () => {
+  // Renders the users information
+  const renderUserGrid = () => {
     return (
       <Grid
         container
@@ -130,57 +132,58 @@ export class UserSettingsPage extends Component {
       >
         <Grid item xs className="UserInfo">
           <Typography variant="h5" component="span">
-            {"@" + this.props.username}
+            {"@" + props.username}
           </Typography>
-            {this.props.isAdmin ? " 👑 " : ""}
+          {props.isAdmin ? " 👑 " : ""}
           <Typography variant="body1">
-            {"Member since " + this.props.memberStatus}
+            {"Member since " + props.joinDate}
           </Typography>
           <Typography variant="body1">
-            {this.props.posts + " posts"}
+            {props.posts + " posts"}
           </Typography>
         </Grid>
 
         <Grid item xs className="UserActions">
-          {this.renderUserActions()}
+          {renderUserActions()}
         </Grid>
       </Grid>
     )
   }
 
-  renderUserActions = () => {
+  // Renders the action buttons: edit username, edit password
+  const renderUserActions = () => {
     return (
       <div>
         {/* Edit Email */}
-        <Grid container spacing={1}>
+        {/* <Grid container spacing={1}>
           <Grid item xs={8}>
             <Typography variant="h6">Email</Typography>
-            {this.props.email}
+            {props.email}
           </Grid>
 
           <Grid item xs={4}>
             <Button
               variant="contained"
               className="EditEmailButton"
-              onClick={this.openEmailModal}
+              onClick={openEmailModal}
               size="medium"
             >
               Edit
             </Button>
           </Grid>
-        </Grid>
+        </Grid> */}
 
         {/* Edit Username */}
         <Grid container spacing={1}>
           <Grid item xs={8}>
             <Typography variant="h6">Username</Typography>
-            {this.props.username}
+            {props.username}
           </Grid>
           <Grid item xs={4}>
             <Button
               variant="contained"
               className="EditUsernameButton"
-              onClick={this.openUserModal}
+              onClick={() => setUserModalOpen(true)}
               size="medium"
             >
               Edit
@@ -192,13 +195,13 @@ export class UserSettingsPage extends Component {
         <Grid container spacing={1}>
           <Grid item xs={8}>
             <Typography variant="h6">Password</Typography>
-            {this.props.password}
+            {props.password}
           </Grid>
           <Grid item xs={4}>
             <Button
               variant="contained"
               className="EditPasswordButton"
-              onClick={this.openPassModal}
+              onClick={() => setPassModalOpen(true)}
               size="medium"
             >
               Edit
@@ -209,17 +212,23 @@ export class UserSettingsPage extends Component {
     );
   }
 
-  render() {
-    return (
-      <div className="UserSettingsPage">
-        <Grid container className="header">
-          <Typography variant="h4" align="center" className="headerTitle">
-            User Settings Page
-          </Typography>
+  return (
+    <div className="UserSettingsPage">
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="stretch"
+        spacing={10}
+      >
+        <Grid item xs={1}>
+          <NavBar isLandingPg={false} />
         </Grid>
 
         <Grid
+          item
           container
+          xs={11}
           direction="row"
           justify="flex-start"
           alignItems="flex-start"
@@ -227,55 +236,58 @@ export class UserSettingsPage extends Component {
         >
           <Grid item xs={1} />
           <Grid item xs={3} className="ProfileGrid">
-            {/* 1. Profile picture Grid and delete account button */}
-            {this.renderProfileGrid()}
+            {/* Profile picture Grid and delete account button */}
+            {renderProfileGrid()}
           </Grid>
           <Grid item xs={7} className="UserInfoGrid">
-            {/* 2. User Info */}
-            {this.renderUserGrid()}
+            {/* User Info */}
+            {renderUserGrid()}
           </Grid>
           <Grid item xs={1} />
         </Grid>
 
         {/* DELETE ACCOUNT MODAL */}
         <DeleteAccountModal
-          userId={this.props.userId}
-          password={this.props.password}
-          delete={() => {}}
-          isOpen={this.state.isDeleteOpen}
-          onClose={this.closeDeleteModal}
+          username={"username"}
+          password={"123"}
+          delete={handleDeleteAccount}
+          isOpen={isDeleteModalOpen}
+          onClose={() => setDeleteModalOpen(false)}
         />
 
         {/* EDIT EMAIL MODAL */}
-        <EditEmailModal
-          userId={this.props.userId}
-          password={this.props.password}
-          email={this.props.email}
-          update={() => {}}
-          isOpen={this.state.isEditEmailOpen}
-          onClose={this.closeEmailModal}
-        />
+        {/* <EditEmailModal
+        username={props.username}
+        password={props.password}
+        email={props.email}
+        update={() => {}}
+        isOpen={state.isEditEmailOpen}
+        onClose={closeEmailModal}
+      /> */}
 
         {/* EDIT USERNAME MODAL */}
         <EditUsernameModal
-          userId={this.props.userId}
-          password={this.props.password}
-          username={this.props.username}
-          update={() => {}}
-          isOpen={this.state.isEditUserOpen}
-          onClose={this.closeUserModal}
+          // username={props.username}
+          // password={props.password}
+          username={"username"}
+          password={"123"}        
+          isOpen={isUserModalOpen}
+          onClose={() => setUserModalOpen(false)}
         />
 
         {/* EDIT PASSWORD MODAL */}
         <EditPasswordModal
-          userId={this.props.userId}
-          password={this.props.password}
-          update={() => {}}
-          isOpen={this.state.isEditPassOpen}
-          onClose={this.closePassModal}
+          // username={props.username}
+          // password={props.password}
+          username={"username"}
+          password={"123"}
+          isOpen={isPassModalOpen}
+          onClose={() => setPassModalOpen(false)}
         />
-      </div>
-    );
-  }
+      </Grid>
+    </div>
+  );
+
 }
 
+export { UserSettingsPage };
