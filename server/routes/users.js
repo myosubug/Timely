@@ -1,6 +1,9 @@
 const router = require('express').Router();
 let User = require('../models/user.model');
 
+const IMAGE_DIR = require('path').dirname(require.main.filename) + "/images/";
+
+
 // Returns a list of all users from db
 router.route('/').get((req, res) => {
     User.find()
@@ -89,6 +92,32 @@ router.route('/update/username/:username').post((req, res) => {
                 .catch(err => res.status(400).json('Error: ' + err));
         })
         .catch(err => res.status(400).json('Error: ' + err));
+});
+
+
+//uploads a User for the specified User id
+router.route('/upload-profile/:username').post((req, res) => {
+    const image = req.files.myFile;
+    const username_id = req.params.username;
+
+    const ext_ar = image.name.split('.');
+    const ext = ext_ar[ext_ar.length - 1]; //Get the last element
+    image.name = username_id + "." + ext;
+    const fileName = image.name;
+
+    const path = IMAGE_DIR + "avatars/" + fileName;
+    image.mv(path); //Move the file to the specified path
+
+    //Get the URL for the User
+    const img_url = req.protocol + '://' + req.get('host') + "/images/avatars/" + fileName;
+    //update the User with the specified id
+    User.findOneAndUpdate({ username: username_id }, { $set: { profileImage: img_url } })
+       .then(user => {
+        const url = user.profileImage;
+        res.json(url);
+       }
+       )
+        .catch(err => console.log(err));
 });
 
 module.exports = router;

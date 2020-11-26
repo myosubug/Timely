@@ -27,6 +27,7 @@ const UserSettingsPage = (props) => {
     posts: PropTypes.number.isRequired,
   };
 
+
   const inputFileRef = createRef(null);
   const [image, _setImage] = useState(null);
 
@@ -47,7 +48,7 @@ const UserSettingsPage = (props) => {
       cleanup();
     }
     _setImage(newImage);
-    console.log(inputFileRef);
+    console.log(newImage);
   };
 
   // Takes uploaded img and passes it to setImg function to be set
@@ -55,7 +56,14 @@ const UserSettingsPage = (props) => {
     const newImage = event.target?.files?.[0];
 
     if (newImage) {
-      setImage(URL.createObjectURL(newImage));
+      const imgData = new FormData();
+      imgData.append('myFile', newImage);
+      axios.post(SERVER_ADDRESS + "/users/upload-profile/" + "test2", imgData)
+        .then(({ data }) => {
+          setImage(data);
+        })    
+      .catch(err => console.log(err));
+      // setImage(URL.createObjectURL(newImage));
     }
   };
 
