@@ -13,19 +13,21 @@ import EditPasswordModal from '../EditPasswordModal';
 import * as avatarImg from './../../images/patrick.jpg';
 import NavBar from '../NavBar';
 import axios from 'axios';
-import { SERVER_ADDRESS } from '../../AppConfig.js'
+import { SERVER_ADDRESS, loggedInUser } from '../../AppConfig.js'
 import './style.css';
 
 const UserSettingsPage = (props) => {
-  UserSettingsPage.propTypes = {
-    username: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
-    isAdmin: PropTypes.bool.isRequired,
-    profileImage: PropTypes.string.isRequired,
+  // THIS ISN'T BEING USED ANYMORE SINCE WE'RE USING LOGGEDINUSER
+  // UserSettingsPage.propTypes = {
+  //   username: PropTypes.string.isRequired,
+  //   password: PropTypes.string.isRequired,
+  //   isAdmin: PropTypes.bool.isRequired,
+  //   profileImage: PropTypes.string.isRequired,
 
-    joinDate: PropTypes.string.isRequired,
-    posts: PropTypes.number.isRequired,
-  };
+  //   joinDate: PropTypes.string.isRequired,
+  //   posts: PropTypes.number.isRequired,
+  // };
+
 
   const inputFileRef = createRef(null);
   const [image, _setImage] = useState(null);
@@ -47,7 +49,7 @@ const UserSettingsPage = (props) => {
       cleanup();
     }
     _setImage(newImage);
-    console.log(inputFileRef);
+    console.log(newImage);
   };
 
   // Takes uploaded img and passes it to setImg function to be set
@@ -55,7 +57,14 @@ const UserSettingsPage = (props) => {
     const newImage = event.target?.files?.[0];
 
     if (newImage) {
-      setImage(URL.createObjectURL(newImage));
+      const imgData = new FormData();
+      imgData.append('myFile', newImage);
+      axios.post(SERVER_ADDRESS + "/users/upload-profile/" + loggedInUser.username, imgData)
+        .then(({ data }) => {
+          setImage(data);
+        })    
+      .catch(err => console.log(err));
+      // setImage(URL.createObjectURL(newImage));
     }
   };
 
@@ -69,11 +78,21 @@ const UserSettingsPage = (props) => {
 
   // Function the makes the axios call to delete an account from the db
   const handleDeleteAccount = () => {
-    console.log(props.username);
-    axios.post(SERVER_ADDRESS + '/users/delete/' + props.username)
+    console.log(loggedInUser.username);
+    axios.post(SERVER_ADDRESS + '/users/delete/' + loggedInUser.username)
       .then(console.log("Axios: user successfully deleted!"))
       .catch(err => (console.log(err)));
   };
+
+  // Function that gets the join date of the user
+  // const handleFetchJoinDate = () => {
+  //   console.log(loggedInUser.username);
+  //   axios.get(SERVER_ADDRESS +  '/users/finduser/join-date' + loggedInUser.username)
+  //     .then(res => {
+  //       const joinDate = res.createdAt;
+
+  //     })
+  // }
 
   // Renders the profile pic and the delete account button
   const renderProfileGrid = () => {
@@ -132,14 +151,16 @@ const UserSettingsPage = (props) => {
       >
         <Grid item xs className="UserInfo">
           <Typography variant="h5" component="span">
-            {"@" + props.username}
+            {"@" + loggedInUser.username}
           </Typography>
-          {props.isAdmin ? " 👑 " : ""}
+          {loggedInUser.isAdmin ? " 👑 " : ""}
           <Typography variant="body1">
-            {"Member since " + props.joinDate}
+          {/* CREATION DATE IS STORED IN USER SCHEMA */}
+            {"Member since " + loggedInUser.joinDate}
           </Typography>
           <Typography variant="body1">
-            {props.posts + " posts"}
+          {/* PULL FROM SERVER */}
+            {loggedInUser.posts + " posts"}
           </Typography>
         </Grid>
 
@@ -177,7 +198,7 @@ const UserSettingsPage = (props) => {
         <Grid container spacing={1}>
           <Grid item xs={8}>
             <Typography variant="h6">Username</Typography>
-            {props.username}
+            {loggedInUser.username}
           </Grid>
           <Grid item xs={4}>
             <Button
@@ -195,7 +216,7 @@ const UserSettingsPage = (props) => {
         <Grid container spacing={1}>
           <Grid item xs={8}>
             <Typography variant="h6">Password</Typography>
-            {props.password}
+            ********
           </Grid>
           <Grid item xs={4}>
             <Button
@@ -269,8 +290,8 @@ const UserSettingsPage = (props) => {
         <EditUsernameModal
           // username={props.username}
           // password={props.password}
-          username={"username"}
-          password={"123"}        
+          username={loggedInUser.username}
+          password={loggedInUser.password}        
           isOpen={isUserModalOpen}
           onClose={() => setUserModalOpen(false)}
         />
@@ -279,8 +300,8 @@ const UserSettingsPage = (props) => {
         <EditPasswordModal
           // username={props.username}
           // password={props.password}
-          username={"username"}
-          password={"123"}
+          username={loggedInUser.username}
+          password={loggedInUser.password}
           isOpen={isPassModalOpen}
           onClose={() => setPassModalOpen(false)}
         />
