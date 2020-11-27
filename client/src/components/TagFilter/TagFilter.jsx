@@ -9,6 +9,9 @@ import Container from '@material-ui/core/Container'
 import styles from './TagFilterStyles.module.css';
 
 
+import axios from 'axios';
+import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
+
 /**
  * TagFilter Overlay used to filter posts by hashtag
  * When DB integration added, onEnter callback can be used to populate
@@ -16,6 +19,17 @@ import styles from './TagFilterStyles.module.css';
  */
   
 export default function TagFilter(props) {
+
+    React.useEffect(() => {
+        axios.get(SERVER_ADDRESS + '/posts/tags')
+            .then(res => {
+                let tags = [];
+                console.log("tags retrieved: " + res.data);
+                //setPosts(new_posts);
+
+            })
+            .catch(err => console.log(err));
+    }, []);
 
     const [values, setValues] = React.useState({
         input: ''
@@ -53,6 +67,7 @@ export default function TagFilter(props) {
     const handleSearch = () => {
         console.log("Searching for: " + values.input);
         setValues({...values, open: false, input: ''});
+        props.queryTags("/posts/find-tag/" + values.input);
         props.onCancel();
     }
 

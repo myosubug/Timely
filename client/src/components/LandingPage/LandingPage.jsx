@@ -105,7 +105,7 @@ const LandingPage = (props) => {
         if (renderModalObj.post) {
             return renderModal(<PostCreator onCancel={() => cancelModal("post")} />);
         } else if (renderModalObj.tags) {
-            return renderModal(<TagFilter onCancel={() => cancelModal("tags")} />);
+            return renderModal(<TagFilter onCancel={() => cancelModal("tags")} queryTags={changePostQuery} />);
         } else if (renderModalObj.login) {
             return renderModal(<Sign onCancel={() => cancelModal("login")} setLoggedIn={(val) => setLoggedIn(val)} />);
         }
@@ -117,7 +117,7 @@ const LandingPage = (props) => {
     }
 
     const changePostQuery = (query) => {
-        
+        console.log("being called with query: " + query);
       // setPostQuery('/posts/trending');
       // postQuery = '/posts/trending'
        setPostQuery(query);

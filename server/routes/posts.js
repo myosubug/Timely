@@ -41,6 +41,36 @@ router.route('/time-remaining').get((req,res)=>{
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+//finds and returns all posts that contain the entered tag
+router.route('/find-tag/:tag').get((req,res)=>{
+    let tag = req.params.tag;
+    let findTag = {tags: tag};
+    Post.find(findTag)
+        .then(posts => {
+            res.json(posts);
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
+/*References/Material used to make this section to find the top 5 tags:
+    -> https://stackoverflow.com/questions/32502599/finding-duplicate-values-in-a-mongodb-array
+    -> https://stackoverflow.com/questions/25436630/mongodb-how-to-find-and-then-aggregate
+    -> https://stackoverflow.com/questions/4421207/how-to-get-the-last-n-records-in-mongodb
+*/
+router.route('/tags').get((req,res)=>{
+    Post.find()
+    Post.aggregate([
+        {"$group" : { "_id": "$tags", "count": { "$sum": 1 } } },
+        {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 0} } }, 
+        {"$sort": {"count" : -1} },
+        
+        {"$project": {"tags" : "$_id", "_id" : 0} },
+        {"$limit": 5},])
+    .then(posts => res.json(posts))
+    .catch(err => res.status(400).json('Error: ' + err));
+    
+})
+
 //Returns a Post object by ID
 router.route('/:id').get((req, res) => {
     Post.findById(req.params.id)
