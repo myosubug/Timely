@@ -24,8 +24,18 @@ export default function TagFilter(props) {
         axios.get(SERVER_ADDRESS + '/posts/tags')
             .then(res => {
                 let tags = [];
+                for(let retrievedTag of res.data) {
+                    tags.push({tag: retrievedTag,
+                    isSelected: false});
+                }
                 console.log("tags retrieved: " + res.data);
-                //setPosts(new_posts);
+                for(let i = 0; i < tags.length; i++) {
+                    console.log("index: " + i + ": " + tags[i]);
+                   // console.log("tag array: " + tags.toString());
+                }
+               
+                setTags([]);
+                setTags(tags);
 
             })
             .catch(err => console.log(err));
@@ -35,26 +45,27 @@ export default function TagFilter(props) {
         input: ''
     });
 
-    const [tags, setTags] = React.useState({
-        tags: [
-            {
-                tag: 'Funny',
-                isSelected: false
-            }, {
-                tag: 'Memes',
-                isSelected: false
-            }, {
-                tag: 'Hot',
-                isSelected: false
-            }, {
-                tag: 'Animals',
-                isSelected: false
-            }, {
-                tag: 'Gaming',
-                isSelected: false
-            }
-        ],
-    });
+    const [tags, setTags] = React.useState(
+        // tags: [
+        //     {
+        //         tag: 'Funny',
+        //         isSelected: false
+        //     }, {
+        //         tag: 'Memes',
+        //         isSelected: false
+        //     }, {
+        //         tag: 'Hot',
+        //         isSelected: false
+        //     }, {
+        //         tag: 'Animals',
+        //         isSelected: false
+        //     }, {
+        //         tag: 'Gaming',
+        //         isSelected: false
+        //     }
+        // ],
+        []
+    );
 
     const handleClearInput = () => {
         setValues({...values, input: ''});
@@ -107,7 +118,7 @@ export default function TagFilter(props) {
                         </IconButton>
                     </div>
                     <div id="tag-button-container" className={styles.tagsWrapperDiv}>
-                        {tags.tags.map((tag, index) => {
+                        {tags.map((tag, index) => {
                             return(
                                 <Button variant="outlined" className={styles.filterButton} 
                                     onClick={() => handleTagClick(index)} disabled={tag.isSelected}>
@@ -120,7 +131,7 @@ export default function TagFilter(props) {
                         <Button className={styles.actionButton} variant="contained" color="secondary" onClick={props.onCancel}>
                             Cancel
                         </Button>
-                        <Button className={styles.actionButton} variant="contained" onClick={props.onCancel} color="primary">
+                        <Button className={styles.actionButton} variant="contained" onClick={handleSearch} color="primary">
                             Confirm
                         </Button>
                     </div>
