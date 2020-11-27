@@ -35,6 +35,7 @@ const IMAGE_DIR = require('path').dirname(require.main.filename) + "/images/";
                         //If the deleteCount is greater than 0, the notify the clients
                         if (res.deletedCount > 0) {
                             io.emit('update post list delete');
+                            console.log("yeet");
 
                             //Once we have deleted the posts, remove the images from the server
                             for (let path of img_addr) {

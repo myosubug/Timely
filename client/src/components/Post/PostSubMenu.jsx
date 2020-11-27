@@ -146,6 +146,7 @@ const PostSubMenu = (props) => {
         <div className={classes.root}>
             <div>
                 <IconButton
+                    className="px-0 py-0"
                     ref={anchorRef}
                     aria-controls={open ? "menu-list-grow" : undefined}
                     aria-haspopup="true"
