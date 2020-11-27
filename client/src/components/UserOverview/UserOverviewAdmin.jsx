@@ -24,7 +24,6 @@ const UserOverviewAdmin = (props) => {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isDemoteModalOpen, setDemoteModalOpen] = useState(false);
   const [isPromoteModalOpen, setPromoteModalOpen] = useState(false);
-  const [isUserModalOpen, setUserModalOpen] = useState(false);
   const [isPassModalOpen, setPassModalOpen] = useState(false);
 
   const [userInfo, setUserInfo] = useState({});
@@ -88,13 +87,36 @@ const UserOverviewAdmin = (props) => {
     }
   };
 
-  // Function the makes the axios call to delete an account from the db
+  // Function that makes the axios call to ban an account from the db
   const handleDeleteAccount = () => {
     console.log(userInfo.username);
     axios.post(SERVER_ADDRESS + '/users/delete/' + userInfo.username)
       .then(console.log("Axios: user successfully deleted!"))
       .catch(err => (console.log(err)));
   };
+
+  // Function that makes the axios call to promote a user 
+  const handlePromoteUser = () => {
+    const data = { isAdmin: true };
+    axios.post(SERVER_ADDRESS + '/users/promote' + userInfo.username, data)
+      .then(res => {
+        console.log(res.data);
+        console.log("Axios: user successfully promoted!")
+      })
+      .catch(err => (console.log(err)));
+  };
+
+  // Function that makes the axios call to demote a user 
+  const handleDemoteUser = () => {
+    const data = { isAdmin: false };
+    axios.post(SERVER_ADDRESS + '/users/promote' + userInfo.username, data)
+      .then(res => {
+        console.log(res.data);
+        console.log("Axios: user successfully demoted!")
+      })
+      .catch(err => (console.log(err)));
+  };
+
 
   // Function that gets the join date of the user
   // const handleFetchJoinDate = () => {
@@ -152,22 +174,24 @@ const UserOverviewAdmin = (props) => {
         {/* PROMOTE OR DEMOTE USER */}
         <Grid item xs={3} className="PromoteDemoteUser">
           {!userInfo.Admin
-            ? <Button
+            ? 
+            <Button
               variant="contained"
               className="PromoteDemoteUserButton"
               onClick={() => setPromoteModalOpen(true)}
               size="medium"
             >
               Promote
-          </Button>
-            : <Button
+            </Button>
+            :
+            <Button
               variant="contained"
               className="PromoteDemoteUserButton"
               onClick={() => setDemoteModalOpen(true)}
               size="medium"
             >
               Demote
-          </Button>
+            </Button>
           }
         </Grid>
       </Grid>
@@ -297,7 +321,7 @@ const UserOverviewAdmin = (props) => {
         {/* PROMOTE USER */}
         <PromoteUserModal 
           username={userInfo.username}
-          promote={() => {}}
+          promote={handlePromoteUser}
           isOpen={isPromoteModalOpen}
           onClose={() => setPromoteModalOpen(false)}          
         />
@@ -305,7 +329,7 @@ const UserOverviewAdmin = (props) => {
         {/* DEMOTE USER */}
         <DemoteAdminModal 
           username={userInfo.username}
-          demote={() => {}}
+          demote={handleDemoteUser}
           isOpen={isDemoteModalOpen}
           onClose={() => setDemoteModalOpen(false)}
         />

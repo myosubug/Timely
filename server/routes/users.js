@@ -30,17 +30,17 @@ router.route('/:id').get((req, res) => {
 router.route('/signup').post((req, res) => {
     const username = req.body.username;
     const password = req.body.password;
-    const newUser = new User({ 
-        username: username, 
+    const newUser = new User({
+        username: username,
         password: password,
         isAdmin: false,
         profileImage: ""
     });
 
     newUser.save()
-        .then(() => res.status(200).json({userInfo: newUser}))
+        .then(() => res.status(200).json({ userInfo: newUser }))
         .catch(err => res.status(400).json('Error: ' + err));
-    
+
 });
 
 // Checks db id username in the request exists 
@@ -51,16 +51,14 @@ router.route('/signin').post((req, res) => {
     const password = req.body.password;
     User.findOne({ username })
         .then(user => {
-            if (user.password === password){
-                res.status(200).json({userInfo: user});
-            } else{
+            if (user.password === password) {
+                res.status(200).json({ userInfo: user });
+            } else {
                 res.status(400).send("password is wrong!");
             }
         })
         .catch(err => res.status(400).json('Error: ' + err));
 });
-
-
 
 // Delete account
 router.route('/delete/:username').post((req, res) => {
@@ -112,11 +110,11 @@ router.route('/upload-profile/:username').post((req, res) => {
     const img_url = req.protocol + '://' + req.get('host') + "/images/avatars/" + fileName;
     //update the User with the specified id
     User.findOneAndUpdate({ username: username_id }, { $set: { profileImage: img_url } })
-       .then(user => {
-        const url = user.profileImage;
-        res.json(url);
-       }
-       )
+        .then(user => {
+            const url = user.profileImage;
+            res.json(url);
+        }
+        )
         .catch(err => console.log(err));
 });
 
@@ -125,6 +123,32 @@ router.route('/upload-profile/:username').post((req, res) => {
 router.route('/finduser/join-date/:username').get((req, res) => {
     User.findOne({ username: req.params.createdAt })
         .then(users => res.json(users))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
+// Promote user
+// Finds user by their username and set their isAdmin to true
+router.route('/promote/:username').post((req, res) => {
+    User.findOne({ username: req.params.username })
+        .then(user => {
+            user.isAdmin = true;
+            user.save()
+                .then(() => user.json('user successfully promoted!'))
+                .catch(err => user.status(400).json('Error: ' + err));
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
+// Demote user
+// Finds user by their username and set their isAdmin to false 
+router.route('/demote/:username').post((req, res) => {
+    User.findOne({ username: req.params.username })
+        .then(user => {
+            user.isAdmin = false;
+            user.save()
+                .then(() => user.json('user successfully demoted!'))
+                .catch(err => user.status(400).json('Error: ' + err));
+        })
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
