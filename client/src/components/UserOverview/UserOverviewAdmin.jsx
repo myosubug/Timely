@@ -101,7 +101,7 @@ const UserOverviewAdmin = (props) => {
     axios.post(SERVER_ADDRESS + '/users/promote/' + userInfo.username, data)
       .then(res => {
         console.log(res.data);
-        console.log("Axios: user successfully promoted!")
+        console.log("Axios: user successfully promoted!");
       })
       .catch(err => (console.log(err)));
   };
@@ -112,7 +112,7 @@ const UserOverviewAdmin = (props) => {
     axios.post(SERVER_ADDRESS + '/users/demote/' + userInfo.username, data)
       .then(res => {
         console.log(res.data);
-        console.log("Axios: user successfully demoted!")
+        console.log("Axios: user successfully demoted!");
       })
       .catch(err => (console.log(err)));
   };
