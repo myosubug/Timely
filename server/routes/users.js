@@ -133,8 +133,8 @@ router.route('/promote/:username').post((req, res) => {
         .then(user => {
             user.isAdmin = true;
             user.save()
-                .then(() => user.json('user successfully promoted!'))
-                .catch(err => user.status(400).json('Error: ' + err));
+                .then(() => res.json('user successfully promoted!'))
+                .catch(err => res.status(400).json('Error: ' + err));
         })
         .catch(err => res.status(400).json('Error: ' + err));
 });
@@ -146,8 +146,8 @@ router.route('/demote/:username').post((req, res) => {
         .then(user => {
             user.isAdmin = false;
             user.save()
-                .then(() => user.json('user successfully demoted!'))
-                .catch(err => user.status(400).json('Error: ' + err));
+                .then(() => res.json('user successfully demoted!'))
+                .catch(err => res.status(400).json('Error: ' + err));
         })
         .catch(err => res.status(400).json('Error: ' + err));
 });
