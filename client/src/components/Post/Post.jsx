@@ -169,7 +169,8 @@ const Post = (props) => {
     //Redirects to the user page
     const handleUserClick = () => {
         //TODO: Redirect to user page
-        window.location.href = '/useroverview/' + props.thisUsername; //relative to domain
+        window.location.href = '/useroverview/' + postDetails.username; //relative to domain
+        console.log(postDetails.username);
         // alert("redirecting to user page");
     }
 
