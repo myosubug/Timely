@@ -13,7 +13,7 @@ function App() {
     <main>
       <Switch>
         <Route path="/" component={LandingPage} exact />
-        <Route path="/settings" component={UserOverviewEdit} />
+        {/* <Route path="/settings" component={UserOverviewEdit} /> */}
         <Route path="/useroverview/:username">
           <OverviewRouter />
         </Route>
