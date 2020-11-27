@@ -21,7 +21,6 @@ const UserOverviewEdit = (props) => {
   const [image, _setImage] = useState(null);
 
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [isUserModalOpen, setUserModalOpen] = useState(false);
   const [isPassModalOpen, setPassModalOpen] = useState(false);
 
   const [userInfo, setUserInfo] = useState({});
@@ -185,41 +184,13 @@ const UserOverviewEdit = (props) => {
   const renderUserActions = () => {
     return (
       <div>
-        {/* Edit Email */}
-        {/* <Grid container spacing={1}>
-          <Grid item xs={8}>
-            <Typography variant="h6">Email</Typography>
-            {props.email}
-          </Grid>
-
-          <Grid item xs={4}>
-            <Button
-              variant="contained"
-              className="EditEmailButton"
-              onClick={openEmailModal}
-              size="medium"
-            >
-              Edit
-            </Button>
-          </Grid>
-        </Grid> */}
-
-        {/* Edit Username */}
+        {/* Username */}
         <Grid container spacing={1}>
           <Grid item xs={8}>
             <Typography variant="h6">Username</Typography>
             {userInfo.username}
           </Grid>
-          <Grid item xs={4}>
-            <Button
-              variant="contained"
-              className="EditUsernameButton"
-              onClick={() => setUserModalOpen(true)}
-              size="medium"
-            >
-              Edit
-            </Button>
-          </Grid>
+          <Grid item xs={4} />
         </Grid>
 
         {/* Edit Password */}
@@ -282,37 +253,15 @@ const UserOverviewEdit = (props) => {
 
         {/* DELETE ACCOUNT MODAL */}
         <DeleteAccountModal
-          username={"username"}
-          password={"123"}
+          username={userInfo.username}
+          password={userInfo.password}
           delete={handleDeleteAccount}
           isOpen={isDeleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
         />
 
-        {/* EDIT EMAIL MODAL */}
-        {/* <EditEmailModal
-        username={props.username}
-        password={props.password}
-        email={props.email}
-        update={() => {}}
-        isOpen={state.isEditEmailOpen}
-        onClose={closeEmailModal}
-      /> */}
-
-        {/* EDIT USERNAME MODAL */}
-        <EditUsernameModal
-          // username={props.username}
-          // password={props.password}
-          username={userInfo.username}
-          password={userInfo.password}        
-          isOpen={isUserModalOpen}
-          onClose={() => setUserModalOpen(false)}
-        />
-
         {/* EDIT PASSWORD MODAL */}
         <EditPasswordModal
-          // username={props.username}
-          // password={props.password}
           username={userInfo.username}
           password={userInfo.password}
           isOpen={isPassModalOpen}
