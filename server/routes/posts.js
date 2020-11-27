@@ -53,16 +53,12 @@ router.route('/find-tag/:tag').get((req,res)=>{
 
 //finds the top 5 tags for posts
 /*References/Material used to make this section to find the top 5 tags:
-    -> https://stackoverflow.com/questions/33763768/loop-through-array-of-values-with-arrow-function
     -> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
-    -> https://stackoverflow.com/questions/7196212/how-to-create-dictionary-and-add-key-value-pairs-dynamically
-    -> https://docs.mongodb.com/manual/reference/method/ObjectId.toString/
-    -> https://stackoverflow.com/questions/25500316/sort-a-dictionary-by-value-in-javascript
+    -> https://stackoverflow.com/questions/38187614/sort-dictionary-of-keyvalue-pairs-in-javascript
     -> https://www.codegrepper.com/code-examples/javascript/javascript+get+first+5+elements+of+array
     */
 router.route('/tags').get((req,res)=>{
     var dictionary = {};
-    //var str2 = "";
     var topTags = [];
     var sortedDictionary = [];
     Post.find()
@@ -75,13 +71,14 @@ router.route('/tags').get((req,res)=>{
                 } else {
                     dictionary[str1] = 1;
                 }
-                //str2 =  str2 + str1+", ";
             }
 
             for(var i in dictionary){
                 sortedDictionary.push([ i, dictionary[i] ])
             }
 
+            //reference for this function by the user slezica:
+            //-> https://stackoverflow.com/questions/38187614/sort-dictionary-of-keyvalue-pairs-in-javascript
             sortedDictionary.sort(function compare(value1,value2){
                 return value2[1] - value1[1];
             })
