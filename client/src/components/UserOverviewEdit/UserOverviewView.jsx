@@ -15,9 +15,7 @@ import axios from 'axios';
 import { SERVER_ADDRESS } from '../../AppConfig.js'
 import './style.css';
 
-const UserSettingsPage = ({match}) => {
-
-  let {username} = match.params;
+const UserOverviewView = (props) => {
 
   const inputFileRef = createRef(null);
   const [image, _setImage] = useState(null);
@@ -30,8 +28,8 @@ const UserSettingsPage = ({match}) => {
 
   useEffect(() => {
     console.log("yeet");
-    console.log(username);
-    axios.get(SERVER_ADDRESS + '/users/finduser/' + username)
+    console.log(props.username);
+    axios.get(SERVER_ADDRESS + '/users/finduser/' + props.username)
       .then(({ data }) => 
       {
         const userInfo = {
@@ -119,14 +117,6 @@ const UserSettingsPage = ({match}) => {
       >
         <Grid item xs={9} className="ProfilePic">
           <IconButton color="primary" >
-            <input
-              accept="image/*"
-              // ref={inputFileRef}
-              hidden
-              id="avatar-image-upload"
-              type="file"
-              onChange={handleOnImgChange}
-            />
             <label htmlFor="avatar-image-upload">
               <Avatar
                 alt="Avatar"
@@ -137,16 +127,6 @@ const UserSettingsPage = ({match}) => {
           </IconButton>
         </Grid>
 
-        <Grid item xs={3} className="DeleteAccount">
-          <Button
-            variant="contained"
-            className="DeleteAccountButton"
-            onClick={() => setDeleteModalOpen(true)}
-            size="medium"
-          >
-            Delete
-          </Button>
-        </Grid>
       </Grid>
     );
   }
@@ -187,24 +167,6 @@ const UserSettingsPage = ({match}) => {
   const renderUserActions = () => {
     return (
       <div>
-        {/* Edit Email */}
-        {/* <Grid container spacing={1}>
-          <Grid item xs={8}>
-            <Typography variant="h6">Email</Typography>
-            {props.email}
-          </Grid>
-
-          <Grid item xs={4}>
-            <Button
-              variant="contained"
-              className="EditEmailButton"
-              onClick={openEmailModal}
-              size="medium"
-            >
-              Edit
-            </Button>
-          </Grid>
-        </Grid> */}
 
         {/* Edit Username */}
         <Grid container spacing={1}>
@@ -212,16 +174,7 @@ const UserSettingsPage = ({match}) => {
             <Typography variant="h6">Username</Typography>
             {userInfo.username}
           </Grid>
-          <Grid item xs={4}>
-            <Button
-              variant="contained"
-              className="EditUsernameButton"
-              onClick={() => setUserModalOpen(true)}
-              size="medium"
-            >
-              Edit
-            </Button>
-          </Grid>
+
         </Grid>
 
         {/* Edit Password */}
@@ -230,23 +183,14 @@ const UserSettingsPage = ({match}) => {
             <Typography variant="h6">Password</Typography>
             ********
           </Grid>
-          <Grid item xs={4}>
-            <Button
-              variant="contained"
-              className="EditPasswordButton"
-              onClick={() => setPassModalOpen(true)}
-              size="medium"
-            >
-              Edit
-            </Button>
-          </Grid>
+          
         </Grid>
       </div>
     );
   }
 
   return (
-    <div className="UserSettingsPage">
+    <div className="UserOverviewView">
       <Grid
         container
         direction="column"
@@ -323,4 +267,4 @@ const UserSettingsPage = ({match}) => {
 
 }
 
-export { UserSettingsPage };
+export { UserOverviewView };
