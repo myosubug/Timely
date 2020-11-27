@@ -62,7 +62,7 @@ router.route('/find-tag/:tag').get((req,res)=>{
     */
 router.route('/tags').get((req,res)=>{
     var dictionary = {};
-    var str2 = "";
+    //var str2 = "";
     var topTags = [];
     var sortedDictionary = [];
     Post.find()
@@ -75,7 +75,7 @@ router.route('/tags').get((req,res)=>{
                 } else {
                     dictionary[str1] = 1;
                 }
-                str2 =  str2 + str1+", ";
+                //str2 =  str2 + str1+", ";
             }
 
             for(var i in dictionary){
