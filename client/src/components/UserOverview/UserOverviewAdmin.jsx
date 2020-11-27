@@ -7,9 +7,10 @@ import {
   IconButton,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import DeleteAccountModal from '../DeleteAccountModal/DeleteAccountModal';
-import EditUsernameModal from '../EditUsernameModal/EditUsernameModal';
-import EditPasswordModal from '../EditPasswordModal/EditPasswordModal';
+import BanUserModal from './AdminPopUps/BanUserModal';
+import AdminEditPasswordModal from './AdminPopUps/AdminEditPasswordModal';
+import DemoteAdminModal from './AdminPopUps/DemoteAdminModal';
+import PromoteUserModal from './AdminPopUps/PromoteUserModal';
 import NavBar from '../NavBar/NavBar';
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../../AppConfig.js'
@@ -21,6 +22,8 @@ const UserOverviewAdmin = (props) => {
   const [image, _setImage] = useState(null);
 
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isDemoteModalOpen, setDemoteModalOpen] = useState(false);
+  const [isPromoteModalOpen, setPromoteModalOpen] = useState(false);
   const [isUserModalOpen, setUserModalOpen] = useState(false);
   const [isPassModalOpen, setPassModalOpen] = useState(false);
 
@@ -134,6 +137,7 @@ const UserOverviewAdmin = (props) => {
           </IconButton>
         </Grid>
 
+        {/* BAN USER */}
         <Grid item xs={3} className="DeleteAccount">
           <Button
             variant="contained"
@@ -141,8 +145,30 @@ const UserOverviewAdmin = (props) => {
             onClick={() => setDeleteModalOpen(true)}
             size="medium"
           >
-            Delete
+            Ban User
           </Button>
+        </Grid>
+
+        {/* PROMOTE OR DEMOTE USER */}
+        <Grid item xs={3} className="PromoteDemoteUser">
+          {!userInfo.Admin
+            ? <Button
+              variant="contained"
+              className="PromoteDemoteUserButton"
+              onClick={() => setPromoteModalOpen(true)}
+              size="medium"
+            >
+              Promote
+          </Button>
+            : <Button
+              variant="contained"
+              className="PromoteDemoteUserButton"
+              onClick={() => setDemoteModalOpen(true)}
+              size="medium"
+            >
+              Demote
+          </Button>
+          }
         </Grid>
       </Grid>
     );
@@ -158,7 +184,7 @@ const UserOverviewAdmin = (props) => {
         alignItems="stretch"
         spacing={1}
       >
-      UserOverviewAdmin
+        UserOverviewAdmin
         <Grid item xs className="UserInfo">
           <Typography variant="h5" component="span">
             {"@" + userInfo.username}
@@ -253,21 +279,37 @@ const UserOverviewAdmin = (props) => {
         </Grid>
 
         {/* DELETE ACCOUNT MODAL */}
-        <DeleteAccountModal
+        <BanUserModal
           username={userInfo.username}
-          password={userInfo.password}
-          delete={handleDeleteAccount}
+          ban={handleDeleteAccount}
           isOpen={isDeleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
         />
 
         {/* EDIT PASSWORD MODAL */}
-        <EditPasswordModal
+        <AdminEditPasswordModal
           username={userInfo.username}
           password={userInfo.password}
           isOpen={isPassModalOpen}
           onClose={() => setPassModalOpen(false)}
         />
+
+        {/* PROMOTE USER */}
+        <PromoteUserModal 
+          username={userInfo.username}
+          promote={() => {}}
+          isOpen={isPromoteModalOpen}
+          onClose={() => setPromoteModalOpen(false)}          
+        />
+        
+        {/* DEMOTE USER */}
+        <DemoteAdminModal 
+          username={userInfo.username}
+          demote={() => {}}
+          isOpen={isDemoteModalOpen}
+          onClose={() => setDemoteModalOpen(false)}
+        />
+
       </Grid>
     </div>
   );
