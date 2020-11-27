@@ -17,7 +17,6 @@ import './style.css';
 
 const UserOverviewAdmin = (props) => {
 
-
   const inputFileRef = createRef(null);
   const [image, _setImage] = useState(null);
 
@@ -29,6 +28,7 @@ const UserOverviewAdmin = (props) => {
 
   useEffect(() => {
     console.log("yeet");
+    console.log(props.username);
     axios.get(SERVER_ADDRESS + '/users/finduser/' + props.username)
       .then(({ data }) => 
       {
@@ -253,7 +253,7 @@ const UserOverviewAdmin = (props) => {
         spacing={10}
       >
         <Grid item xs={1}>
-          <NavBar isLandingPg={false} />
+          <NavBar isLandingPg={false} username={userInfo.username} />
         </Grid>
 
         <Grid
