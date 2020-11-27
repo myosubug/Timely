@@ -124,6 +124,7 @@ const LandingPage = (props) => {
             <NavBar
                 openSignInModal={() => setRenderModalObj(prev => ({ ...prev, "login": true }))}
                 isLandingPg={true}
+                username={loggedInUser.username}
             />
 
             {checkModalState()}
