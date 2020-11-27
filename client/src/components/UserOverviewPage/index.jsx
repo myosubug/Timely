@@ -5,16 +5,18 @@ import {
   Typography,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import * as avatarImg from './../../imgs/patrick.jpg';
+import * as avatarImg from './../../images/patrick.jpg';
 import './style.css';
 
 export class UserOverviewPage extends Component {
   static propTypes = {
     // Could probably make some sort of user data structure to be passed in
     // Rather than passing in props for each field
+    userId: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
-    joinDate: PropTypes.string.isRequired,
+    memberStatus: PropTypes.string.isRequired,
     posts: PropTypes.number.isRequired,
+    email: PropTypes.string.isRequired,
     postActivity: PropTypes.string.isRequired,
     isAdmin: PropTypes.bool.isRequired,
   }
@@ -28,6 +30,7 @@ export class UserOverviewPage extends Component {
       isEditPassOpen: false,
     };
   }
+
 
   // DELETE MODAL STATE HANDLER
   openDeleteModal = () => {
@@ -116,7 +119,7 @@ export class UserOverviewPage extends Component {
           </Typography>
             {this.props.isAdmin ? " 👑 " : ""}
           <Typography variant="body1">
-            {"Member since " + this.props.joinDate}
+            {"Member since " + this.props.memberStatus}
           </Typography>
           <Typography variant="body1">
             {this.props.posts + " posts"}

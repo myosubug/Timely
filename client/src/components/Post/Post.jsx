@@ -169,7 +169,8 @@ const Post = (props) => {
     //Redirects to the user page
     const handleUserClick = () => {
         //TODO: Redirect to user page
-        alert("redirecting to user page");
+        window.location.href = '/settings'; //relative to domain
+        // alert("redirecting to user page");
     }
 
     //Renders the header of the post (with or without the admin settings)

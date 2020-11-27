@@ -1,4 +1,4 @@
-import React, { createRef, useState } from 'react';
+import React, { createRef, useEffect, useState, useParams } from 'react';
 import {
   Avatar,
   Grid,
@@ -13,21 +13,12 @@ import EditPasswordModal from '../EditPasswordModal';
 import * as avatarImg from './../../images/patrick.jpg';
 import NavBar from '../NavBar';
 import axios from 'axios';
-import { SERVER_ADDRESS, loggedInUser } from '../../AppConfig.js'
+import { SERVER_ADDRESS } from '../../AppConfig.js'
 import './style.css';
 
-const UserSettingsPage = (props) => {
-  // THIS ISN'T BEING USED ANYMORE SINCE WE'RE USING LOGGEDINUSER
-  // UserSettingsPage.propTypes = {
-  //   username: PropTypes.string.isRequired,
-  //   password: PropTypes.string.isRequired,
-  //   isAdmin: PropTypes.bool.isRequired,
-  //   profileImage: PropTypes.string.isRequired,
+const UserSettingsPage = ({match}) => {
 
-  //   joinDate: PropTypes.string.isRequired,
-  //   posts: PropTypes.number.isRequired,
-  // };
-
+  let {username} = match.params;
 
   const inputFileRef = createRef(null);
   const [image, _setImage] = useState(null);
@@ -35,7 +26,27 @@ const UserSettingsPage = (props) => {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isUserModalOpen, setUserModalOpen] = useState(false);
   const [isPassModalOpen, setPassModalOpen] = useState(false);
-  // const [isEmailModalOpen, setEmailModalOpen] = useState(false);
+
+  const [userInfo, setUserInfo] = useState({});
+
+  useEffect(() => {
+    console.log("yeet");
+    console.log(username);
+    axios.get(SERVER_ADDRESS + '/users/finduser/' + username)
+      .then(({ data }) => 
+      {
+        const userInfo = {
+          username: data.username,
+          password: data.password,
+          isAdmin: data.isAdmin,
+          joinDate: data.createdAt,
+          profileImage: data.profileImage,
+        };
+        setUserInfo(userInfo);
+      }
+      )
+      .catch(err => console.log(err));
+  },[]);
 
   // Function that cleans up avatar image
   const cleanup = () => {
@@ -59,7 +70,7 @@ const UserSettingsPage = (props) => {
     if (newImage) {
       const imgData = new FormData();
       imgData.append('myFile', newImage);
-      axios.post(SERVER_ADDRESS + "/users/upload-profile/" + loggedInUser.username, imgData)
+      axios.post(SERVER_ADDRESS + "/users/upload-profile/" + userInfo.username, imgData)
         .then(({ data }) => {
           setImage(data);
         })    
@@ -78,16 +89,16 @@ const UserSettingsPage = (props) => {
 
   // Function the makes the axios call to delete an account from the db
   const handleDeleteAccount = () => {
-    console.log(loggedInUser.username);
-    axios.post(SERVER_ADDRESS + '/users/delete/' + loggedInUser.username)
+    console.log(userInfo.username);
+    axios.post(SERVER_ADDRESS + '/users/delete/' + userInfo.username)
       .then(console.log("Axios: user successfully deleted!"))
       .catch(err => (console.log(err)));
   };
 
   // Function that gets the join date of the user
   // const handleFetchJoinDate = () => {
-  //   console.log(loggedInUser.username);
-  //   axios.get(SERVER_ADDRESS +  '/users/finduser/join-date' + loggedInUser.username)
+  //   console.log(userInfo.username);
+  //   axios.get(SERVER_ADDRESS +  '/users/finduser/join-date' + userInfo.username)
   //     .then(res => {
   //       const joinDate = res.createdAt;
 
@@ -151,16 +162,16 @@ const UserSettingsPage = (props) => {
       >
         <Grid item xs className="UserInfo">
           <Typography variant="h5" component="span">
-            {"@" + loggedInUser.username}
+            {"@" + userInfo.username}
           </Typography>
-          {loggedInUser.isAdmin ? " 👑 " : ""}
+          {userInfo.isAdmin ? " 👑 " : ""}
           <Typography variant="body1">
           {/* CREATION DATE IS STORED IN USER SCHEMA */}
-            {"Member since " + loggedInUser.joinDate}
+            {"Member since " + userInfo.joinDate}
           </Typography>
           <Typography variant="body1">
           {/* PULL FROM SERVER */}
-            {loggedInUser.posts + " posts"}
+            {userInfo.posts + " posts"}
           </Typography>
         </Grid>
 
@@ -198,7 +209,7 @@ const UserSettingsPage = (props) => {
         <Grid container spacing={1}>
           <Grid item xs={8}>
             <Typography variant="h6">Username</Typography>
-            {loggedInUser.username}
+            {userInfo.username}
           </Grid>
           <Grid item xs={4}>
             <Button
@@ -290,8 +301,8 @@ const UserSettingsPage = (props) => {
         <EditUsernameModal
           // username={props.username}
           // password={props.password}
-          username={loggedInUser.username}
-          password={loggedInUser.password}        
+          username={userInfo.username}
+          password={userInfo.password}        
           isOpen={isUserModalOpen}
           onClose={() => setUserModalOpen(false)}
         />
@@ -300,8 +311,8 @@ const UserSettingsPage = (props) => {
         <EditPasswordModal
           // username={props.username}
           // password={props.password}
-          username={loggedInUser.username}
-          password={loggedInUser.password}
+          username={userInfo.username}
+          password={userInfo.password}
           isOpen={isPassModalOpen}
           onClose={() => setPassModalOpen(false)}
         />
