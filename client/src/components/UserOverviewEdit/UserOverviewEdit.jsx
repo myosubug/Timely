@@ -7,10 +7,10 @@ import {
   IconButton,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import DeleteAccountModal from '../DeleteAccountModal';
-import EditUsernameModal from '../EditUsernameModal';
-import EditPasswordModal from '../EditPasswordModal';
-import NavBar from '../NavBar';
+import DeleteAccountModal from '../DeleteAccountModal/DeleteAccountModal';
+import EditUsernameModal from '../EditUsernameModal/EditUsernameModal';
+import EditPasswordModal from '../EditPasswordModal/EditPasswordModal';
+import NavBar from '../NavBar/NavBar';
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../../AppConfig.js'
 import './style.css';

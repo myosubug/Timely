@@ -4,7 +4,7 @@ import { PostCreator } from '../PostCreator/PostCreator.jsx';
 import { Post } from '../Post/Post.jsx';
 import { Sign } from '../SignInUp/Sign.jsx';
 import TagFilter from '../TagFilter/TagFilter';
-import NavBar from '../NavBar';
+import NavBar from '../NavBar/NavBar.jsx';
 
 import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
