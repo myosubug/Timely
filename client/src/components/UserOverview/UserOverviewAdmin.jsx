@@ -1,4 +1,4 @@
-import React, { createRef, useState } from 'react';
+import React, { createRef, useEffect, useState, useParams } from 'react';
 import {
   Avatar,
   Grid,
@@ -7,40 +7,50 @@ import {
   IconButton,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import DeleteAccountModal from '../DeleteAccountModal';
-import EditUsernameModal from '../EditUsernameModal';
-import EditPasswordModal from '../EditPasswordModal';
-import * as avatarImg from './../../images/patrick.jpg';
-import NavBar from '../NavBar';
+import BanUserModal from './AdminPopUps/BanUserModal';
+import AdminEditPasswordModal from './AdminPopUps/AdminEditPasswordModal';
+import DemoteAdminModal from './AdminPopUps/DemoteAdminModal';
+import PromoteUserModal from './AdminPopUps/PromoteUserModal';
+import NavBar from '../NavBar/NavBar';
 import axios from 'axios';
-import { SERVER_ADDRESS, loggedInUser } from '../../AppConfig.js'
+import { SERVER_ADDRESS } from '../../AppConfig.js'
 import './style.css';
 
-const UserSettingsPage = (props) => {
-  // THIS ISN'T BEING USED ANYMORE SINCE WE'RE USING LOGGEDINUSER
-  // UserSettingsPage.propTypes = {
-  //   username: PropTypes.string.isRequired,
-  //   password: PropTypes.string.isRequired,
-  //   isAdmin: PropTypes.bool.isRequired,
-  //   profileImage: PropTypes.string.isRequired,
-
-  //   joinDate: PropTypes.string.isRequired,
-  //   posts: PropTypes.number.isRequired,
-  // };
-
+const UserOverviewAdmin = (props) => {
 
   const inputFileRef = createRef(null);
   const [image, _setImage] = useState(null);
 
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [isUserModalOpen, setUserModalOpen] = useState(false);
+  const [isDemoteModalOpen, setDemoteModalOpen] = useState(false);
+  const [isPromoteModalOpen, setPromoteModalOpen] = useState(false);
   const [isPassModalOpen, setPassModalOpen] = useState(false);
-  // const [isEmailModalOpen, setEmailModalOpen] = useState(false);
+
+  const [userInfo, setUserInfo] = useState({});
+
+  useEffect(() => {
+    console.log("yeet");
+    console.log(props.username);
+    axios.get(SERVER_ADDRESS + '/users/finduser/' + props.username)
+      .then(({ data }) => {
+        const userInfo = {
+          username: data.username,
+          password: data.password,
+          isAdmin: data.isAdmin,
+          joinDate: data.createdAt,
+          profileImage: data.profileImage,
+        };
+        setUserInfo(userInfo);
+        setImage(userInfo.profileImage);
+      }
+      )
+      .catch(err => console.log(err));
+  }, []);
 
   // Function that cleans up avatar image
   const cleanup = () => {
-    URL.revokeObjectURL(image);
-    inputFileRef.current.value = null;
+    // URL.revokeObjectURL(image);
+    // inputFileRef.current.value = null;
   };
 
   // Function that sets avatar image
@@ -49,22 +59,23 @@ const UserSettingsPage = (props) => {
       cleanup();
     }
     _setImage(newImage);
-    console.log(newImage);
+    // console.log(newImage);
   };
 
   // Takes uploaded img and passes it to setImg function to be set
   const handleOnImgChange = (event) => {
     const newImage = event.target?.files?.[0];
+    // console.log(newImage);
 
     if (newImage) {
       const imgData = new FormData();
       imgData.append('myFile', newImage);
-      axios.post(SERVER_ADDRESS + "/users/upload-profile/" + loggedInUser.username, imgData)
+      axios.post(SERVER_ADDRESS + "/users/upload-profile/" + userInfo.username, imgData)
         .then(({ data }) => {
-          setImage(data);
-        })    
-      .catch(err => console.log(err));
-      // setImage(URL.createObjectURL(newImage));
+          // setImage(data);
+        })
+        .catch(err => console.log(err));
+      setImage(URL.createObjectURL(newImage));
     }
   };
 
@@ -72,22 +83,44 @@ const UserSettingsPage = (props) => {
   const handleAvatarClick = (event) => {
     if (image) {
       event.preventDefault();
-      setImage(null);
+      setImage(image);
     }
   };
 
-  // Function the makes the axios call to delete an account from the db
+  // Function that makes the axios call to ban an account from the db
   const handleDeleteAccount = () => {
-    console.log(loggedInUser.username);
-    axios.post(SERVER_ADDRESS + '/users/delete/' + loggedInUser.username)
+    console.log(userInfo.username);
+    axios.post(SERVER_ADDRESS + '/users/delete/' + userInfo.username)
       .then(console.log("Axios: user successfully deleted!"))
+      .catch(err => (console.log(err)));
+  };
+
+  // Function that makes the axios call to promote a user 
+  const handlePromoteUser = () => {
+    const data = { isAdmin: true };
+    axios.post(SERVER_ADDRESS + '/users/promote/' + userInfo.username, data)
+      .then(res => {
+        console.log(res.data);
+        console.log("Axios: user successfully promoted!");
+      })
+      .catch(err => (console.log(err)));
+  };
+
+  // Function that makes the axios call to demote a user 
+  const handleDemoteUser = () => {
+    const data = { isAdmin: false };
+    axios.post(SERVER_ADDRESS + '/users/demote/' + userInfo.username, data)
+      .then(res => {
+        console.log(res.data);
+        console.log("Axios: user successfully demoted!");
+      })
       .catch(err => (console.log(err)));
   };
 
   // Function that gets the join date of the user
   // const handleFetchJoinDate = () => {
-  //   console.log(loggedInUser.username);
-  //   axios.get(SERVER_ADDRESS +  '/users/finduser/join-date' + loggedInUser.username)
+  //   console.log(userInfo.username);
+  //   axios.get(SERVER_ADDRESS +  '/users/finduser/join-date' + userInfo.username)
   //     .then(res => {
   //       const joinDate = res.createdAt;
 
@@ -106,10 +139,10 @@ const UserSettingsPage = (props) => {
         spacing={1}
       >
         <Grid item xs={9} className="ProfilePic">
-          <IconButton color="primary" onClick={handleAvatarClick}>
+          <IconButton color="primary" >
             <input
               accept="image/*"
-              ref={inputFileRef}
+              // ref={inputFileRef}
               hidden
               id="avatar-image-upload"
               type="file"
@@ -118,13 +151,14 @@ const UserSettingsPage = (props) => {
             <label htmlFor="avatar-image-upload">
               <Avatar
                 alt="Avatar"
-                src={image || avatarImg}
+                src={image}
                 className="avatar"
               />
             </label>
           </IconButton>
         </Grid>
 
+        {/* BAN USER */}
         <Grid item xs={3} className="DeleteAccount">
           <Button
             variant="contained"
@@ -132,8 +166,32 @@ const UserSettingsPage = (props) => {
             onClick={() => setDeleteModalOpen(true)}
             size="medium"
           >
-            Delete
+            Ban User
           </Button>
+        </Grid>
+
+        {/* PROMOTE OR DEMOTE USER */}
+        <Grid item xs={3} className="PromoteDemoteUser">
+          {!userInfo.Admin
+            ? 
+            <Button
+              variant="contained"
+              className="PromoteDemoteUserButton"
+              onClick={() => setPromoteModalOpen(true)}
+              size="medium"
+            >
+              Promote
+            </Button>
+            :
+            <Button
+              variant="contained"
+              className="PromoteDemoteUserButton"
+              onClick={() => setDemoteModalOpen(true)}
+              size="medium"
+            >
+              Demote
+            </Button>
+          }
         </Grid>
       </Grid>
     );
@@ -149,18 +207,19 @@ const UserSettingsPage = (props) => {
         alignItems="stretch"
         spacing={1}
       >
+        UserOverviewAdmin
         <Grid item xs className="UserInfo">
           <Typography variant="h5" component="span">
-            {"@" + loggedInUser.username}
+            {"@" + userInfo.username}
           </Typography>
-          {loggedInUser.isAdmin ? " 👑 " : ""}
+          {userInfo.isAdmin ? " 👑 " : ""}
           <Typography variant="body1">
-          {/* CREATION DATE IS STORED IN USER SCHEMA */}
-            {"Member since " + loggedInUser.joinDate}
+            {/* CREATION DATE IS STORED IN USER SCHEMA */}
+            {"Member since " + userInfo.joinDate}
           </Typography>
           <Typography variant="body1">
-          {/* PULL FROM SERVER */}
-            {loggedInUser.posts + " posts"}
+            {/* PULL FROM SERVER */}
+            {userInfo.posts + " posts"}
           </Typography>
         </Grid>
 
@@ -175,41 +234,13 @@ const UserSettingsPage = (props) => {
   const renderUserActions = () => {
     return (
       <div>
-        {/* Edit Email */}
-        {/* <Grid container spacing={1}>
-          <Grid item xs={8}>
-            <Typography variant="h6">Email</Typography>
-            {props.email}
-          </Grid>
-
-          <Grid item xs={4}>
-            <Button
-              variant="contained"
-              className="EditEmailButton"
-              onClick={openEmailModal}
-              size="medium"
-            >
-              Edit
-            </Button>
-          </Grid>
-        </Grid> */}
-
-        {/* Edit Username */}
+        {/* Username */}
         <Grid container spacing={1}>
           <Grid item xs={8}>
             <Typography variant="h6">Username</Typography>
-            {loggedInUser.username}
+            {userInfo.username}
           </Grid>
-          <Grid item xs={4}>
-            <Button
-              variant="contained"
-              className="EditUsernameButton"
-              onClick={() => setUserModalOpen(true)}
-              size="medium"
-            >
-              Edit
-            </Button>
-          </Grid>
+          <Grid item xs={4} />
         </Grid>
 
         {/* Edit Password */}
@@ -234,7 +265,7 @@ const UserSettingsPage = (props) => {
   }
 
   return (
-    <div className="UserSettingsPage">
+    <div className="UserOverviewEdit">
       <Grid
         container
         direction="column"
@@ -243,7 +274,10 @@ const UserSettingsPage = (props) => {
         spacing={10}
       >
         <Grid item xs={1}>
-          <NavBar isLandingPg={false} />
+          <NavBar
+            isLandingPg={false}
+            username={props.username}
+          />
         </Grid>
 
         <Grid
@@ -268,47 +302,41 @@ const UserSettingsPage = (props) => {
         </Grid>
 
         {/* DELETE ACCOUNT MODAL */}
-        <DeleteAccountModal
-          username={"username"}
-          password={"123"}
-          delete={handleDeleteAccount}
+        <BanUserModal
+          username={userInfo.username}
+          ban={handleDeleteAccount}
           isOpen={isDeleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
         />
 
-        {/* EDIT EMAIL MODAL */}
-        {/* <EditEmailModal
-        username={props.username}
-        password={props.password}
-        email={props.email}
-        update={() => {}}
-        isOpen={state.isEditEmailOpen}
-        onClose={closeEmailModal}
-      /> */}
-
-        {/* EDIT USERNAME MODAL */}
-        <EditUsernameModal
-          // username={props.username}
-          // password={props.password}
-          username={loggedInUser.username}
-          password={loggedInUser.password}        
-          isOpen={isUserModalOpen}
-          onClose={() => setUserModalOpen(false)}
-        />
-
         {/* EDIT PASSWORD MODAL */}
-        <EditPasswordModal
-          // username={props.username}
-          // password={props.password}
-          username={loggedInUser.username}
-          password={loggedInUser.password}
+        <AdminEditPasswordModal
+          username={userInfo.username}
+          password={userInfo.password}
           isOpen={isPassModalOpen}
           onClose={() => setPassModalOpen(false)}
         />
+
+        {/* PROMOTE USER */}
+        <PromoteUserModal 
+          username={userInfo.username}
+          promote={handlePromoteUser}
+          isOpen={isPromoteModalOpen}
+          onClose={() => setPromoteModalOpen(false)}          
+        />
+        
+        {/* DEMOTE USER */}
+        <DemoteAdminModal 
+          username={userInfo.username}
+          demote={handleDemoteUser}
+          isOpen={isDemoteModalOpen}
+          onClose={() => setDemoteModalOpen(false)}
+        />
+
       </Grid>
     </div>
   );
 
 }
 
-export { UserSettingsPage };
+export { UserOverviewAdmin };

@@ -7,6 +7,7 @@ export const NavBar = (props) => {
   NavBar.propTypes = {
     openSignInModal: PropTypes.func,
     isLandingPg: PropTypes.bool.isRequired,
+    username: PropTypes.string.isRequired,
   };
 
   return (
@@ -32,7 +33,7 @@ export const NavBar = (props) => {
           }
 
             {/* User settings button */}
-            <Link to="/settings">⚙️</Link>
+            <Link to={"/useroverview/" + props.username}>⚙️</Link>
           </div>
         </div>
       </div>

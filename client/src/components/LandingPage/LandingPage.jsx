@@ -3,8 +3,12 @@ import { useEffect, useState } from 'react';
 import { PostCreator } from '../PostCreator/PostCreator.jsx';
 import { Post } from '../Post/Post.jsx';
 import { Sign } from '../SignInUp/Sign.jsx';
+
+import { faHome, faBell, faFire, faChartLine } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import TagFilter from '../TagFilter/TagFilter';
-import NavBar from '../NavBar';
+import NavBar from '../NavBar/NavBar.jsx';
 
 import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
@@ -67,7 +71,7 @@ const LandingPage = (props) => {
                         </div>
                     )
                 }
-
+                console.log("lior");
                 setPosts([]);
                 setPosts(new_posts);
 
@@ -124,14 +128,15 @@ const LandingPage = (props) => {
             <NavBar
                 openSignInModal={() => setRenderModalObj(prev => ({ ...prev, "login": true }))}
                 isLandingPg={true}
+                username={loggedInUser.username}
             />
 
             {checkModalState()}
 
 
-            <div className="flex">
+            <div className="grid grid-cols-9 gap-4 w-full" style={{ backgroundColor : "#fcfcfc" }}>
 
-                <div className="h-screen top-0 pt-24 sticky p-4 w-2/12 border-r-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
+                <div className="hidden md:block xl:col-span-2 col-span-3 h-screen top-0 pt-24 sticky p-4 border-r-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
                     <div className="flex justify-center text-white mt-4 font-medium text-3xl">
                         <img width="150px;" draggable="false" src="https://i.imgur.com/ATuMhih.png"></img>
                         <div className="flex justify-center px-6">
@@ -141,15 +146,15 @@ const LandingPage = (props) => {
                     <div className="selector mt-4 ml-12 mb-8">
 
                         <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer">
-                            <i className="fas fa-home" style={{ paddingRight: "0.3rem", fontSize: "1.6rem" }}></i> Home
+                        <FontAwesomeIcon icon={faHome} /> <i style={{ paddingRight: "0.45rem" }} /> Home
                         </div>
 
                         <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer">
-                            <i className="far fa-bell pr-3" style={{ fontSize: "1.6rem" }}></i> Notifications
+                        <FontAwesomeIcon icon={faBell} /> <i className="pr-3" /> Notifications
                         </div>
 
                         <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer">
-                            <i className="fas fa-fire pr-3" style={{ fontSize: "1.6rem" }}></i> Trending
+                        <FontAwesomeIcon icon={faFire} /> <i className="pr-3" /> Trending
                         </div>
 
                     </div>
@@ -165,18 +170,19 @@ const LandingPage = (props) => {
 
                 </div>
 
-                <div className="flex-grow justify-center px-56 pt-24 bg-white-300">
+                <div className="col-span-9 md:col-span-6 xl:col-span-5 flex-grow justify-center w-full pt-24 px-5" style={{ backgroundColor : "#fcfcfc" }}>
                     <div className="justify-center">
 
 
-                        {posts}
+                        { posts }
 
                     </div>
                 </div>
 
-                <div className="h-screen top-0 sticky pt-32 p-4 w-2/12 border-l-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
+                <div className="hidden xl:block col-span-2 h-screen top-0 sticky pt-32 p-4 border-l-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
 
 
+                    {/* IF LOGGED IN */}
                     <div className="flex mb-8">
                         <img className="place-self-center h-16 w-16 mr-6 ml-6 mt-2 rounded-full" src="https://i.imgur.com/Tj96CFr.png"></img>
                         <div className="text-left">
@@ -188,13 +194,33 @@ const LandingPage = (props) => {
                         </div>
                     </div>
 
-                    <div className="flex justify-center px-6">
+                    <div className="justify-center px-6">
+
+                        {/* IF LOGGED IN */}
                         <div
                             onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}
                             className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
                             style={{ height: "3.2rem" }}>
                             <p style={{ paddingTop: "0.18rem" }}>Create Post</p>
                         </div>
+
+                        <div
+                            onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}
+                            className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
+                            style={{ height: "3.2rem" }}>
+                            <p style={{ paddingTop: "0.18rem" }}>Log Out</p>
+                        </div>
+
+
+
+                        {/* ONLY RENDER NOT LOGGED IN */}
+                        {/* <div
+                            onClick={() => setRenderModalObj(prev => ({ ...prev, "login": true }))}
+                            className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
+                            style={{ height: "3.2rem" }}>
+                            <p style={{ paddingTop: "0.18rem" }}>Sign In/Up</p>
+                        </div> */}
+
                     </div>
 
                 </div>

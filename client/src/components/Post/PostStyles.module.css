@@ -6,7 +6,6 @@
 
 .profile_info{
     cursor: pointer;
-    width: fit-content;
 }
 
 .action_btn{
@@ -39,6 +38,12 @@
 }
 
 
+#content {
+    padding-left: 2.75rem;
+    padding-right: 3.0rem;
+    margin-top: 0.5rem;
+}
+
 #content img{
     display: block;
     margin: auto;
@@ -46,7 +51,7 @@
     height: auto;
 }
 
-#content p{
+#content p {
     margin: auto;
     width: 90%;
 }
@@ -68,7 +73,7 @@
 #timer{
     margin-top: auto;
     margin-bottom: auto;
-    margin-right: 5%;
+    margin-right: 0.5rem;
     text-align: right;
     padding: 10px;
 }
