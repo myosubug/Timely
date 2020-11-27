@@ -199,7 +199,9 @@ const UserOverviewView = (props) => {
         spacing={10}
       >
         <Grid item xs={1}>
-          <NavBar isLandingPg={false} />
+          <NavBar
+            isLandingPg={false}
+            username={userInfo.username} />
         </Grid>
 
         <Grid

@@ -253,7 +253,10 @@ const UserOverviewAdmin = (props) => {
         spacing={10}
       >
         <Grid item xs={1}>
-          <NavBar isLandingPg={false} username={userInfo.username} />
+          <NavBar
+            isLandingPg={false}
+            username={userInfo.username}
+          />
         </Grid>
 
         <Grid
