@@ -30,8 +30,7 @@ const UserOverviewView = (props) => {
     console.log("yeet");
     console.log(props.username);
     axios.get(SERVER_ADDRESS + '/users/finduser/' + props.username)
-      .then(({ data }) => 
-      {
+      .then(({ data }) => {
         const userInfo = {
           username: data.username,
           password: data.password,
@@ -44,7 +43,7 @@ const UserOverviewView = (props) => {
       }
       )
       .catch(err => console.log(err));
-  },[]);
+  }, []);
 
   // Function that cleans up avatar image
   const cleanup = () => {
@@ -72,8 +71,8 @@ const UserOverviewView = (props) => {
       axios.post(SERVER_ADDRESS + "/users/upload-profile/" + userInfo.username, imgData)
         .then(({ data }) => {
           // setImage(data);
-        })    
-      .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
       setImage(URL.createObjectURL(newImage));
     }
   };
@@ -147,11 +146,11 @@ const UserOverviewView = (props) => {
           </Typography>
           {userInfo.isAdmin ? " 👑 " : ""}
           <Typography variant="body1">
-          {/* CREATION DATE IS STORED IN USER SCHEMA */}
+            {/* CREATION DATE IS STORED IN USER SCHEMA */}
             {"Member since " + userInfo.joinDate}
           </Typography>
           <Typography variant="body1">
-          {/* PULL FROM SERVER */}
+            {/* PULL FROM SERVER */}
             {userInfo.posts + " posts"}
           </Typography>
         </Grid>
@@ -183,7 +182,7 @@ const UserOverviewView = (props) => {
             <Typography variant="h6">Password</Typography>
             ********
           </Grid>
-          
+
         </Grid>
       </div>
     );
@@ -249,7 +248,7 @@ const UserOverviewView = (props) => {
           // username={props.username}
           // password={props.password}
           username={userInfo.username}
-          password={userInfo.password}        
+          password={userInfo.password}
           isOpen={isUserModalOpen}
           onClose={() => setUserModalOpen(false)}
         />
