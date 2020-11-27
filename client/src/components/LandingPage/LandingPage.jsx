@@ -172,7 +172,7 @@ const LandingPage = (props) => {
                     <div className="justify-center">
 
 
-                        <Post/>
+                        { posts }
 
                     </div>
                 </div>
@@ -192,7 +192,7 @@ const LandingPage = (props) => {
                         </div>
                     </div>
 
-                    <div className="flex justify-center px-6">
+                    <div className="justify-center px-6">
 
                         {/* IF LOGGED IN */}
                         <div
@@ -201,6 +201,15 @@ const LandingPage = (props) => {
                             style={{ height: "3.2rem" }}>
                             <p style={{ paddingTop: "0.18rem" }}>Create Post</p>
                         </div>
+
+                        <div
+                            onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}
+                            className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
+                            style={{ height: "3.2rem" }}>
+                            <p style={{ paddingTop: "0.18rem" }}>Log Out</p>
+                        </div>
+
+
 
                         {/* ONLY RENDER NOT LOGGED IN */}
                         {/* <div
