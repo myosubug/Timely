@@ -65,11 +65,11 @@ router.route('/tags').get((req,res)=>{
     .then(post => 
         {
             for(var element of post){
-                str1 = element.tags.toString()+"";
-                if(str1 in dictionary){
-                    dictionary[str1] += 1;
+                var tagVal = element.tags.toString().toLowerCase()+"";
+                if(tagVal in dictionary){
+                    dictionary[tagVal] += 1;
                 } else {
-                    dictionary[str1] = 1;
+                    dictionary[tagVal] = 1;
                 }
             }
 
