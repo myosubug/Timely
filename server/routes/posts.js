@@ -2,7 +2,6 @@ const router = require('express').Router();
 let Post = require('../models/post.model');
 let io = require('../server.js').io;
 
-
 const IMAGE_DIR = require('path').dirname(require.main.filename) + "/images/";
 
 //Returns all posts in the order that they are in the db
@@ -52,23 +51,48 @@ router.route('/find-tag/:tag').get((req,res)=>{
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+//finds the top 5 tags for posts
 /*References/Material used to make this section to find the top 5 tags:
-    -> https://stackoverflow.com/questions/32502599/finding-duplicate-values-in-a-mongodb-array
-    -> https://stackoverflow.com/questions/25436630/mongodb-how-to-find-and-then-aggregate
-    -> https://stackoverflow.com/questions/4421207/how-to-get-the-last-n-records-in-mongodb
-*/
+    -> https://stackoverflow.com/questions/33763768/loop-through-array-of-values-with-arrow-function
+    -> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
+    -> https://stackoverflow.com/questions/7196212/how-to-create-dictionary-and-add-key-value-pairs-dynamically
+    -> https://docs.mongodb.com/manual/reference/method/ObjectId.toString/
+    -> https://stackoverflow.com/questions/25500316/sort-a-dictionary-by-value-in-javascript
+    -> https://www.codegrepper.com/code-examples/javascript/javascript+get+first+5+elements+of+array
+    */
 router.route('/tags').get((req,res)=>{
+    var dictionary = {};
+    var str2 = "";
+    var topTags = [];
+    var sortedDictionary = [];
     Post.find()
-    Post.aggregate([
-        {"$group" : { "_id": "$tags", "count": { "$sum": 1 } } },
-        {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 0} } }, 
-        {"$sort": {"count" : -1} },
-        
-        {"$project": {"tags" : "$_id", "_id" : 0} },
-        {"$limit": 5},])
-    .then(posts => res.json(posts))
+    .then(post => 
+        {
+            for(var element of post){
+                str1 = element.tags.toString()+"";
+                if(str1 in dictionary){
+                    dictionary[str1] += 1;
+                } else {
+                    dictionary[str1] = 1;
+                }
+                str2 =  str2 + str1+", ";
+            }
+
+            for(var i in dictionary){
+                sortedDictionary.push([ i, dictionary[i] ])
+            }
+
+            sortedDictionary.sort(function compare(value1,value2){
+                return value2[1] - value1[1];
+            })
+
+            for(var j in sortedDictionary){
+                topTags.push(sortedDictionary[j][0]);
+            }
+        }
+        )
+    .then(post => res.json(topTags.slice(0,5)))
     .catch(err => res.status(400).json('Error: ' + err));
-    
 })
 
 //Returns a Post object by ID
