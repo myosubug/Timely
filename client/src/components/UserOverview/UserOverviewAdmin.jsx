@@ -98,7 +98,7 @@ const UserOverviewAdmin = (props) => {
   // Function that makes the axios call to promote a user 
   const handlePromoteUser = () => {
     const data = { isAdmin: true };
-    axios.post(SERVER_ADDRESS + '/users/promote' + userInfo.username, data)
+    axios.post(SERVER_ADDRESS + '/users/promote/' + userInfo.username, data)
       .then(res => {
         console.log(res.data);
         console.log("Axios: user successfully promoted!")
@@ -109,14 +109,13 @@ const UserOverviewAdmin = (props) => {
   // Function that makes the axios call to demote a user 
   const handleDemoteUser = () => {
     const data = { isAdmin: false };
-    axios.post(SERVER_ADDRESS + '/users/promote' + userInfo.username, data)
+    axios.post(SERVER_ADDRESS + '/users/demote/' + userInfo.username, data)
       .then(res => {
         console.log(res.data);
         console.log("Axios: user successfully demoted!")
       })
       .catch(err => (console.log(err)));
   };
-
 
   // Function that gets the join date of the user
   // const handleFetchJoinDate = () => {
