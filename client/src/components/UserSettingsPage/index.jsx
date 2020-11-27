@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import DeleteAccountModal from '../DeleteAccountModal';
 import EditUsernameModal from '../EditUsernameModal';
 import EditPasswordModal from '../EditPasswordModal';
-import * as avatarImg from './../../images/patrick.jpg';
 import NavBar from '../NavBar';
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../../AppConfig.js'
@@ -43,6 +42,7 @@ const UserSettingsPage = ({match}) => {
           profileImage: data.profileImage,
         };
         setUserInfo(userInfo);
+        setImage(userInfo.profileImage);
       }
       )
       .catch(err => console.log(err));
@@ -50,8 +50,8 @@ const UserSettingsPage = ({match}) => {
 
   // Function that cleans up avatar image
   const cleanup = () => {
-    URL.revokeObjectURL(image);
-    inputFileRef.current.value = null;
+    // URL.revokeObjectURL(image);
+    // inputFileRef.current.value = null;
   };
 
   // Function that sets avatar image
@@ -60,22 +60,23 @@ const UserSettingsPage = ({match}) => {
       cleanup();
     }
     _setImage(newImage);
-    console.log(newImage);
+    // console.log(newImage);
   };
 
   // Takes uploaded img and passes it to setImg function to be set
   const handleOnImgChange = (event) => {
     const newImage = event.target?.files?.[0];
+    // console.log(newImage);
 
     if (newImage) {
       const imgData = new FormData();
       imgData.append('myFile', newImage);
       axios.post(SERVER_ADDRESS + "/users/upload-profile/" + userInfo.username, imgData)
         .then(({ data }) => {
-          setImage(data);
+          // setImage(data);
         })    
       .catch(err => console.log(err));
-      // setImage(URL.createObjectURL(newImage));
+      setImage(URL.createObjectURL(newImage));
     }
   };
 
@@ -83,7 +84,7 @@ const UserSettingsPage = ({match}) => {
   const handleAvatarClick = (event) => {
     if (image) {
       event.preventDefault();
-      setImage(null);
+      setImage(image);
     }
   };
 
@@ -117,10 +118,10 @@ const UserSettingsPage = ({match}) => {
         spacing={1}
       >
         <Grid item xs={9} className="ProfilePic">
-          <IconButton color="primary" onClick={handleAvatarClick}>
+          <IconButton color="primary" >
             <input
               accept="image/*"
-              ref={inputFileRef}
+              // ref={inputFileRef}
               hidden
               id="avatar-image-upload"
               type="file"
@@ -129,7 +130,7 @@ const UserSettingsPage = ({match}) => {
             <label htmlFor="avatar-image-upload">
               <Avatar
                 alt="Avatar"
-                src={image || avatarImg}
+                src={image}
                 className="avatar"
               />
             </label>

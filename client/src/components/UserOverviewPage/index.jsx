@@ -5,7 +5,6 @@ import {
   Typography,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import * as avatarImg from './../../images/patrick.jpg';
 import './style.css';
 
 export class UserOverviewPage extends Component {
@@ -95,7 +94,7 @@ export class UserOverviewPage extends Component {
         <Grid item xs className="ProfilePic">
           <Avatar
             alt="Patrick"
-            src={avatarImg}
+            src={"https://pyxis.nymag.com/v1/imgs/0f9/f96/029acbf4c6d8c67e138e1eb06a277204bf-05-patrick.rsocial.w1200.jpg"}
             className="avatar"
           />
           {/* TODO Change profile pic button*/}
