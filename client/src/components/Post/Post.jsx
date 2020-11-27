@@ -255,8 +255,8 @@ const Post = (props) => {
             sec = Math.floor(timeRemaining % 60);
         }
         else {
-            min = 12;
-            sec = 5
+            min = 0;
+            sec = 0;
         }
 
         return min.toString() + "m " + sec.toString() + "s";
