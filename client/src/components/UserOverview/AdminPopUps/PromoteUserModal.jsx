@@ -44,7 +44,6 @@ export const PromoteUserModal = (props) => {
       <DialogContent>
         <DialogContentText>
           Are you sure you want to promote this user?
-          This cannot be undone.
         </DialogContentText>
       </DialogContent>
       <DialogActions>

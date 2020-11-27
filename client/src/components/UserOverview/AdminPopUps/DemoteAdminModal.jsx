@@ -44,7 +44,6 @@ export const DemoteAdminModal = (props) => {
       <DialogContent>
         <DialogContentText>
           Are you sure you want to demote this user?
-          This cannot be undone.
         </DialogContentText>
       </DialogContent>
       <DialogActions>

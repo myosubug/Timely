@@ -245,6 +245,8 @@ const UserOverviewEdit = (props) => {
             {renderProfileGrid()}
           </Grid>
           <Grid item xs={7} className="UserInfoGrid">
+          UserOverviewEdit
+
             {/* User Info */}
             {renderUserGrid()}
           </Grid>
