@@ -1,5 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { PostCreator } from '../PostCreator/PostCreator.jsx';
 import { Post } from '../Post/Post.jsx';
 import { Sign } from '../SignInUp/Sign.jsx';
@@ -11,7 +12,8 @@ import TagFilter from '../TagFilter/TagFilter';
 import NavBar from '../NavBar/NavBar.jsx';
 
 import axios from 'axios';
-import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
+import { SERVER_ADDRESS, socket, loggedInUser, resetLoggedInUser } from '../../AppConfig.js'
+import { eraseCookie } from '../../cookieHandler.js'
 
 import './LandingStyles.css'
 
@@ -19,6 +21,7 @@ const LandingPage = (props) => {
 
     const [renderModalObj, setRenderModalObj] = useState({ "tags": false, "login": false, "post": false });
     const [posts, setPosts] = useState([]);
+    const [numPosts, setNumPosts] = useState(0);
     const [postQuery, setPostQuery] = useState('/posts/');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -35,6 +38,8 @@ const LandingPage = (props) => {
         });
 
         renderPosts();
+        setLoggedIn(loggedInUser.username !== "");
+        getNumPosts();
     }, []);
 
 
@@ -51,6 +56,7 @@ const LandingPage = (props) => {
                     )
                 }
                 setPosts(new_posts);
+                getNumPosts();
 
             })
             .catch(err => console.log(err));
@@ -71,11 +77,19 @@ const LandingPage = (props) => {
                         </div>
                     )
                 }
-                console.log("lior");
+
                 setPosts([]);
                 setPosts(new_posts);
+                getNumPosts(); //Get the number of posts for the user (in case his were deleted)
 
             })
+            .catch(err => console.log(err));
+    }
+
+    //Gets the number of posts the current user has
+    const getNumPosts = () => {
+        axios.get(SERVER_ADDRESS + "/users/numPosts/" + loggedInUser.username)
+            .then(({ data }) => setNumPosts(data))
             .catch(err => console.log(err));
     }
 
@@ -100,6 +114,75 @@ const LandingPage = (props) => {
     function setLoggedIn(val) {
         setIsLoggedIn(val);
         renderPosts();
+        renderRightSideBar();
+    }
+
+    //Handles what happens after we logout
+    const handleLogOut = () => {
+        //Sets the loggedinUser info to an empty object again
+        resetLoggedInUser();
+
+        //Erases the cookie
+        eraseCookie('id');
+
+        //Removes the session storage
+        sessionStorage.clear('id');
+
+        //Set the state
+        setLoggedIn(false);
+    }
+
+    //Renders the right sidebar based on if the user is logged in or not
+    const renderRightSideBar = () => {
+        if (isLoggedIn) {
+            return (
+                <div>
+                    <div className="flex mb-8">
+                        <Link to={"/useroverview/" + loggedInUser.username}>
+                            <img className="place-self-center h-16 w-16 mr-6 ml-6 mt-2 rounded-full" src={loggedInUser.profileImage}></img>
+                        </Link>
+                        <div className="text-left">
+                            <Link to={"/useroverview/" + loggedInUser.username}>
+                                <h2 className="text-lg font-semibold text-gray-700 border-gray-400 pb-1 border-b-2"> {loggedInUser.username} </h2>
+                            </Link>
+                            <div className="text-gray-600" style={{ marginTop: "0.2rem", fontSize: "13px" }}>
+                                <p>Posts Active: <b className="text-gray-700"> {numPosts} </b></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="justify-center px-6">
+
+                        {/* IF LOGGED IN */}
+                        <div
+                            onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}
+                            className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
+                            style={{ height: "3.2rem" }}>
+                            <p style={{ paddingTop: "0.18rem" }}>Create Post</p>
+                        </div>
+
+                        <div
+                            onClick={handleLogOut}
+                            className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
+                            style={{ height: "3.2rem" }}>
+                            <p style={{ paddingTop: "0.18rem" }}>Log Out</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        else {
+            return (
+                <div className="justify-center px-6">
+                    <div
+                        onClick={() => setRenderModalObj(prev => ({ ...prev, "login": true }))}
+                        className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
+                        style={{ height: "3.2rem" }}>
+                        <p style={{ paddingTop: "0.18rem" }}>Sign In/Up</p>
+                    </div>
+                </div>
+            );
+        }
     }
 
     // Function that determines what modal to render
@@ -134,7 +217,7 @@ const LandingPage = (props) => {
             {checkModalState()}
 
 
-            <div className="grid grid-cols-9 gap-4 w-full" style={{ backgroundColor : "#fcfcfc" }}>
+            <div className="grid grid-cols-9 gap-4 w-full" style={{ backgroundColor: "#fcfcfc" }}>
 
                 <div className="hidden md:block xl:col-span-2 col-span-3 h-screen top-0 pt-24 sticky p-4 border-r-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
                     <div className="flex justify-center text-white mt-4 font-medium text-3xl">
@@ -146,15 +229,15 @@ const LandingPage = (props) => {
                     <div className="selector mt-4 ml-12 mb-8">
 
                         <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer">
-                        <FontAwesomeIcon icon={faHome} /> <i style={{ paddingRight: "0.45rem" }} /> Home
+                            <FontAwesomeIcon icon={faHome} /> <i style={{ paddingRight: "0.45rem" }} /> Home
                         </div>
 
                         <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer">
-                        <FontAwesomeIcon icon={faBell} /> <i className="pr-3" /> Notifications
+                            <FontAwesomeIcon icon={faBell} /> <i className="pr-3" /> Notifications
                         </div>
 
                         <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer">
-                        <FontAwesomeIcon icon={faFire} /> <i className="pr-3" /> Trending
+                            <FontAwesomeIcon icon={faFire} /> <i className="pr-3" /> Trending
                         </div>
 
                     </div>
@@ -170,11 +253,11 @@ const LandingPage = (props) => {
 
                 </div>
 
-                <div className="col-span-9 md:col-span-6 xl:col-span-5 flex-grow justify-center w-full pt-24 px-5" style={{ backgroundColor : "#fcfcfc" }}>
+                <div className="col-span-9 md:col-span-6 xl:col-span-5 flex-grow justify-center w-full pt-24 px-5" style={{ backgroundColor: "#fcfcfc" }}>
                     <div className="justify-center">
 
 
-                        { posts }
+                        {posts}
 
                     </div>
                 </div>
@@ -182,46 +265,7 @@ const LandingPage = (props) => {
                 <div className="hidden xl:block col-span-2 h-screen top-0 sticky pt-32 p-4 border-l-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
 
 
-                    {/* IF LOGGED IN */}
-                    <div className="flex mb-8">
-                        <img className="place-self-center h-16 w-16 mr-6 ml-6 mt-2 rounded-full" src="https://i.imgur.com/Tj96CFr.png"></img>
-                        <div className="text-left">
-                            <h2 className="text-lg font-semibold text-gray-700 border-gray-400 pb-1 border-b-2">@notpavolfederl</h2>
-                            <div className="text-gray-600" style={{ marginTop: "0.2rem", fontSize: "13px" }}>
-                                <p>Posts Active: <b className="text-gray-700">5</b></p>
-                                <p>Posts Expired: <b className="text-gray-700">163</b></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="justify-center px-6">
-
-                        {/* IF LOGGED IN */}
-                        <div
-                            onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}
-                            className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
-                            style={{ height: "3.2rem" }}>
-                            <p style={{ paddingTop: "0.18rem" }}>Create Post</p>
-                        </div>
-
-                        <div
-                            onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}
-                            className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
-                            style={{ height: "3.2rem" }}>
-                            <p style={{ paddingTop: "0.18rem" }}>Log Out</p>
-                        </div>
-
-
-
-                        {/* ONLY RENDER NOT LOGGED IN */}
-                        {/* <div
-                            onClick={() => setRenderModalObj(prev => ({ ...prev, "login": true }))}
-                            className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
-                            style={{ height: "3.2rem" }}>
-                            <p style={{ paddingTop: "0.18rem" }}>Sign In/Up</p>
-                        </div> */}
-
-                    </div>
+                    {renderRightSideBar()}
 
                 </div>
 

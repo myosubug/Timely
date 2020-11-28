@@ -9,7 +9,7 @@ import Container from '@material-ui/core/Container';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../../AppConfig.js'
-import { loggedInUser } from '../../AppConfig.js'
+import { loggedInUser, populateUserInfo } from '../../AppConfig.js'
 import { setCookie } from '../../cookieHandler.js';
 
 const useStyles = makeStyles((theme) => ({
@@ -47,15 +47,9 @@ export default function SignUp(props) {
 
         //Store in storage
         setCookie('id', loggedInUser.id, 10);
-        setCookie('username', loggedInUser.username, 10);
-        setCookie('isAdmin', loggedInUser.isAdmin, 10);
-        setCookie('profileImage', loggedInUser.profileImage, 10);
 
         //Store in sessionStorage (in case we refresh after cookie expiration time)
         sessionStorage.setItem('id', loggedInUser.id);
-        sessionStorage.setItem('username', loggedInUser.username);
-        sessionStorage.setItem('isAdmin', loggedInUser.isAdmin);
-        sessionStorage.setItem('profileImage', loggedInUser.profileImage);
 
         alert("your account is created and you are logged in now");
         props.setLoggedIn(true);

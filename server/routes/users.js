@@ -1,5 +1,6 @@
 const router = require('express').Router();
 let User = require('../models/user.model');
+let Post = require('../models/post.model');
 
 const IMAGE_DIR = require('path').dirname(require.main.filename) + "/images/";
 
@@ -151,5 +152,16 @@ router.route('/demote/:username').post((req, res) => {
         })
         .catch(err => res.status(400).json('Error: ' + err));
 });
+
+//Find the number of posts that the user currently has
+router.route('/numPosts/:username').get((req, res) => {
+    const username = req.params.username;
+
+    Post.find({ username: username })
+        .then(posts => {
+            res.json(posts.length);
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+})
 
 module.exports = router;
