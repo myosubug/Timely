@@ -98,20 +98,32 @@ const Post = (props) => {
 
                     const date_display = formatDate(timePosted);
 
-                    //Set the date
-                    setPostDetails({
-                        id: id,
-                        type: type,
-                        maxTime: maxTime,
-                        time: time,
-                        username: username,
-                        timePosted: date_display,
-                        likeCount: likeCount,
-                        dislikeCount: dislikeCount,
-                        textContent: text_content,
-                        imgSrc: img_src
+                    //Get the user's profile picture
+                    axios.get(SERVER_ADDRESS + "/users/findUser/" + username)
+                        .then(({ data }) => {
+                            const profileImage = data.profileImage;
 
-                    });
+                            //Set the date
+                            setPostDetails({
+                                id: id,
+                                type: type,
+                                maxTime: maxTime,
+                                time: time,
+                                username: username,
+                                timePosted: date_display,
+                                likeCount: likeCount,
+                                dislikeCount: dislikeCount,
+                                textContent: text_content,
+                                imgSrc: img_src,
+                                profileImage: profileImage
+
+                            });
+                        }
+                        )
+                        .catch(err => console.log(err));
+
+
+
 
                     //Check if we have already liked the post
                     if (props.thisUsername in obj.likedUsers) {
@@ -199,7 +211,7 @@ const Post = (props) => {
 
         const header = <CardHeader
             style={{ width: "100%" }}
-            avatar={<Avatar className={styles.profile_info} onClick={handleUserClick}>P</Avatar>}
+            avatar={<Avatar className={styles.profile_info} onClick={handleUserClick} src={postDetails.profileImage}></Avatar>}
             title={<p className={styles.profile_info} onClick={handleUserClick}> {postDetails.username} </p>}
             subheader={postDetails.timePosted}
             action={renderActions()}

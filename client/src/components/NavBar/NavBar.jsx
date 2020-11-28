@@ -19,21 +19,6 @@ export const NavBar = (props) => {
             <Link to="/">
               <img width="150px" draggable="false" src="https://i.imgur.com/ATuMhih.png"></img>
             </Link>
-
-          {/* Sign in/up button */}
-          {
-            props.isLandingPg &&
-            <div
-              onClick={props.openSignInModal}
-              className="button text-white text-2xl font-semibold mb-2 text-right rounded cursor-pointer"
-              style={{ height: "3.2rem" }}
-            >
-              <p style={{ paddingTop: "0.18rem" }}>Sign In/Up</p>
-            </div>
-          }
-
-            {/* User settings button */}
-            <Link to={"/useroverview/" + props.username}>⚙️</Link>
           </div>
         </div>
       </div>
