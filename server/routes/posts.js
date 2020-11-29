@@ -41,14 +41,26 @@ router.route('/time-remaining').get((req,res)=>{
 });
 
 //finds and returns all posts that contain the entered tag
-router.route('/find-tag/:tag').get((req,res)=>{
-    let tag = req.params.tag;
-    let findTag = {tags: tag};
-    Post.find(findTag)
-        .then(posts => {
-            res.json(posts);
-        })
-        .catch(err => res.status(400).json('Error: ' + err));
+router.route('/find-tag').get((req,res)=>{
+    let receivedTags = [];
+    if(!Array.isArray(req.query.tag)) {
+        receivedTags.push(req.query.tag);
+    } else {
+        receivedTags = [...req.query.tag];
+    }
+    Post.find().then(posts => {
+        let resultPosts = [];
+        for(let post of posts) {
+            for(let tag of receivedTags) {
+                if(post.tags.includes(tag)) {
+                    if(!resultPosts.includes(post)){
+                        resultPosts.push(post);
+                    }
+                }
+            }
+        }
+        res.status(200).json(resultPosts);
+    }).catch(err => res.status(400).json('Error: ' + err.message));
 });
 
 //finds the top 5 tags for posts
@@ -244,7 +256,7 @@ router.route('/add').post((req, res) => {
 
     //Calculate expirty date
     const MAX_MIN = 5 * 60; // 5 min (MAX time for post)
-    const MAX_TIME_ADD = MAX_MIN * 1000; //5 minutes (to add)
+    const MAX_TIME_ADD = MAX_MIN * 10000; //5 minutes (to add)
 
     const expiryDate = new Date(new Date(dateCreated).getTime() + MAX_TIME_ADD).toUTCString();
 

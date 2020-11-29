@@ -25,13 +25,10 @@ export default function TagFilter(props) {
             .then(res => {
                 let tags = [];
                 for(let retrievedTag of res.data) {
-                    tags.push({tag: retrievedTag,
-                    isSelected: false});
-                }
-                console.log("tags retrieved: " + res.data);
-                for(let i = 0; i < tags.length; i++) {
-                    console.log("index: " + i + ": " + tags[i]);
-                   // console.log("tag array: " + tags.toString());
+                    tags.push({
+                    "tag": retrievedTag,
+                    "isSelected": false
+                    });
                 }
                
                 setTags([]);
@@ -45,27 +42,7 @@ export default function TagFilter(props) {
         input: ''
     });
 
-    const [tags, setTags] = React.useState(
-        // tags: [
-        //     {
-        //         tag: 'Funny',
-        //         isSelected: false
-        //     }, {
-        //         tag: 'Memes',
-        //         isSelected: false
-        //     }, {
-        //         tag: 'Hot',
-        //         isSelected: false
-        //     }, {
-        //         tag: 'Animals',
-        //         isSelected: false
-        //     }, {
-        //         tag: 'Gaming',
-        //         isSelected: false
-        //     }
-        // ],
-        []
-    );
+    const [tags, setTags] = React.useState([]);
 
     const handleClearInput = () => {
         setValues({...values, input: ''});
@@ -76,16 +53,36 @@ export default function TagFilter(props) {
     }
 
     const handleSearch = () => {
-        console.log("Searching for: " + values.input);
+        let inputTags = values.input.trim().split(' ');
+        
+        let clickedTags = [...tags];
+        let completedQuery = "?";
+        for(let i of clickedTags) {
+            if(i.isSelected) {
+                inputTags.push(i.tag);
+            }
+        }
+        if(inputTags.length === 0) {
+            return;
+        }
+        inputTags.forEach((item, index) => {
+            if(item !== "") {
+                completedQuery += "tag="+item;
+            }
+            if(index !== inputTags.length -1) {
+                completedQuery += "&";
+            }
+        });
+        props.queryTags("/posts/find-tag/" + completedQuery);
         setValues({...values, open: false, input: ''});
-        props.queryTags("/posts/find-tag/" + values.input);
         props.onCancel();
     }
 
     const handleTagClick = (index) => {
-        let newTags = [...tags.tags];
+        let newTags = [...tags];
         newTags[index].isSelected = !newTags[index].isSelected;
-        setTags({tags: newTags});
+        setTags([]);
+        setTags(newTags);
     }
     
     return (
@@ -120,8 +117,14 @@ export default function TagFilter(props) {
                     <div id="tag-button-container" className={styles.tagsWrapperDiv}>
                         {tags.map((tag, index) => {
                             return(
+                                tag.isSelected ?
+                                <Button variant="outlined" className={styles.filterButtonSelected} 
+                                    onClick={() => handleTagClick(index)}>
+                                    {tag.tag}
+                                </Button>
+                                : 
                                 <Button variant="outlined" className={styles.filterButton} 
-                                    onClick={() => handleTagClick(index)} disabled={tag.isSelected}>
+                                    onClick={() => handleTagClick(index)}>
                                     {tag.tag}
                                 </Button>
                             );

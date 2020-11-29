@@ -118,22 +118,9 @@ const LandingPage = (props) => {
 
     const changePostQuery = (query) => {
         console.log("being called with query: " + query);
-      // setPostQuery('/posts/trending');
-      // postQuery = '/posts/trending'
-       setPostQuery(query);
-       //onsole.log("state of postquery after " + postQuery);
+        setPostQuery(query);
         deletePosts();
-        //setPosts([]);
-       // deletePosts();
-        // let arr = this.posts;
-        // arr.map(post => {
-        //     console.log("hi");
-        // });
-        // console.log("Trending button being clicked");
     }
-
-
-
 
 
     return (

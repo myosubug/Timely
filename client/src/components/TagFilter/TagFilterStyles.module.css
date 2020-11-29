@@ -23,6 +23,11 @@
     margin: 5px !important;
 }
 
+.filterButtonSelected {
+    margin: 5px !important;
+    border-color: red !important;
+}
+
 .inputWrapper {
     display: flex;
     width: 100%;
