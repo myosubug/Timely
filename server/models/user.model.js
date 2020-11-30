@@ -19,8 +19,7 @@ const userSchema = new Schema({
         type: Boolean
     },
     profileImage: {
-        type: String,
-        unique: true
+        type: String
     },
 }, {
     timestamps: true
