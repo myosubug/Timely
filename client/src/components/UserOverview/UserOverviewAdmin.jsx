@@ -41,7 +41,7 @@ const UserOverviewAdmin = (props) => {
           profileImage: data.profileImage,
         };
         setUserInfo(userInfo);
-        setImage(userInfo.profileImage);
+        setImage(userInfo.profileImage + "?" + Date.now());
       }
       )
       .catch(err => console.log(err));
@@ -173,7 +173,7 @@ const UserOverviewAdmin = (props) => {
         {/* PROMOTE OR DEMOTE USER */}
         <Grid item xs={3} className="PromoteDemoteUser">
           {!userInfo.Admin
-            ? 
+            ?
             <Button
               variant="contained"
               className="PromoteDemoteUserButton"
@@ -318,15 +318,15 @@ const UserOverviewAdmin = (props) => {
         />
 
         {/* PROMOTE USER */}
-        <PromoteUserModal 
+        <PromoteUserModal
           username={userInfo.username}
           promote={handlePromoteUser}
           isOpen={isPromoteModalOpen}
-          onClose={() => setPromoteModalOpen(false)}          
+          onClose={() => setPromoteModalOpen(false)}
         />
-        
+
         {/* DEMOTE USER */}
-        <DemoteAdminModal 
+        <DemoteAdminModal
           username={userInfo.username}
           demote={handleDemoteUser}
           isOpen={isDemoteModalOpen}

@@ -18,13 +18,17 @@ export const populateUserInfo = async (token) => {
                 loggedInUser.username = data.object.username;
                 loggedInUser.id = data.object._id;
                 loggedInUser.isAdmin = data.object.isAdmin;
-                loggedInUser.profileImage = data.object.profileImage;
-
-                const new_token = data.token;
-                localStorage.setItem('token', new_token);
+                loggedInUser.profileImage = data.object.profileImage + "?" + Date.now();
+            }
+            else {
+                resetLoggedInUser();
             }
         })
         .catch(err => console.log(err));
+}
+
+export const getProfilePic = async () => {
+    await axios.get(SERVER_ADDRESS + "/use")
 }
 
 export const resetLoggedInUser = () => {

@@ -3,6 +3,7 @@ let User = require('../models/user.model');
 let Post = require('../models/post.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+let io = require('../server.js').io;
 
 const IMAGE_DIR = require('path').dirname(require.main.filename) + "/images/";
 
@@ -160,6 +161,16 @@ router.route('/upload-profile/:username').post((req, res) => {
         .then(user => {
             const url = user.profileImage;
             res.json(url);
+
+            //Update all active posts so that they can render the new image
+            Post.find({ username: user.username })
+                .then(posts => {
+                    for (let post of posts) {
+                        io.emit("update post " + post._id);
+                    }
+
+                })
+                .catch(err => res.status(400).json('Error: ' + err));
         }
         )
         .catch(err => console.log(err));

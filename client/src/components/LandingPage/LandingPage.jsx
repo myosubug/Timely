@@ -12,9 +12,9 @@ import TagFilter from '../TagFilter/TagFilter';
 import NavBar from '../NavBar/NavBar.jsx';
 
 import axios from 'axios';
-import { SERVER_ADDRESS, socket, loggedInUser, resetLoggedInUser } from '../../AppConfig.js'
+import { SERVER_ADDRESS, socket, loggedInUser, resetLoggedInUser, populateUserInfo } from '../../AppConfig.js'
 
-import './LandingStyles.css'
+import './LandingStyles.css';
 
 const LandingPage = (props) => {
 
@@ -26,7 +26,6 @@ const LandingPage = (props) => {
 
 
     useEffect(() => {
-
         socket.on('update post list', () => {
             //TODO: Figure out the state, so we can render sorted posts
             renderPosts();
@@ -36,9 +35,13 @@ const LandingPage = (props) => {
             deletePosts();
         });
 
+
+
+        populateUserInfo(localStorage.getItem('token'));
         renderPosts();
         setLoggedIn(loggedInUser.username !== "");
         getNumPosts();
+
     }, []);
 
 
