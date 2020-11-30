@@ -15,15 +15,14 @@ import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser, resetLoggedInUser, populateUserInfo } from '../../AppConfig.js'
 
 import './LandingStyles.css';
-
+let postQuery = "/posts/trending";
 const LandingPage = (props) => {
 
     const [renderModalObj, setRenderModalObj] = useState({ "tags": false, "login": false, "post": false });
     const [posts, setPosts] = useState([]);
     const [numPosts, setNumPosts] = useState(0);
-    const [postQuery, setPostQuery] = useState('/posts/');
+   // const [postQuery, setPostQuery] = useState('/posts/trending');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
 
     useEffect(() => {
         socket.on('update post list', () => {
@@ -32,9 +31,8 @@ const LandingPage = (props) => {
         });
 
         socket.on('update post list delete', () => {
-            deletePosts();
+            renderPosts();
         });
-
 
 
         populateUserInfo(localStorage.getItem('token'));
@@ -52,7 +50,7 @@ const LandingPage = (props) => {
                 let new_posts = [];
                 for (let post of res.data) {
                     new_posts.push(
-                        <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full">
+                        <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full" key={post._id}>
                             <Post isAdmin={loggedInUser.isAdmin} id={post._id} thisUsername={loggedInUser.username} />
                         </div>
                     )
@@ -65,27 +63,6 @@ const LandingPage = (props) => {
 
 
 
-    }
-
-    //Gets the posts from the specified query and sets the state (for some reason I had to set it to an empty array to work properly for deletion)
-    const deletePosts = () => {
-        axios.get(SERVER_ADDRESS + postQuery)
-            .then(res => {
-                let new_posts = [];
-                for (let post of res.data) {
-                    new_posts.push(
-                        <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full">
-                            <Post isAdmin={loggedInUser.isAdmin} id={post._id} thisUsername={loggedInUser.username} />
-                        </div>
-                    )
-                }
-
-                setPosts([]);
-                setPosts(new_posts);
-                getNumPosts(); //Get the number of posts for the user (in case his were deleted)
-
-            })
-            .catch(err => console.log(err));
     }
 
     //Gets the number of posts the current user has
@@ -189,7 +166,7 @@ const LandingPage = (props) => {
         if (renderModalObj.post) {
             return renderModal(<PostCreator onCancel={() => cancelModal("post")} />);
         } else if (renderModalObj.tags) {
-            return renderModal(<TagFilter onCancel={() => cancelModal("tags")} />);
+            return renderModal(<TagFilter onCancel={() => cancelModal("tags")} queryTags={changePostQuery} />);
         } else if (renderModalObj.login) {
             return renderModal(<Sign onCancel={() => cancelModal("login")} setLoggedIn={(val) => setLoggedIn(val)} />);
         }
@@ -200,9 +177,10 @@ const LandingPage = (props) => {
         setRenderModalObj(prev => ({ ...prev, [name]: false }));
     }
 
-
-
-
+    const changePostQuery = (query) => {
+        postQuery = query;
+        renderPosts();
+    }
 
 
     return (
@@ -231,14 +209,25 @@ const LandingPage = (props) => {
                             <FontAwesomeIcon icon={faHome} /> <i style={{ paddingRight: "0.45rem" }} /> Home
                         </div>
 
-                        <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer">
-                            <FontAwesomeIcon icon={faBell} /> <i className="pr-3" /> Notifications
-                        </div>
-
-                        <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer">
+                        <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
+                            onClick={() => changePostQuery('/posts/trending')}>
                             <FontAwesomeIcon icon={faFire} /> <i className="pr-3" /> Trending
                         </div>
 
+                        <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
+                            onClick={() => changePostQuery('/posts/newest-posts')}>
+                            <i className="fas fa-fire pr-3" style={{ fontSize: "1.6rem" }}></i> Newest
+                        </div>
+
+                        <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
+                            onClick={() => changePostQuery('/posts/expiring-soon')}>
+                            <i className="fas fa-fire pr-3" style={{ fontSize: "1.6rem" }}></i> Expiring
+                        </div>
+
+                        <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
+                            onClick={() => changePostQuery('/posts/time-remaining')}>
+                            <i className="fas fa-fire pr-3" style={{ fontSize: "1.6rem" }}></i> Longest
+                        </div>
                     </div>
 
                     <div className="flex justify-center px-6">
