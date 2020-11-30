@@ -1,24 +1,30 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { PostCreator } from '../PostCreator/PostCreator.jsx';
 import { Post } from '../Post/Post.jsx';
 import { Sign } from '../SignInUp/Sign.jsx';
+
+import { faHome, faBell, faFire, faChartLine } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import TagFilter from '../TagFilter/TagFilter';
-import NavBar from '../NavBar';
+import NavBar from '../NavBar/NavBar.jsx';
 
 import axios from 'axios';
-import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
+import { SERVER_ADDRESS, socket, loggedInUser, resetLoggedInUser, populateUserInfo } from '../../AppConfig.js'
 
-import './LandingStyles.css'
+import './LandingStyles.css';
+
 const LandingPage = (props) => {
 
     const [renderModalObj, setRenderModalObj] = useState({ "tags": false, "login": false, "post": false });
-    let [posts, setPosts] = useState([]);
-    let [postQuery, setPostQuery] = useState('/posts/');
+    const [posts, setPosts] = useState([]);
+    const [numPosts, setNumPosts] = useState(0);
+    const [postQuery, setPostQuery] = useState('/posts/');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-
         socket.on('update post list', () => {
             //TODO: Figure out the state, so we can render sorted posts
             renderPosts();
@@ -28,7 +34,13 @@ const LandingPage = (props) => {
             deletePosts();
         });
 
-       renderPosts();
+
+
+        populateUserInfo(localStorage.getItem('token'));
+        renderPosts();
+        setLoggedIn(loggedInUser.username !== "");
+        getNumPosts();
+
     }, []);
 
     useEffect(() => {
@@ -49,6 +61,7 @@ const LandingPage = (props) => {
                     )
                 }
                 setPosts(new_posts);
+                getNumPosts();
 
             })
             .catch(err => console.log(err));
@@ -72,9 +85,20 @@ const LandingPage = (props) => {
 
                 setPosts([]);
                 setPosts(new_posts);
+                getNumPosts(); //Get the number of posts for the user (in case his were deleted)
 
             })
             .catch(err => console.log(err));
+    }
+
+    //Gets the number of posts the current user has
+    const getNumPosts = () => {
+        if (loggedInUser.username !== "") {
+            axios.get(SERVER_ADDRESS + "/users/numPosts/" + loggedInUser.username)
+                .then(({ data }) => setNumPosts(data))
+                .catch(err => console.log(err));
+        }
+
     }
 
     // Renders the modal based on the content passed in
@@ -98,6 +122,69 @@ const LandingPage = (props) => {
     function setLoggedIn(val) {
         setIsLoggedIn(val);
         renderPosts();
+        renderRightSideBar();
+    }
+
+    //Handles what happens after we logout
+    const handleLogOut = () => {
+        //Sets the loggedinUser info to an empty object again
+        resetLoggedInUser();
+
+        //Set the state
+        setLoggedIn(false);
+    }
+
+    //Renders the right sidebar based on if the user is logged in or not
+    const renderRightSideBar = () => {
+        if (isLoggedIn) {
+            return (
+                <div>
+                    <div className="flex mb-8">
+                        <Link to={"/useroverview/" + loggedInUser.username}>
+                            <img className="place-self-center h-16 w-16 mr-6 ml-6 mt-2 rounded-full" src={loggedInUser.profileImage}></img>
+                        </Link>
+                        <div className="text-left">
+                            <Link to={"/useroverview/" + loggedInUser.username}>
+                                <h2 className="text-lg font-semibold text-gray-700 border-gray-400 pb-1 border-b-2"> {loggedInUser.username} </h2>
+                            </Link>
+                            <div className="text-gray-600" style={{ marginTop: "0.2rem", fontSize: "13px" }}>
+                                <p>Posts Active: <b className="text-gray-700"> {numPosts} </b></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="justify-center px-6">
+
+                        {/* IF LOGGED IN */}
+                        <div
+                            onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}
+                            className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
+                            style={{ height: "3.2rem" }}>
+                            <p style={{ paddingTop: "0.18rem" }}>Create Post</p>
+                        </div>
+
+                        <div
+                            onClick={handleLogOut}
+                            className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
+                            style={{ height: "3.2rem" }}>
+                            <p style={{ paddingTop: "0.18rem" }}>Log Out</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        else {
+            return (
+                <div className="justify-center px-6">
+                    <div
+                        onClick={() => setRenderModalObj(prev => ({ ...prev, "login": true }))}
+                        className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
+                        style={{ height: "3.2rem" }}>
+                        <p style={{ paddingTop: "0.18rem" }}>Sign In/Up</p>
+                    </div>
+                </div>
+            );
+        }
     }
 
     // Function that determines what modal to render
@@ -127,14 +214,15 @@ const LandingPage = (props) => {
             <NavBar
                 openSignInModal={() => setRenderModalObj(prev => ({ ...prev, "login": true }))}
                 isLandingPg={true}
+                username={loggedInUser.username}
             />
 
             {checkModalState()}
 
 
-            <div className="flex">
+            <div className="grid grid-cols-9 gap-4 w-full" style={{ backgroundColor: "#fcfcfc" }}>
 
-                <div className="h-screen top-0 pt-24 sticky p-4 w-2/12 border-r-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
+                <div className="hidden md:block xl:col-span-2 col-span-3 h-screen top-0 pt-24 sticky p-4 border-r-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
                     <div className="flex justify-center text-white mt-4 font-medium text-3xl">
                         <img width="150px;" draggable="false" src="https://i.imgur.com/ATuMhih.png"></img>
                         <div className="flex justify-center px-6">
@@ -144,16 +232,16 @@ const LandingPage = (props) => {
                     <div className="selector mt-4 ml-12 mb-8">
 
                         <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer">
-                            <i className="fas fa-home" style={{ paddingRight: "0.3rem", fontSize: "1.6rem" }}></i> Home
+                            <FontAwesomeIcon icon={faHome} /> <i style={{ paddingRight: "0.45rem" }} /> Home
                         </div>
 
                         <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer">
-                            <i className="far fa-bell pr-3" style={{ fontSize: "1.6rem" }}></i> Notifications
+                            <FontAwesomeIcon icon={faBell} /> <i className="pr-3" /> Notifications
                         </div>
 
                         <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
                             onClick={() => changePostQuery('/posts/trending')}>
-                            <i className="fas fa-fire pr-3" style={{ fontSize: "1.6rem" }}></i> Trending
+                            <FontAwesomeIcon icon={faFire} /> <i className="pr-3" /> Trending
                         </div>
 
                         <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
@@ -183,7 +271,7 @@ const LandingPage = (props) => {
 
                 </div>
 
-                <div className="flex-grow justify-center px-56 pt-24 bg-white-300">
+                <div className="col-span-9 md:col-span-6 xl:col-span-5 flex-grow justify-center w-full pt-24 px-5" style={{ backgroundColor: "#fcfcfc" }}>
                     <div className="justify-center">
 
 
@@ -192,28 +280,10 @@ const LandingPage = (props) => {
                     </div>
                 </div>
 
-                <div className="h-screen top-0 sticky pt-32 p-4 w-2/12 border-l-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
+                <div className="hidden xl:block col-span-2 h-screen top-0 sticky pt-32 p-4 border-l-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
 
 
-                    <div className="flex mb-8">
-                        <img className="place-self-center h-16 w-16 mr-6 ml-6 mt-2 rounded-full" src="https://i.imgur.com/Tj96CFr.png"></img>
-                        <div className="text-left">
-                            <h2 className="text-lg font-semibold text-gray-700 border-gray-400 pb-1 border-b-2">@notpavolfederl</h2>
-                            <div className="text-gray-600" style={{ marginTop: "0.2rem", fontSize: "13px" }}>
-                                <p>Posts Active: <b className="text-gray-700">5</b></p>
-                                <p>Posts Expired: <b className="text-gray-700">163</b></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="flex justify-center px-6">
-                        <div
-                            onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}
-                            className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
-                            style={{ height: "3.2rem" }}>
-                            <p style={{ paddingTop: "0.18rem" }}>Create Post</p>
-                        </div>
-                    </div>
+                    {renderRightSideBar()}
 
                 </div>
 

@@ -1,4 +1,4 @@
-import React, { createRef, useState } from 'react';
+import React, { createRef, useEffect, useState, useParams } from 'react';
 import {
   Avatar,
   Grid,
@@ -7,25 +7,15 @@ import {
   IconButton,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import DeleteAccountModal from '../DeleteAccountModal';
-import EditUsernameModal from '../EditUsernameModal';
-import EditPasswordModal from '../EditPasswordModal';
-import * as avatarImg from './../../images/patrick.jpg';
-import NavBar from '../NavBar';
+import DeleteAccountModal from '../DeleteAccountModal/DeleteAccountModal';
+import EditUsernameModal from '../EditUsernameModal/EditUsernameModal';
+import EditPasswordModal from '../EditPasswordModal/EditPasswordModal';
+import NavBar from '../NavBar/NavBar';
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../../AppConfig.js'
 import './style.css';
 
-const UserSettingsPage = (props) => {
-  UserSettingsPage.propTypes = {
-    username: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
-    isAdmin: PropTypes.bool.isRequired,
-    profileImage: PropTypes.string.isRequired,
-
-    joinDate: PropTypes.string.isRequired,
-    posts: PropTypes.number.isRequired,
-  };
+const UserOverviewView = (props) => {
 
   const inputFileRef = createRef(null);
   const [image, _setImage] = useState(null);
@@ -33,12 +23,32 @@ const UserSettingsPage = (props) => {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isUserModalOpen, setUserModalOpen] = useState(false);
   const [isPassModalOpen, setPassModalOpen] = useState(false);
-  // const [isEmailModalOpen, setEmailModalOpen] = useState(false);
+
+  const [userInfo, setUserInfo] = useState({});
+
+  useEffect(() => {
+    console.log("yeet");
+    console.log(props.username);
+    axios.get(SERVER_ADDRESS + '/users/finduser/' + props.username)
+      .then(({ data }) => {
+        const userInfo = {
+          username: data.username,
+          password: data.password,
+          isAdmin: data.isAdmin,
+          joinDate: data.createdAt,
+          profileImage: data.profileImage,
+        };
+        setUserInfo(userInfo);
+        setImage(userInfo.profileImage + "?" + Date.now());
+      }
+      )
+      .catch(err => console.log(err));
+  }, []);
 
   // Function that cleans up avatar image
   const cleanup = () => {
-    URL.revokeObjectURL(image);
-    inputFileRef.current.value = null;
+    // URL.revokeObjectURL(image);
+    // inputFileRef.current.value = null;
   };
 
   // Function that sets avatar image
@@ -47,14 +57,22 @@ const UserSettingsPage = (props) => {
       cleanup();
     }
     _setImage(newImage);
-    console.log(inputFileRef);
+    // console.log(newImage);
   };
 
   // Takes uploaded img and passes it to setImg function to be set
   const handleOnImgChange = (event) => {
     const newImage = event.target?.files?.[0];
+    // console.log(newImage);
 
     if (newImage) {
+      const imgData = new FormData();
+      imgData.append('myFile', newImage);
+      axios.post(SERVER_ADDRESS + "/users/upload-profile/" + userInfo.username, imgData)
+        .then(({ data }) => {
+          // setImage(data);
+        })
+        .catch(err => console.log(err));
       setImage(URL.createObjectURL(newImage));
     }
   };
@@ -63,17 +81,27 @@ const UserSettingsPage = (props) => {
   const handleAvatarClick = (event) => {
     if (image) {
       event.preventDefault();
-      setImage(null);
+      setImage(image);
     }
   };
 
   // Function the makes the axios call to delete an account from the db
   const handleDeleteAccount = () => {
-    console.log(props.username);
-    axios.post(SERVER_ADDRESS + '/users/delete/' + props.username)
+    console.log(userInfo.username);
+    axios.post(SERVER_ADDRESS + '/users/delete/' + userInfo.username)
       .then(console.log("Axios: user successfully deleted!"))
       .catch(err => (console.log(err)));
   };
+
+  // Function that gets the join date of the user
+  // const handleFetchJoinDate = () => {
+  //   console.log(userInfo.username);
+  //   axios.get(SERVER_ADDRESS +  '/users/finduser/join-date' + userInfo.username)
+  //     .then(res => {
+  //       const joinDate = res.createdAt;
+
+  //     })
+  // }
 
   // Renders the profile pic and the delete account button
   const renderProfileGrid = () => {
@@ -87,35 +115,17 @@ const UserSettingsPage = (props) => {
         spacing={1}
       >
         <Grid item xs={9} className="ProfilePic">
-          <IconButton color="primary" onClick={handleAvatarClick}>
-            <input
-              accept="image/*"
-              ref={inputFileRef}
-              hidden
-              id="avatar-image-upload"
-              type="file"
-              onChange={handleOnImgChange}
-            />
+          <IconButton color="primary" >
             <label htmlFor="avatar-image-upload">
               <Avatar
                 alt="Avatar"
-                src={image || avatarImg}
+                src={image}
                 className="avatar"
               />
             </label>
           </IconButton>
         </Grid>
 
-        <Grid item xs={3} className="DeleteAccount">
-          <Button
-            variant="contained"
-            className="DeleteAccountButton"
-            onClick={() => setDeleteModalOpen(true)}
-            size="medium"
-          >
-            Delete
-          </Button>
-        </Grid>
       </Grid>
     );
   }
@@ -132,14 +142,16 @@ const UserSettingsPage = (props) => {
       >
         <Grid item xs className="UserInfo">
           <Typography variant="h5" component="span">
-            {"@" + props.username}
+            {"@" + userInfo.username}
           </Typography>
-          {props.isAdmin ? " 👑 " : ""}
+          {userInfo.isAdmin ? " 👑 " : ""}
           <Typography variant="body1">
-            {"Member since " + props.joinDate}
+            {/* CREATION DATE IS STORED IN USER SCHEMA */}
+            {"Member since " + userInfo.joinDate}
           </Typography>
           <Typography variant="body1">
-            {props.posts + " posts"}
+            {/* PULL FROM SERVER */}
+            {userInfo.posts + " posts"}
           </Typography>
         </Grid>
 
@@ -154,66 +166,30 @@ const UserSettingsPage = (props) => {
   const renderUserActions = () => {
     return (
       <div>
-        {/* Edit Email */}
-        {/* <Grid container spacing={1}>
-          <Grid item xs={8}>
-            <Typography variant="h6">Email</Typography>
-            {props.email}
-          </Grid>
-
-          <Grid item xs={4}>
-            <Button
-              variant="contained"
-              className="EditEmailButton"
-              onClick={openEmailModal}
-              size="medium"
-            >
-              Edit
-            </Button>
-          </Grid>
-        </Grid> */}
 
         {/* Edit Username */}
         <Grid container spacing={1}>
           <Grid item xs={8}>
             <Typography variant="h6">Username</Typography>
-            {props.username}
+            {userInfo.username}
           </Grid>
-          <Grid item xs={4}>
-            <Button
-              variant="contained"
-              className="EditUsernameButton"
-              onClick={() => setUserModalOpen(true)}
-              size="medium"
-            >
-              Edit
-            </Button>
-          </Grid>
+
         </Grid>
 
         {/* Edit Password */}
         <Grid container spacing={1}>
           <Grid item xs={8}>
             <Typography variant="h6">Password</Typography>
-            {props.password}
+            ********
           </Grid>
-          <Grid item xs={4}>
-            <Button
-              variant="contained"
-              className="EditPasswordButton"
-              onClick={() => setPassModalOpen(true)}
-              size="medium"
-            >
-              Edit
-            </Button>
-          </Grid>
+
         </Grid>
       </div>
     );
   }
 
   return (
-    <div className="UserSettingsPage">
+    <div className="UserOverviewView">
       <Grid
         container
         direction="column"
@@ -222,7 +198,10 @@ const UserSettingsPage = (props) => {
         spacing={10}
       >
         <Grid item xs={1}>
-          <NavBar isLandingPg={false} />
+          <NavBar
+            isLandingPg={false}
+            username={props.username}
+          />
         </Grid>
 
         <Grid
@@ -269,8 +248,8 @@ const UserSettingsPage = (props) => {
         <EditUsernameModal
           // username={props.username}
           // password={props.password}
-          username={"username"}
-          password={"123"}        
+          username={userInfo.username}
+          password={userInfo.password}
           isOpen={isUserModalOpen}
           onClose={() => setUserModalOpen(false)}
         />
@@ -279,8 +258,8 @@ const UserSettingsPage = (props) => {
         <EditPasswordModal
           // username={props.username}
           // password={props.password}
-          username={"username"}
-          password={"123"}
+          username={userInfo.username}
+          password={userInfo.password}
           isOpen={isPassModalOpen}
           onClose={() => setPassModalOpen(false)}
         />
@@ -290,4 +269,4 @@ const UserSettingsPage = (props) => {
 
 }
 
-export { UserSettingsPage };
+export { UserOverviewView };

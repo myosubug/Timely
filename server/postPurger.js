@@ -28,7 +28,6 @@ const IMAGE_DIR = require('path').dirname(require.main.filename) + "/images/";
                     }
                 }
 
-                //console.log(ids);
                 //Delete all expired posts from db
                 Post.deleteMany({ _id: { $in: ids } })
                     .then(res => {

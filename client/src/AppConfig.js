@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import { getCookie, setCookie } from './cookieHandler.js';
+import axios from 'axios';
 
 export const SERVER_ADDRESS = "http://localhost:5000"; //Define dynamic server address
 export const socket = io.connect(SERVER_ADDRESS);
@@ -10,31 +10,36 @@ export let loggedInUser = {
     profileImage: ""
 };
 
-
-//Check if we have username in the cookie, and if so, assume that the user is logged in
-if (getCookie('username') !== null) {
-    loggedInUser.username = getCookie('username');
-    loggedInUser.id = getCookie('id');
-    loggedInUser.isAdmin = getCookie('isAdmin');
-    loggedInUser.profileImage = getCookie('profileImage');
-
-    //Set the sessionStorage values
-    sessionStorage.setItem('id', loggedInUser.id);
-    sessionStorage.setItem('username', loggedInUser.username);
-    sessionStorage.setItem('isAdmin', loggedInUser.isAdmin);
-    sessionStorage.setItem('profileImage', loggedInUser.profileImage);
+//Populates the loggedInUser object based on the username
+export const populateUserInfo = async (token) => {
+    await axios.post(SERVER_ADDRESS + "/users/token", { "token": token })
+        .then(({ data }) => {
+            if (data.isValid) {
+                loggedInUser.username = data.object.username;
+                loggedInUser.id = data.object._id;
+                loggedInUser.isAdmin = data.object.isAdmin;
+                loggedInUser.profileImage = data.object.profileImage + "?" + Date.now();
+            }
+            else {
+                resetLoggedInUser();
+            }
+        })
+        .catch(err => console.log(err));
 }
 
-//If we get to this point, then that means that the cookie has expired, but we are still in session, so check if we have a session, and if we do, update the cookie again
-else if (sessionStorage.getItem('username') !== null) {
-    loggedInUser.username = sessionStorage.getItem('username');
-    loggedInUser.id = sessionStorage.getItem('id');
-    loggedInUser.isAdmin = sessionStorage.getItem('isAdmin');
-    loggedInUser.profileImage = sessionStorage.getItem('profileImage');
-
-    //Set the cookie values again
-    setCookie('id', loggedInUser.id, 10);
-    setCookie('username', loggedInUser.username, 10);
-    setCookie('isAdmin', loggedInUser.isAdmin, 10);
-    setCookie('profileImage', loggedInUser.profileImage, 10);
+export const getProfilePic = async () => {
+    await axios.get(SERVER_ADDRESS + "/use")
 }
+
+export const resetLoggedInUser = () => {
+    loggedInUser = {
+        username: "",
+        id: "",
+        isAdmin: false,
+        profileImage: ""
+    };
+
+    localStorage.clear();
+}
+
+

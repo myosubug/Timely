@@ -12,7 +12,8 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 
 import { Button } from '@material-ui/core';
-
+import { faClock } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PostSubMenu } from './PostSubMenu.jsx';
 
 import axios from 'axios';
@@ -23,14 +24,14 @@ import styles from './PostStyles.module.css';
 const BorderLinearProgress = withStyles((theme) => ({
     root: {
         height: 10,
-        borderRadius: 5,
+        borderRadius: 0,
     },
     colorPrimary: {
-        backgroundColor: theme.palette.grey[200],
+        backgroundColor: "#e1e1e1",
     },
     bar: {
-        borderRadius: 5,
-        backgroundColor: '#1a90ff',
+        borderRadius: 0,
+        backgroundColor: '#afc5d3',
     },
 }))(LinearProgress);
 
@@ -97,20 +98,32 @@ const Post = (props) => {
 
                     const date_display = formatDate(timePosted);
 
-                    //Set the date
-                    setPostDetails({
-                        id: id,
-                        type: type,
-                        maxTime: maxTime,
-                        time: time,
-                        username: username,
-                        timePosted: date_display,
-                        likeCount: likeCount,
-                        dislikeCount: dislikeCount,
-                        textContent: text_content,
-                        imgSrc: img_src
+                    //Get the user's profile picture
+                    axios.get(SERVER_ADDRESS + "/users/findUser/" + username)
+                        .then(({ data }) => {
+                            const profileImage = data.profileImage;
 
-                    });
+                            //Set the date
+                            setPostDetails({
+                                id: id,
+                                type: type,
+                                maxTime: maxTime,
+                                time: time,
+                                username: username,
+                                timePosted: date_display,
+                                likeCount: likeCount,
+                                dislikeCount: dislikeCount,
+                                textContent: text_content,
+                                imgSrc: img_src,
+                                profileImage: profileImage
+
+                            });
+                        }
+                        )
+                        .catch(err => console.log(err));
+
+
+
 
                     //Check if we have already liked the post
                     if (props.thisUsername in obj.likedUsers) {
@@ -169,7 +182,9 @@ const Post = (props) => {
     //Redirects to the user page
     const handleUserClick = () => {
         //TODO: Redirect to user page
-        alert("redirecting to user page");
+        window.location.href = '/useroverview/' + postDetails.username; //relative to domain
+        console.log(postDetails.username);
+        // alert("redirecting to user page");
     }
 
     //Renders the header of the post (with or without the admin settings)
@@ -178,14 +193,14 @@ const Post = (props) => {
         const renderActions = () => {
             //If the user is logged in
             if (props.thisUsername !== "") {
-                return (<div>
+                return (<div className="ml-auto mr-3">
                     <div className={`${styles.action_btn} ${styles.no_text_select} ${isLikeSelected ? styles.action_btn_selected : ''}`} onClick={handleLikeClick}>
-                        <p>👍</p>
+                        <p className="pr-2">👍</p>
                         <p> {renderLikeInfo(postDetails.likeCount)} </p>
                     </div>
 
                     <div className={`${styles.action_btn} ${styles.no_text_select} ${isDislikeSelected ? styles.action_btn_selected : ''}`} onClick={handleDislikeClick}>
-                        <p>👎</p>
+                        <p className="pr-2">👎</p>
                         <p> {renderLikeInfo(postDetails.dislikeCount)} </p>
                     </div>
                 </div>
@@ -195,7 +210,8 @@ const Post = (props) => {
         }
 
         const header = <CardHeader
-            avatar={<Avatar className={styles.profile_info} onClick={handleUserClick}>P</Avatar>}
+            style={{ width: "100%" }}
+            avatar={<Avatar className={styles.profile_info} onClick={handleUserClick} src={`${postDetails.profileImage}?${Date.now()}`}></Avatar>}
             title={<p className={styles.profile_info} onClick={handleUserClick}> {postDetails.username} </p>}
             subheader={postDetails.timePosted}
             action={renderActions()}
@@ -203,27 +219,18 @@ const Post = (props) => {
 
         if (!props.isAdmin) {
             return (
-                <Grid container>
-                    <Grid item xs={1}>
-
-                    </Grid>
-                    <Grid item xs={10}>
-                        {header}
-                    </Grid>
-                </Grid>
+                <div className="flex mt-2 pl-8">
+                    {header}
+                </div>
             );
         }
 
         else {
             return (
-                <Grid container>
-                    <Grid item xs={1}>
-                        <PostSubMenu id={props.id} />
-                    </Grid>
-                    <Grid item xs={10}>
-                        {header}
-                    </Grid>
-                </Grid>
+                <div className="flex mt-2">
+                    <PostSubMenu id={props.id} />
+                    {header}
+                </div>
             );
         }
     }
@@ -261,7 +268,7 @@ const Post = (props) => {
         }
         else {
             min = 0;
-            sec = 0
+            sec = 0;
         }
 
         return min.toString() + "m " + sec.toString() + "s";
@@ -294,10 +301,22 @@ const Post = (props) => {
 
 
     return (
-        <div id={styles.container}>
-            <Card>
+        <div id={styles.container}
+            style={{
+                borderRadius: 12,
+                boxShadow: "0px 0px"
+            }}>
+            <Card
+                style={{
+                    borderStyle: "solid",
+                    borderWidth: 1,
+                    borderColor: "#d6d6d6",
+                    borderRadius: 12,
+                    backgroundColor: "#fcfcfc",
+                    boxShadow: "0px 0px"
+                }}>
                 {renderHeader()}
-                <CardContent>
+                <CardContent style={{ padding: 0 }}>
                     <Grid container>
                         <Grid item xs={12}>
                             <div id={styles.content} className={isOverflow ? "" : styles.no_overflow}>
@@ -309,7 +328,7 @@ const Post = (props) => {
                             <Button id={styles.show_more_btn} onClick={handleShowMoreClick}> {isOverflow ? "Show Less" : "Show More"} </Button>
                         </Grid>
                         <Grid item xs={6} className={styles.bottom_options}>
-                            <p id={styles.timer} className={styles.no_text_select}> {renderTimeInfo()} </p>
+                            <p style={{ color: "#aaaaaa" }} id={styles.timer} className={styles.no_text_select}> <span style={{ color: "#9c9c9c" }} ><FontAwesomeIcon icon={faClock} /></span> {renderTimeInfo()} </p>
                         </Grid>
 
                         <Grid item xs={12}>
