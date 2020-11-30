@@ -117,7 +117,6 @@ const LandingPage = (props) => {
     }
 
     const changePostQuery = (query) => {
-        console.log("being called with query: " + query);
         setPostQuery(query);
         deletePosts();
     }
