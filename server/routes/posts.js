@@ -257,7 +257,7 @@ router.route('/add').post((req, res) => {
 
     //Calculate expirty date
     const MAX_MIN = 5 * 60; // 5 min (MAX time for post)
-    const MAX_TIME_ADD = MAX_MIN * 10000; //5 minutes (to add)
+    const MAX_TIME_ADD = MAX_MIN * 1000; //5 minutes (to add)
 
     const expiryDate = new Date(new Date(dateCreated).getTime() + MAX_TIME_ADD).toUTCString();
 
