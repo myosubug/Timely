@@ -29,8 +29,7 @@ const UserOverviewEdit = (props) => {
     console.log("yeet");
     console.log(props.username);
     axios.get(SERVER_ADDRESS + '/users/finduser/' + props.username)
-      .then(({ data }) => 
-      {
+      .then(({ data }) => {
         const userInfo = {
           username: data.username,
           password: data.password,
@@ -39,11 +38,11 @@ const UserOverviewEdit = (props) => {
           profileImage: data.profileImage,
         };
         setUserInfo(userInfo);
-        setImage(userInfo.profileImage);
+        setImage(userInfo.profileImage + "?" + Date.now());
       }
       )
       .catch(err => console.log(err));
-  },[]);
+  }, []);
 
   // Function that cleans up avatar image
   const cleanup = () => {
@@ -71,8 +70,8 @@ const UserOverviewEdit = (props) => {
       axios.post(SERVER_ADDRESS + "/users/upload-profile/" + userInfo.username, imgData)
         .then(({ data }) => {
           // setImage(data);
-        })    
-      .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
       setImage(URL.createObjectURL(newImage));
     }
   };
@@ -164,11 +163,11 @@ const UserOverviewEdit = (props) => {
           </Typography>
           {userInfo.isAdmin ? " 👑 " : ""}
           <Typography variant="body1">
-          {/* CREATION DATE IS STORED IN USER SCHEMA */}
+            {/* CREATION DATE IS STORED IN USER SCHEMA */}
             {"Member since " + userInfo.joinDate}
           </Typography>
           <Typography variant="body1">
-          {/* PULL FROM SERVER */}
+            {/* PULL FROM SERVER */}
             {userInfo.posts + " posts"}
           </Typography>
         </Grid>
@@ -245,7 +244,7 @@ const UserOverviewEdit = (props) => {
             {renderProfileGrid()}
           </Grid>
           <Grid item xs={7} className="UserInfoGrid">
-          UserOverviewEdit
+            UserOverviewEdit
 
             {/* User Info */}
             {renderUserGrid()}

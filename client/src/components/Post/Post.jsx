@@ -211,7 +211,7 @@ const Post = (props) => {
 
         const header = <CardHeader
             style={{ width: "100%" }}
-            avatar={<Avatar className={styles.profile_info} onClick={handleUserClick} src={postDetails.profileImage}></Avatar>}
+            avatar={<Avatar className={styles.profile_info} onClick={handleUserClick} src={`${postDetails.profileImage}?${Date.now()}`}></Avatar>}
             title={<p className={styles.profile_info} onClick={handleUserClick}> {postDetails.username} </p>}
             subheader={postDetails.timePosted}
             action={renderActions()}

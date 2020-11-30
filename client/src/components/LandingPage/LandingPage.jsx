@@ -12,10 +12,9 @@ import TagFilter from '../TagFilter/TagFilter';
 import NavBar from '../NavBar/NavBar.jsx';
 
 import axios from 'axios';
-import { SERVER_ADDRESS, socket, loggedInUser, resetLoggedInUser } from '../../AppConfig.js'
-import { eraseCookie } from '../../cookieHandler.js'
+import { SERVER_ADDRESS, socket, loggedInUser, resetLoggedInUser, populateUserInfo } from '../../AppConfig.js'
 
-import './LandingStyles.css'
+import './LandingStyles.css';
 
 const LandingPage = (props) => {
 
@@ -27,7 +26,6 @@ const LandingPage = (props) => {
 
 
     useEffect(() => {
-
         socket.on('update post list', () => {
             //TODO: Figure out the state, so we can render sorted posts
             renderPosts();
@@ -37,9 +35,13 @@ const LandingPage = (props) => {
             deletePosts();
         });
 
+
+
+        populateUserInfo(localStorage.getItem('token'));
         renderPosts();
         setLoggedIn(loggedInUser.username !== "");
         getNumPosts();
+
     }, []);
 
 
@@ -88,9 +90,12 @@ const LandingPage = (props) => {
 
     //Gets the number of posts the current user has
     const getNumPosts = () => {
-        axios.get(SERVER_ADDRESS + "/users/numPosts/" + loggedInUser.username)
-            .then(({ data }) => setNumPosts(data))
-            .catch(err => console.log(err));
+        if (loggedInUser.username !== "") {
+            axios.get(SERVER_ADDRESS + "/users/numPosts/" + loggedInUser.username)
+                .then(({ data }) => setNumPosts(data))
+                .catch(err => console.log(err));
+        }
+
     }
 
     // Renders the modal based on the content passed in
@@ -121,12 +126,6 @@ const LandingPage = (props) => {
     const handleLogOut = () => {
         //Sets the loggedinUser info to an empty object again
         resetLoggedInUser();
-
-        //Erases the cookie
-        eraseCookie('id');
-
-        //Removes the session storage
-        sessionStorage.clear('id');
 
         //Set the state
         setLoggedIn(false);

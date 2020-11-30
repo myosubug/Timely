@@ -27,11 +27,17 @@ export const EditPasswordModal = (props) => {
   };
 
   // Checks if the password is valid and checks if the passwords match
-  const isPasswordValid = () => {
-    if (props.password !== document.getElementById('currentPass').value) {
-      console.log("Current password is incorrect.");
-      return false;
-    }
+  const isPasswordValid = async () => {
+
+    //Check if the passwords match
+    await axios.post(SERVER_ADDRESS + "/users/verifyUser", { username: props.username, password: document.getElementById('currentPass').value })
+      .then(res => {
+        if (!res) {
+          return res;
+        }
+      })
+      .catch(err => console.log(err));
+
     if (!document.getElementById('newPass').value || document.getElementById('newPass').value.length < 3) {
       console.log("New password must be at least 3 characters.");
       return false;

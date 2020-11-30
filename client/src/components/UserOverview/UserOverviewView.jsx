@@ -39,7 +39,7 @@ const UserOverviewView = (props) => {
           profileImage: data.profileImage,
         };
         setUserInfo(userInfo);
-        setImage(userInfo.profileImage);
+        setImage(userInfo.profileImage + "?" + Date.now());
       }
       )
       .catch(err => console.log(err));
@@ -200,7 +200,7 @@ const UserOverviewView = (props) => {
         <Grid item xs={1}>
           <NavBar
             isLandingPg={false}
-            username={props.username} 
+            username={props.username}
           />
         </Grid>
 

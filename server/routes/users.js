@@ -1,6 +1,9 @@
 const router = require('express').Router();
 let User = require('../models/user.model');
 let Post = require('../models/post.model');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+let io = require('../server.js').io;
 
 const IMAGE_DIR = require('path').dirname(require.main.filename) + "/images/";
 
@@ -35,12 +38,26 @@ router.route('/signup').post((req, res) => {
         username: username,
         password: password,
         isAdmin: false,
-        profileImage: ""
+        profileImage: req.protocol + '://' + req.get('host') + "/images/defaults/default_avatar.jpg" //Set a default profile picture
     });
 
-    newUser.save()
-        .then(() => res.status(200).json({ userInfo: newUser }))
-        .catch(err => res.status(400).json('Error: ' + err));
+
+    //Hash the password with a salt
+    bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, (err, hash) => {
+
+            //Set the password to the hashed password
+            newUser.password = hash;
+
+            const token = jwt.sign({ username: username }, 'timelysecret'); //Generate a token that expires in 300 seconds (5 min)
+
+            //Save the user the db
+            newUser.save()
+                .then(() => res.status(200).json({ userInfo: newUser, "token": token }))
+                .catch(err => res.status(400).json('Error: ' + err));
+
+        })
+    });
 
 });
 
@@ -50,15 +67,40 @@ router.route('/signup').post((req, res) => {
 router.route('/signin').post((req, res) => {
     const username = req.body.username;
     const password = req.body.password;
+
     User.findOne({ username })
         .then(user => {
-            if (user.password === password) {
-                res.status(200).json({ userInfo: user });
-            } else {
-                res.status(400).send("password is wrong!");
-            }
+
+            //Compare the password
+            bcrypt.compare(password, user.password, (err, isMatch) => {
+                if (isMatch) {
+                    const token = jwt.sign({ username: username }, 'timelysecret'); //Generate a token that expires in 300 seconds (5 min)
+                    res.status(200).json({ userInfo: user, token: token });
+                }
+                else {
+                    res.status(400).send("password is wrong!");
+                }
+            });
         })
         .catch(err => res.status(400).json('Error: ' + err));
+});
+
+
+//Verifies the user using a token, if token matches, send in the user's info
+router.route('/token').post((req, res) => {
+    const token = req.body.token;
+
+    jwt.verify(token, 'timelysecret', function (err, decoded) {
+        if (!err) {
+            //Find the user's details and send it the client
+            User.findOne({ username: decoded.username })
+                .then(user => res.json({ "isValid": true, "object": user }))
+                .catch(err => res.status(400).json('Error: ' + err));
+
+        } else {
+            res.json({ "isValid": false });
+        }
+    })
 });
 
 // Delete account
@@ -70,15 +112,20 @@ router.route('/delete/:username').post((req, res) => {
 
 // Update password
 router.route('/update/pass/:username').post((req, res) => {
-    User.findOne({ username: req.params.username })
-        .then(user => {
-            user.password = req.body.password;
 
-            user.save()
-                .then(() => res.json('password successfully updated!'))
+
+    //Hash the password with a salt
+    bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(req.body.password, salt, (err, hash) => {
+            //Update the user's password
+            User.findOneAndUpdate({ username: req.params.username }, { $set: { password: hash } })
+                .then(() => {
+                    res.json('password successfully updated!')
+                })
                 .catch(err => res.status(400).json('Error: ' + err));
+
         })
-        .catch(err => res.status(400).json('Error: ' + err));
+    });
 });
 
 // Update username
@@ -114,6 +161,16 @@ router.route('/upload-profile/:username').post((req, res) => {
         .then(user => {
             const url = user.profileImage;
             res.json(url);
+
+            //Update all active posts so that they can render the new image
+            Post.find({ username: user.username })
+                .then(posts => {
+                    for (let post of posts) {
+                        io.emit("update post " + post._id);
+                    }
+
+                })
+                .catch(err => res.status(400).json('Error: ' + err));
         }
         )
         .catch(err => console.log(err));
@@ -164,4 +221,18 @@ router.route('/numPosts/:username').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 })
 
+//Verifies if the username/password combination is valid
+router.route('/verifyUser').post((req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    //Find the user
+    User.findOne({ username: username })
+        .then(user => {
+            bcrypt.compare(password, user.password, (err, isMatch) => {
+                res.json(isMatch);
+            });
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+});
 module.exports = router;
