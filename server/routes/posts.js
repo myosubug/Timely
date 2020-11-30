@@ -78,28 +78,29 @@ router.route('/tags').get((req,res)=>{
         {
             for(var element of post){
                 var tagVal = element.tags.toString().toLowerCase()+"";
-                
-                //this if statement section deals with multiple tags
-                if(tagVal.includes(",")){
-                    var parsedStr = tagVal.split(",");
+                if(tagVal !== "") {
+                    //this if statement section deals with multiple tags
+                    if(tagVal.includes(",")){
+                        var parsedStr = tagVal.split(",");
 
-                    for(var q in parsedStr){
-                        var temp = parsedStr[q]+"";
-                        
-                        if(temp in dictionary){
-                            dictionary[temp] += 1;
+                        for(var q in parsedStr){
+                            var temp = parsedStr[q]+"";
+                            
+                            if(temp in dictionary){
+                                dictionary[temp] += 1;
+                            } 
+                            else {
+                                dictionary[temp] = 1;
+                            }
+                        }
+                    } 
+                    else{ // this else statement deals with singular tags
+                        if(tagVal in dictionary){
+                            dictionary[tagVal] += 1;
                         } 
                         else {
-                            dictionary[temp] = 1;
+                            dictionary[tagVal] = 1;
                         }
-                    }
-                } 
-                else{ // this else statement deals with singular tags
-                    if(tagVal in dictionary){
-                        dictionary[tagVal] += 1;
-                    } 
-                    else {
-                        dictionary[tagVal] = 1;
                     }
                 }
                 
