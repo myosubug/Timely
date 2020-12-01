@@ -113,6 +113,7 @@ const PostCreator = (props) => {
                     filesLimit={1}
                     maxFileSize={5000000}
                     onChange={(files) => { setPostImage(files[0]) }}
+                    showAlerts={false}
                 />
             </PostCreatorBase>
         );
