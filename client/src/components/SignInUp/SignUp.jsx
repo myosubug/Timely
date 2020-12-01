@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
+import Alert from '@material-ui/lab/Alert';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp(props) {
+  const [isSignUpOkay, setIsSignUpOkay] = useState(true);
   const classes = useStyles();
 
   function handleSignUp(e) {
@@ -47,45 +49,79 @@ export default function SignUp(props) {
         //Set the token
         const token = res.data.token;
         localStorage.setItem('token', token);
-
-        alert("your account is created and you are logged in now");
+        setIsSignUpOkay(true);
         props.setLoggedIn(true);
         props.onCancel();
       }).catch(err => {
-        alert("Error occured while creating account, user name already exists or uername is too short");
+        setIsSignUpOkay(false);
       })
   }
-
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
-        <form onSubmit={handleSignUp} className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField variant="outlined" required fullWidth id="username" label="User Name" name="email" autoComplete="email" />
+  if (!isSignUpOkay) {
+    return (
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Typography component="h1" variant="h5">
+            Sign up
+          </Typography>
+          <form onSubmit={handleSignUp} className={classes.form} noValidate>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField variant="outlined" required fullWidth id="username" label="User Name" name="email" autoComplete="email" />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField variant="outlined" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
+              </Grid>
+              <Alert item xs={12} variant="outlined" severity="error">
+            Error occured while creating account, the user name already exists or uername is too short.
+            </Alert>
             </Grid>
             <Grid item xs={12}>
-              <TextField variant="outlined" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
+              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+                Sign Up
+                </Button>
             </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-              Sign Up
-              </Button>
-          </Grid>
-          <Grid item xs={12}>
-            <Button fullWidth variant="contained" color="primary" onClick={props.onCancel} className={classes.submit}>
-              Cancel
-              </Button>
-          </Grid>
-        </form>
-      </div>
-    </Container>
-  );
+            <Grid item xs={12}>
+              <Button fullWidth variant="contained" color="primary" onClick={props.onCancel} className={classes.submit}>
+                Cancel
+                </Button>
+            </Grid>
+          </form>
+        </div>
+      </Container>
+    );
+    } else {
+      return (
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <div className={classes.paper}>
+            <Typography component="h1" variant="h5">
+              Sign up
+            </Typography>
+            <form onSubmit={handleSignUp} className={classes.form} noValidate>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField variant="outlined" required fullWidth id="username" label="User Name" name="email" autoComplete="email" />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField variant="outlined" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+                  Sign Up
+                  </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button fullWidth variant="contained" color="primary" onClick={props.onCancel} className={classes.submit}>
+                  Cancel
+                  </Button>
+              </Grid>
+            </form>
+          </div>
+        </Container>
+      );
+    }
 }
 
 
