@@ -21,16 +21,10 @@ const LandingPage = (props) => {
     const [renderModalObj, setRenderModalObj] = useState({ "tags": false, "login": false, "post": false });
     const [posts, setPosts] = useState([]);
     const [numPosts, setNumPosts] = useState(0);
-   // const [postQuery, setPostQuery] = useState('/posts/trending');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
         socket.on('update post list', () => {
-            //TODO: Figure out the state, so we can render sorted posts
-            renderPosts();
-        });
-
-        socket.on('update post list delete', () => {
             renderPosts();
         });
 

@@ -13,47 +13,47 @@ router.route('/').get((req, res) => {
 
 //Returns all most-liked posts in descending order
 router.route('/trending').get((req, res) => {
-    Post.find().sort({likeCount: -1})
+    Post.find().sort({ likeCount: -1 })
         .then(posts => res.json(posts))
         .catch(err => res.status(400).json('Error: ' + err));
-        
+
 });
 
 //finds and sorts the posts based on expiration date(posts with expiry date soon appear first)
-router.route('/expiring-soon').get((req,res)=>{
-    Post.find().sort({expiryDate: 1})
+router.route('/expiring-soon').get((req, res) => {
+    Post.find().sort({ expiryDate: 1 })
         .then(posts => res.json(posts))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 //finds and sorts the posts based on creation date(newest posts appear first)
-router.route('/newest-posts').get((req,res)=>{
-    Post.find().sort({dateCreated: -1})
+router.route('/newest-posts').get((req, res) => {
+    Post.find().sort({ dateCreated: -1 })
         .then(posts => res.json(posts))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 //finds and sorts the posts based on the amount of time remaining(?)
-router.route('/time-remaining').get((req,res)=>{
-    Post.find().sort({expiryDate: -1})
+router.route('/time-remaining').get((req, res) => {
+    Post.find().sort({ expiryDate: -1 })
         .then(posts => res.json(posts))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 //finds and returns all posts that contain the entered tag
-router.route('/find-tag').get((req,res)=>{
+router.route('/find-tag').get((req, res) => {
     let receivedTags = [];
-    if(!Array.isArray(req.query.tag)) {
+    if (!Array.isArray(req.query.tag)) {
         receivedTags.push(req.query.tag);
     } else {
         receivedTags = [...req.query.tag];
     }
     Post.find().then(posts => {
         let resultPosts = [];
-        for(let post of posts) {
-            for(let tag of receivedTags) {
-                if(post.tags.includes(tag)) {
-                    if(!resultPosts.includes(post)){
+        for (let post of posts) {
+            for (let tag of receivedTags) {
+                if (post.tags.includes(tag)) {
+                    if (!resultPosts.includes(post)) {
                         resultPosts.push(post);
                     }
                 }
@@ -69,60 +69,59 @@ router.route('/find-tag').get((req,res)=>{
     -> https://stackoverflow.com/questions/38187614/sort-dictionary-of-keyvalue-pairs-in-javascript
     -> https://www.codegrepper.com/code-examples/javascript/javascript+get+first+5+elements+of+array
     */
-router.route('/tags').get((req,res)=>{
+router.route('/tags').get((req, res) => {
     var dictionary = {};
     var topTags = [];
     var sortedDictionary = [];
     Post.find()
-    .then(post => 
-        {
-            for(var element of post){
-                var tagVal = element.tags.toString().toLowerCase()+"";
-                if(tagVal !== "") {
+        .then(post => {
+            for (var element of post) {
+                var tagVal = element.tags.toString().toLowerCase() + "";
+                if (tagVal !== "") {
                     //this if statement section deals with multiple tags
-                    if(tagVal.includes(",")){
+                    if (tagVal.includes(",")) {
                         var parsedStr = tagVal.split(",");
 
-                        for(var q in parsedStr){
-                            var temp = parsedStr[q]+"";
-                            
-                            if(temp in dictionary){
+                        for (var q in parsedStr) {
+                            var temp = parsedStr[q] + "";
+
+                            if (temp in dictionary) {
                                 dictionary[temp] += 1;
-                            } 
+                            }
                             else {
                                 dictionary[temp] = 1;
                             }
                         }
-                    } 
-                    else{ // this else statement deals with singular tags
-                        if(tagVal in dictionary){
+                    }
+                    else { // this else statement deals with singular tags
+                        if (tagVal in dictionary) {
                             dictionary[tagVal] += 1;
-                        } 
+                        }
                         else {
                             dictionary[tagVal] = 1;
                         }
                     }
                 }
-                
+
             }
 
-            for(var i in dictionary){
-                sortedDictionary.push([ i, dictionary[i] ])
+            for (var i in dictionary) {
+                sortedDictionary.push([i, dictionary[i]])
             }
 
             //reference for this function by the user slezica:
             //-> https://stackoverflow.com/questions/38187614/sort-dictionary-of-keyvalue-pairs-in-javascript
-            sortedDictionary.sort(function compare(value1,value2){
+            sortedDictionary.sort(function compare(value1, value2) {
                 return value2[1] - value1[1];
             })
 
-            for(var j in sortedDictionary){
+            for (var j in sortedDictionary) {
                 topTags.push(sortedDictionary[j][0]);
             }
         }
         )
-    .then(post => res.json(topTags.slice(0,5)))
-    .catch(err => res.status(400).json('Error: ' + err));
+        .then(post => res.json(topTags.slice(0, 5)))
+        .catch(err => res.status(400).json('Error: ' + err));
 })
 
 //Returns a Post object by ID
@@ -327,7 +326,7 @@ router.route('/delete').post((req, res) => {
     Post.findByIdAndDelete(req.body.id)
         .then(post => {
             res.status(200).json("Deleted post " + post);
-            io.emit('update post list delete');
+            io.emit('update post list');
         })
         .catch(err => res.status(400).json('Error: ' + err))
 });
