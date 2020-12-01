@@ -14,7 +14,7 @@ import { loggedInUser, populateUserInfo } from '../../AppConfig.js'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(4),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -73,8 +73,8 @@ export default function SignUp(props) {
                 <TextField variant="outlined" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
               </Grid>
               <Alert item xs={12} variant="outlined" severity="error">
-            Error occured while creating account, the user name already exists or uername is too short.
-            </Alert>
+                Error occured while creating account, the user name already exists or uername is too short.
+              </Alert>
             </Grid>
             <Grid item xs={12}>
               <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
