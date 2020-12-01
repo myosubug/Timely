@@ -24,10 +24,11 @@ const UserOverviewEdit = (props) => {
   const [isPassModalOpen, setPassModalOpen] = useState(false);
 
   const [userInfo, setUserInfo] = useState({});
+  const [postNum, setPostNum] = useState(0);
 
   useEffect(() => {
-    console.log("yeet");
     console.log(props.username);
+    // Get logged in user's info
     axios.get(SERVER_ADDRESS + '/users/finduser/' + props.username)
       .then(({ data }) => {
         const userInfo = {
@@ -37,10 +38,18 @@ const UserOverviewEdit = (props) => {
           joinDate: data.createdAt,
           profileImage: data.profileImage,
         };
+
+        // Update state
         setUserInfo(userInfo);
         setImage(userInfo.profileImage + "?" + Date.now());
-      }
-      )
+
+        // Get user's number of posts
+        axios.get(SERVER_ADDRESS + '/users/numposts/' + userInfo.username)
+          .then(res => {
+            setPostNum(res.data);
+          })
+          .catch(err => (console.log(err)));
+      })
       .catch(err => console.log(err));
   }, []);
 
@@ -168,7 +177,7 @@ const UserOverviewEdit = (props) => {
           </Typography>
           <Typography variant="body1">
             {/* PULL FROM SERVER */}
-            {userInfo.posts + " posts"}
+            {postNum + " posts"}
           </Typography>
         </Grid>
 

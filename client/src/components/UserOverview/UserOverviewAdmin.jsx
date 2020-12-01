@@ -20,6 +20,7 @@ const UserOverviewAdmin = (props) => {
 
   const inputFileRef = createRef(null);
   const [image, _setImage] = useState(null);
+  const [postNum, setPostNum] = useState(0);
 
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isDemoteModalOpen, setDemoteModalOpen] = useState(false);
@@ -29,8 +30,8 @@ const UserOverviewAdmin = (props) => {
   const [userInfo, setUserInfo] = useState({});
 
   useEffect(() => {
-    console.log("yeet");
     console.log(props.username);
+    // Get logged in user's info
     axios.get(SERVER_ADDRESS + '/users/finduser/' + props.username)
       .then(({ data }) => {
         const userInfo = {
@@ -40,10 +41,19 @@ const UserOverviewAdmin = (props) => {
           joinDate: data.createdAt,
           profileImage: data.profileImage,
         };
+
+        // Update state
         setUserInfo(userInfo);
         setImage(userInfo.profileImage + "?" + Date.now());
-      }
-      )
+
+        // Get user's number of posts
+        axios.get(SERVER_ADDRESS + '/users/numposts/' + userInfo.username)
+          .then(res => {
+            setPostNum(res.data);
+          })
+          .catch(err => (console.log(err)));
+
+      })
       .catch(err => console.log(err));
   }, []);
 
@@ -219,7 +229,7 @@ const UserOverviewAdmin = (props) => {
           </Typography>
           <Typography variant="body1">
             {/* PULL FROM SERVER */}
-            {userInfo.posts + " posts"}
+            {postNum + " posts"}
           </Typography>
         </Grid>
 
