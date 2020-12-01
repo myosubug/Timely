@@ -66,10 +66,10 @@ const Sign = (props) => {
             <div>
                 <div className={classes.tabs}>
                     <Button className={classes.buttonStyle} type="submit" color="primary" onClick={handleSignIn}>
-                        Sign In
+                        Welcome back
                     </Button>
                     <Button className={classes.buttonStyle} type="submit" color="primary" onClick={handleSignUp}>
-                        Sign Up
+                        Create Account
                     </Button>
                 </div>
                 <SignIn onCancel={props.onCancel} setLoggedIn={props.setLoggedIn} />
@@ -81,10 +81,10 @@ const Sign = (props) => {
             <div>
                 <div className={classes.tabs}>
                     <Button className={classes.buttonStyle} type="submit" color="primary" onClick={handleSignIn}>
-                        Sign In
+                        Welcome back
                     </Button>
                     <Button className={classes.buttonStyle} type="submit" color="primary" onClick={handleSignUp}>
-                        Sign Up
+                        Create Account
                     </Button>
                 </div>
                 <SignUp onCancel={props.onCancel} setLoggedIn={props.setLoggedIn} />
