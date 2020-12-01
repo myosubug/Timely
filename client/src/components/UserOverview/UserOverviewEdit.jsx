@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState, useParams } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import {
   Avatar,
   Grid,
@@ -6,9 +6,7 @@ import {
   Typography,
   IconButton,
 } from '@material-ui/core';
-import PropTypes from 'prop-types';
 import DeleteAccountModal from '../DeleteAccountModal/DeleteAccountModal';
-import EditUsernameModal from '../EditUsernameModal/EditUsernameModal';
 import EditPasswordModal from '../EditPasswordModal/EditPasswordModal';
 import NavBar from '../NavBar/NavBar';
 import axios from 'axios';
@@ -100,16 +98,6 @@ const UserOverviewEdit = (props) => {
       .then(console.log("Axios: user successfully deleted!"))
       .catch(err => (console.log(err)));
   };
-
-  // Function that gets the join date of the user
-  // const handleFetchJoinDate = () => {
-  //   console.log(userInfo.username);
-  //   axios.get(SERVER_ADDRESS +  '/users/finduser/join-date' + userInfo.username)
-  //     .then(res => {
-  //       const joinDate = res.createdAt;
-
-  //     })
-  // }
 
   // Renders the profile pic and the delete account button
   const renderProfileGrid = () => {

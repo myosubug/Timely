@@ -8,7 +8,7 @@ import { UserOverviewView } from './UserOverviewView.jsx';
 
 function OverviewRouter() {
 
-  let {username} = useParams();
+  let { username } = useParams();
 
   const renderOverview = () => {
     if(loggedInUser.username === username) {

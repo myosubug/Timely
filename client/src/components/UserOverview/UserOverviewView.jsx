@@ -6,7 +6,6 @@ import {
   IconButton,
 } from '@material-ui/core';
 import DeleteAccountModal from '../DeleteAccountModal/DeleteAccountModal';
-import EditUsernameModal from '../EditUsernameModal/EditUsernameModal';
 import EditPasswordModal from '../EditPasswordModal/EditPasswordModal';
 import NavBar from '../NavBar/NavBar';
 import axios from 'axios';
@@ -100,16 +99,6 @@ const UserOverviewView = (props) => {
       .catch(err => (console.log(err)));
   };
 
-  // Function that gets the join date of the user
-  // const handleFetchJoinDate = () => {
-  //   console.log(userInfo.username);
-  //   axios.get(SERVER_ADDRESS +  '/users/finduser/join-date' + userInfo.username)
-  //     .then(res => {
-  //       const joinDate = res.createdAt;
-
-  //     })
-  // }
-
   // Renders the profile pic and the delete account button
   const renderProfileGrid = () => {
     return (
@@ -132,7 +121,6 @@ const UserOverviewView = (props) => {
             </label>
           </IconButton>
         </Grid>
-
       </Grid>
     );
   }
@@ -239,26 +227,6 @@ const UserOverviewView = (props) => {
           delete={handleDeleteAccount}
           isOpen={isDeleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
-        />
-
-        {/* EDIT EMAIL MODAL */}
-        {/* <EditEmailModal
-        username={props.username}
-        password={props.password}
-        email={props.email}
-        update={() => {}}
-        isOpen={state.isEditEmailOpen}
-        onClose={closeEmailModal}
-      /> */}
-
-        {/* EDIT USERNAME MODAL */}
-        <EditUsernameModal
-          // username={props.username}
-          // password={props.password}
-          username={userInfo.username}
-          password={userInfo.password}
-          isOpen={isUserModalOpen}
-          onClose={() => setUserModalOpen(false)}
         />
 
         {/* EDIT PASSWORD MODAL */}
