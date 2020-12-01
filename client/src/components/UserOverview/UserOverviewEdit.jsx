@@ -38,7 +38,7 @@ const UserOverviewEdit = (props) => {
           joinDate: data.createdAt,
           profileImage: data.profileImage,
         };
-
+        
         // Update state
         setUserInfo(userInfo);
         setImage(userInfo.profileImage + "?" + Date.now());
@@ -177,7 +177,7 @@ const UserOverviewEdit = (props) => {
           </Typography>
           <Typography variant="body1">
             {/* PULL FROM SERVER */}
-            {postNum + " posts"}
+            {postNum + " active posts"}
           </Typography>
         </Grid>
 

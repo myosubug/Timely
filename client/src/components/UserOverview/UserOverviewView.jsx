@@ -1,12 +1,10 @@
-import React, { createRef, useEffect, useState, useParams } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import {
   Avatar,
   Grid,
-  Button,
   Typography,
   IconButton,
 } from '@material-ui/core';
-import PropTypes from 'prop-types';
 import DeleteAccountModal from '../DeleteAccountModal/DeleteAccountModal';
 import EditUsernameModal from '../EditUsernameModal/EditUsernameModal';
 import EditPasswordModal from '../EditPasswordModal/EditPasswordModal';
