@@ -5,6 +5,7 @@ import { LandingPage } from './components/LandingPage/LandingPage';
 import {UserOverviewEdit} from './components/UserOverview/UserOverviewEdit';
 import { UserOverviewView } from './components/UserOverview/UserOverviewView';
 import OverviewRouter from './components/UserOverview/OverviewRouter';
+import NotFound from './components/NotFound/NotFound';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/useroverview/:username">
           <OverviewRouter />
         </Route>
+        <Route component={NotFound} />
       </Switch>
     </main>
   );
