@@ -56,7 +56,6 @@ export const EditPasswordModal = (props) => {
     // Passwords match and is updated
     else {
       const data = { password: document.getElementById('newPass').value };
-      console.log(data);
       // axios call 
       axios.post(SERVER_ADDRESS + '/users/update/pass/' + props.username, data)
         .then(res => {
@@ -68,6 +67,7 @@ export const EditPasswordModal = (props) => {
     }
   };
 
+  // Function that renders the current alert set in the state
   const renderAlert = () => (
     <Alert severity={alert.severity}>
       {alert.message}
