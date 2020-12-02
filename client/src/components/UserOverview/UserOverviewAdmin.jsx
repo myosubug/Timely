@@ -21,7 +21,6 @@ const UserOverviewAdmin = (props) => {
 
   const inputFileRef = createRef(null);
   const [image, _setImage] = useState(null);
-  const [postNum, setPostNum] = useState(0);
 
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isDemoteModalOpen, setDemoteModalOpen] = useState(false);
@@ -47,13 +46,6 @@ const UserOverviewAdmin = (props) => {
         // Update state
         setUserInfo(userInfo);
         setImage(userInfo.profileImage + "?" + Date.now());
-
-        // Get user's number of posts
-        axios.get(SERVER_ADDRESS + '/users/numposts/' + userInfo.username)
-          .then(res => {
-            setPostNum(res.data);
-          })
-          .catch(err => (console.log(err)));
 
         //Setup a socket listener
         socket.on('update post list', () => {
@@ -245,7 +237,7 @@ const UserOverviewAdmin = (props) => {
             {"Member since " + userInfo.joinDate}
           </Typography>
           <Typography variant="body1">
-            {postNum + " posts"}
+            {posts.length + " post(s)"}
           </Typography>
         </Grid>
 

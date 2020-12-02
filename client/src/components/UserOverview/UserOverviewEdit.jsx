@@ -23,7 +23,6 @@ const UserOverviewEdit = (props) => {
   const [isPassModalOpen, setPassModalOpen] = useState(false);
 
   const [userInfo, setUserInfo] = useState({});
-  const [postNum, setPostNum] = useState(0);
 
   const [posts, setPosts] = useState([]);
 
@@ -46,14 +45,6 @@ const UserOverviewEdit = (props) => {
         // Update state
         setUserInfo(userInfo);
         setImage(userInfo.profileImage + "?" + Date.now());
-
-        // Get user's number of posts
-        axios.get(SERVER_ADDRESS + '/users/numposts/' + userInfo.username)
-          .then(res => {
-            setPostNum(res.data);
-          })
-          .catch(err => (console.log(err)));
-
 
         //Setup a socket listener
         socket.on('update post list', () => {
@@ -200,7 +191,7 @@ const UserOverviewEdit = (props) => {
           </Typography>
           <Typography variant="body1">
             {/* PULL FROM SERVER */}
-            {postNum + " active posts"}
+            {posts.length + " active post(s)"}
           </Typography>
         </Grid>
 
