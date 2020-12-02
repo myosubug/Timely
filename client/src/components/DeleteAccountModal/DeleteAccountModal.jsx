@@ -10,7 +10,8 @@ import {
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
-import { resetLoggedInUser } from '../../AppConfig';
+import axios from 'axios';
+import { SERVER_ADDRESS, resetLoggedInUser } from '../../AppConfig.js'
 
 export const DeleteAccountModal = (props) => {
 
@@ -38,22 +39,29 @@ export const DeleteAccountModal = (props) => {
 
   // Function that checks if entered password is valid 
   // If valid make axios call and redirect user back to landing page
-  const handleConfirm = () => {
-    // Password is invalid
-    // if (!document.getElementById('confirmPass').value || props.password !== document.getElementById('confirmPass').value) {
-    //   console.log(document.getElementById('confirmPass'));
-    //   setAlert({message: "Password is incorrect. Please try again!", severity: "error"});
-    // }
-    // // Password is valid 
-    // else {
+  const handleOnConfirmClick = () => {
+    // Check if the passwords match
+    // await axios.post(SERVER_ADDRESS + "/users/verifyUser", { username: props.username, password: document.getElementById('currentPass').value })
+    //   .then(res => {
+    //     if (!res) {
+    //       return res;
+    //       console.log(res);
+    //     }
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     setAlert({ message: "Password is incorrect. Please try again!", severity: "error" });
+    //   });
+
+    // Password is valid 
       setAlert({message: "Account successfully deleted!", severity: "success"});
       console.log("Account successfully deleted!");
       props.delete(props.username);
-      handleClose();
       resetLoggedInUser();
+      handleClose();
       window.location.href = '/' ; // relative to domain
     // }
-  }
+  };
 
   const renderAlert = () => (
     <Alert severity={alert.severity}>
@@ -96,7 +104,7 @@ export const DeleteAccountModal = (props) => {
           Cancel
         </Button>
         <Button
-          onClick={handleConfirm}
+          onClick={handleOnConfirmClick}
           className="ConfirmButton"
         >
           Confirm
