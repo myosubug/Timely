@@ -30,7 +30,6 @@ const UserOverviewAdmin = (props) => {
   const [userInfo, setUserInfo] = useState({});
 
   useEffect(() => {
-    console.log(props.username);
     // Get logged in user's info
     axios.get(SERVER_ADDRESS + '/users/finduser/' + props.username)
       .then(({ data }) => {
@@ -99,7 +98,6 @@ const UserOverviewAdmin = (props) => {
 
   // Function that makes the axios call to ban an account from the db
   const handleDeleteAccount = () => {
-    console.log(userInfo.username);
     axios.post(SERVER_ADDRESS + '/users/delete/' + userInfo.username)
       .then(console.log("Axios: user successfully deleted!"))
       .catch(err => (console.log(err)));
