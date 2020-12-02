@@ -24,9 +24,15 @@ export const PromoteUserModal = (props) => {
     severity: "info"
   });
 
+  const [isDeleted, setIsDeleted] = useState(false);
+
   // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
+    setAlert({
+      message: "You can promote the user at any time.",
+      severity: "info"
+    });
   };
 
   // Function that handles account deletion
@@ -34,6 +40,7 @@ export const PromoteUserModal = (props) => {
     console.log("Account successfully promoted!");
     setAlert({ message: "User successfully promoted!", severity: "success" });
     props.promote(props.username);
+    setIsDeleted(true);
   };
 
   // Function that renders the alert to the user based on its current state
@@ -63,18 +70,30 @@ export const PromoteUserModal = (props) => {
         {renderAlert()}
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={handleClose}
-          className="ConfirmButton"
-        >
-          Cancel
+        {isDeleted
+          ?
+          <Button
+            onClick={handleClose}
+            className="CloseButton"
+          >
+            Close
         </Button>
-        <Button
-          onClick={handleOnConfirmClick}
-          className="ConfirmButton"
-        >
-          Confirm
+          :
+          <>
+            <Button
+              onClick={handleClose}
+              className="ConfirmButton"
+            >
+              Cancel
         </Button>
+            <Button
+              onClick={handleOnConfirmClick}
+              className="ConfirmButton"
+            >
+              Confirm
+        </Button>
+          </>
+        }
       </DialogActions>
     </Dialog>
   );

@@ -24,9 +24,15 @@ export const BanUserModal = (props) => {
     severity: "info"
   });
 
+  const [isDeleted, setIsDeleted] = useState(false);
+
   // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
+    setAlert({
+      message: "Banning a user will delete them from the server.",
+      severity: "info"
+    });
   };
 
   // Function that handles account deletion
@@ -34,7 +40,7 @@ export const BanUserModal = (props) => {
     console.log("Account successfully banned!");
     setAlert({ message: "Account successfully banned!", severity: "success" });
     props.ban(props.username);
-    handleClose();
+    setIsDeleted(true);
   };
 
   // Function that renders the alert to the user based on its current state
@@ -62,18 +68,30 @@ export const BanUserModal = (props) => {
         {renderAlert()}
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={handleClose}
-          className="ConfirmButton"
-        >
-          Cancel
+        {isDeleted
+          ?
+          <Button
+            onClick={handleClose}
+            className="CloseButton"
+          >
+            Close
         </Button>
-        <Button
-          onClick={handleOnConfirmClick}
-          className="ConfirmButton"
-        >
-          Confirm
-        </Button>
+          :
+          <>
+            <Button
+              onClick={handleClose}
+              className="ConfirmButton"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleOnConfirmClick}
+              className="ConfirmButton"
+            >
+              Confirm
+            </Button>
+          </>
+        }
       </DialogActions>
     </Dialog>
   );

@@ -24,9 +24,15 @@ export const DemoteAdminModal = (props) => {
     severity: "info"
   });
 
+  const [isDeleted, setIsDeleted] = useState(false);
+
   // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
+    setAlert({
+      message: "You can promote the user at any time.",
+      severity: "info"
+    });
   };
 
   // Function that handles account deletion
@@ -34,7 +40,7 @@ export const DemoteAdminModal = (props) => {
     console.log("Account successfully demoted!");
     setAlert({ message: "User successfully demoted!", severity: "success" });
     props.demote(props.username);
-    handleClose();
+    setIsDeleted(true);
   };
 
   // Function that renders the alert to the user based on its current state
@@ -61,18 +67,29 @@ export const DemoteAdminModal = (props) => {
         {renderAlert()}
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={handleClose}
-          className="ConfirmButton"
-        >
-          Cancel
+      {isDeleted
+          ?
+          <Button
+            onClick={handleClose}
+            className="CloseButton"
+          >
+            Close
         </Button>
-        <Button
-          onClick={handleOnConfirmClick}
-          className="ConfirmButton"
-        >
-          Confirm
+          : <>
+            <Button
+              onClick={handleClose}
+              className="ConfirmButton"
+            >
+              Cancel
         </Button>
+            <Button
+              onClick={handleOnConfirmClick}
+              className="ConfirmButton"
+            >
+              Confirm
+        </Button>
+          </>
+        }
       </DialogActions>
     </Dialog>
   );
