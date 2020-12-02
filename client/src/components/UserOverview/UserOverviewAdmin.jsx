@@ -172,17 +172,9 @@ const UserOverviewAdmin = (props) => {
 
         {/* PROMOTE OR DEMOTE USER */}
         <Grid item xs={3} className="PromoteDemoteUser">
-          {!userInfo.Admin
+        {console.log(userInfo)}
+          {userInfo.isAdmin
             ?
-            <Button
-              variant="contained"
-              className="PromoteDemoteUserButton"
-              onClick={() => setPromoteModalOpen(true)}
-              size="medium"
-            >
-              Promote
-            </Button>
-            :
             <Button
               variant="contained"
               className="PromoteDemoteUserButton"
@@ -190,6 +182,15 @@ const UserOverviewAdmin = (props) => {
               size="medium"
             >
               Demote
+            </Button>
+            :
+            <Button
+              variant="contained"
+              className="PromotePromoteUserButton"
+              onClick={() => setPromoteModalOpen(true)}
+              size="medium"
+            >
+              Promote
             </Button>
           }
         </Grid>
@@ -214,11 +215,9 @@ const UserOverviewAdmin = (props) => {
           </Typography>
           {userInfo.isAdmin ? " 👑 " : ""}
           <Typography variant="body1">
-            {/* CREATION DATE IS STORED IN USER SCHEMA */}
             {"Member since " + userInfo.joinDate}
           </Typography>
           <Typography variant="body1">
-            {/* PULL FROM SERVER */}
             {postNum + " posts"}
           </Typography>
         </Grid>
