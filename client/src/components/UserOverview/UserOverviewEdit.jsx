@@ -222,7 +222,7 @@ const UserOverviewEdit = (props) => {
         <Grid item xs={1}>
           <NavBar
             isLandingPg={false}
-            username={props.username}
+            username={userInfo.username}
           />
         </Grid>
 
