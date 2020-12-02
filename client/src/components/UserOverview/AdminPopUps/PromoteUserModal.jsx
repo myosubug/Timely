@@ -24,7 +24,6 @@ export const PromoteUserModal = (props) => {
     severity: "info"
   });
 
-
   // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
