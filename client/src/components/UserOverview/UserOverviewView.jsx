@@ -8,8 +8,9 @@ import {
 import DeleteAccountModal from '../DeleteAccountModal/DeleteAccountModal';
 import EditPasswordModal from '../EditPasswordModal/EditPasswordModal';
 import NavBar from '../NavBar/NavBar';
+import { Post } from '../Post/Post';
 import axios from 'axios';
-import { SERVER_ADDRESS } from '../../AppConfig.js'
+import { loggedInUser, SERVER_ADDRESS, socket } from '../../AppConfig.js'
 import './style.css';
 
 const UserOverviewView = (props) => {
@@ -23,6 +24,8 @@ const UserOverviewView = (props) => {
 
   const [userInfo, setUserInfo] = useState({});
   const [postNum, setPostNum] = useState(0);
+
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     // Get logged in user's info
@@ -46,9 +49,38 @@ const UserOverviewView = (props) => {
             setPostNum(res.data);
           })
           .catch(err => (console.log(err)));
+
+
+        //Setup a socket listener
+        socket.on('update post list', () => {
+          renderPosts(userInfo);
+        });
+
+        renderPosts(userInfo);
       })
       .catch(err => console.log(err));
+
+
   }, []);
+
+
+  //Gets the posts from specified query, and sets the state
+  const renderPosts = (username_obj) => {
+    axios.get(SERVER_ADDRESS + "/users/userPosts/" + username_obj.username)
+      .then(res => {
+        let new_posts = [];
+        for (let post of res.data) {
+          new_posts.push(
+            <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full" key={post._id}>
+              <Post isAdmin={loggedInUser.isAdmin} id={post._id} thisUsername={loggedInUser.username} />
+            </div>
+          )
+        }
+        setPosts(new_posts);
+
+      })
+      .catch(err => console.log(err));
+  }
 
   // Function that cleans up avatar image
   const cleanup = () => {
@@ -237,6 +269,10 @@ const UserOverviewView = (props) => {
           isOpen={isPassModalOpen}
           onClose={() => setPassModalOpen(false)}
         />
+      </Grid>
+
+      <Grid item xs={12}>
+        {posts}
       </Grid>
     </div>
   );
