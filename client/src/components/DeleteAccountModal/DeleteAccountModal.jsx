@@ -41,11 +41,11 @@ export const DeleteAccountModal = (props) => {
   // If valid make axios call and redirect user back to landing page
   const handleOnConfirmClick = () => {
     // Check if the passwords match
-    // await axios.post(SERVER_ADDRESS + "/users/verifyUser", { username: props.username, password: document.getElementById('currentPass').value })
+    // await axios.post(SERVER_ADDRESS + "/users/verifyUser", { username: props.username, password: document.getElementById('confirmPass').value })
     //   .then(res => {
     //     if (!res) {
-    //       return res;
     //       console.log(res);
+    //       return res;
     //     }
     //   })
     //   .catch(err => {
