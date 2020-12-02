@@ -17,7 +17,6 @@ export const DeleteAccountModal = (props) => {
 
   DeleteAccountModal.propTypes = {
     username: PropTypes.string,
-    password: PropTypes.string,
     delete: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
@@ -37,26 +36,28 @@ export const DeleteAccountModal = (props) => {
   // If valid make axios call and redirect user back to landing page
   const handleOnConfirmClick = () => {
     // Check if the passwords match
-    // await axios.post(SERVER_ADDRESS + "/users/verifyUser", { username: props.username, password: document.getElementById('confirmPass').value })
-    //   .then(res => {
-    //     if (!res) {
-    //       console.log(res);
-    //       return res;
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //     setAlert({ message: "Password is incorrect. Please try again!", severity: "error" });
-    //   });
+    axios.post(SERVER_ADDRESS + "/users/verifyUser", { username: props.username, password: document.getElementById("confirmPass").value })
+      .then(({ data }) => {
+        if (data) {
+          axios.post(SERVER_ADDRESS + "/users/delete/" + props.username)
+            .then(() => {
+              // Password is valid 
+              setAlert({ message: "Account successfully deleted!", severity: "success" });
+              console.log("Account successfully deleted!");
+              props.delete(props.username);
+              resetLoggedInUser();
+              handleClose();
+              window.location.href = '/'; // relative to domain
+            }
+            )
+            .catch(err => console.log(err));
+        }
+        else {
+          setAlert({ message: "Password is incorrect. Please try again!", severity: "error" });
+        }
+      });
 
-    // Password is valid 
-      setAlert({message: "Account successfully deleted!", severity: "success"});
-      console.log("Account successfully deleted!");
-      props.delete(props.username);
-      resetLoggedInUser();
-      handleClose();
-      window.location.href = '/' ; // relative to domain
-    // }
+
   };
 
   // Function that renders the alert to the user based on its current state
@@ -64,7 +65,7 @@ export const DeleteAccountModal = (props) => {
     <Alert severity={alert.severity}>
       {alert.message}
     </Alert>
-    );
+  );
 
 
   return (

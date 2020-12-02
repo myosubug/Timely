@@ -9,8 +9,9 @@ import {
 import DeleteAccountModal from '../DeleteAccountModal/DeleteAccountModal';
 import EditPasswordModal from '../EditPasswordModal/EditPasswordModal';
 import NavBar from '../NavBar/NavBar';
+import { Post } from '../Post/Post';
 import axios from 'axios';
-import { SERVER_ADDRESS } from '../../AppConfig.js'
+import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
 import './style.css';
 
 const UserOverviewEdit = (props) => {
@@ -24,7 +25,13 @@ const UserOverviewEdit = (props) => {
   const [userInfo, setUserInfo] = useState({});
   const [postNum, setPostNum] = useState(0);
 
+  const [posts, setPosts] = useState([]);
+
   useEffect(() => {
+
+
+
+
     // Get logged in user's info
     axios.get(SERVER_ADDRESS + '/users/finduser/' + props.username)
       .then(({ data }) => {
@@ -35,7 +42,7 @@ const UserOverviewEdit = (props) => {
           joinDate: data.createdAt,
           profileImage: data.profileImage,
         };
-        
+
         // Update state
         setUserInfo(userInfo);
         setImage(userInfo.profileImage + "?" + Date.now());
@@ -46,6 +53,14 @@ const UserOverviewEdit = (props) => {
             setPostNum(res.data);
           })
           .catch(err => (console.log(err)));
+
+
+        //Setup a socket listener
+        socket.on('update post list', () => {
+          renderPosts(userInfo);
+        });
+
+        renderPosts(userInfo);
       })
       .catch(err => console.log(err));
   }, []);
@@ -55,6 +70,26 @@ const UserOverviewEdit = (props) => {
     // URL.revokeObjectURL(image);
     // inputFileRef.current.value = null;
   };
+
+
+  //Gets the posts from specified query, and sets the state
+  const renderPosts = (username_obj) => {
+    axios.get(SERVER_ADDRESS + "/users/userPosts/" + username_obj.username)
+      .then(res => {
+        console.log(res);
+        let new_posts = [];
+        for (let post of res.data) {
+          new_posts.push(
+            <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full" key={post._id}>
+              <Post isAdmin={loggedInUser.isAdmin} id={post._id} thisUsername={loggedInUser.username} />
+            </div>
+          )
+        }
+        setPosts(new_posts);
+
+      })
+      .catch(err => console.log(err));
+  }
 
   // Function that sets avatar image
   const setImage = (newImage) => {
@@ -139,6 +174,7 @@ const UserOverviewEdit = (props) => {
             Delete
           </Button>
         </Grid>
+
       </Grid>
     );
   }
@@ -251,7 +287,6 @@ const UserOverviewEdit = (props) => {
         {/* DELETE ACCOUNT MODAL */}
         <DeleteAccountModal
           username={userInfo.username}
-          password={userInfo.password}
           delete={handleDeleteAccount}
           isOpen={isDeleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
@@ -264,6 +299,10 @@ const UserOverviewEdit = (props) => {
           isOpen={isPassModalOpen}
           onClose={() => setPassModalOpen(false)}
         />
+
+        <Grid item xs={12}>
+          {posts}
+        </Grid>
       </Grid>
     </div>
   );

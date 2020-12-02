@@ -4,6 +4,7 @@ let Post = require('../models/post.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 let io = require('../server.js').io;
+const fs = require('fs');
 
 const IMAGE_DIR = require('path').dirname(require.main.filename) + "/images/";
 
@@ -106,7 +107,49 @@ router.route('/token').post((req, res) => {
 // Delete account
 router.route('/delete/:username').post((req, res) => {
     User.findOneAndDelete({ username: req.params.username })
-        .then(() => res.json('user successfully deleted!'))
+        .then(() => {
+            //Find all posts of that user
+            Post.find({ username: req.params.username })
+                .then(posts => {
+                    //Arrays for storing the results
+                    let all_posts = [];
+                    let img_addr = []; //Addresses of images to be deleted later
+
+
+                    const IMAGE_DIR = require('path').dirname(require.main.filename) + "/images/"; //The directory for the images
+
+                    //Push the ids of the posts
+                    for (post of posts) {
+                        all_posts.push(post._id);
+
+                        if (post.type === "img") {
+                            const addr_ar = post.imageURL.split('/');
+                            const img_filename = addr_ar[addr_ar.length - 1];
+
+                            const file_path = IMAGE_DIR + "posts/" + img_filename;
+                            img_addr.push(file_path);
+                        }
+                    }
+
+                    //Remove all posts that we have found
+                    Post.deleteMany({ _id: { $in: all_posts } })
+                        .then(res => {
+                            if (res.deletedCount > 0) {
+                                //Notify everyone to update
+                                io.emit('update post list');
+
+
+                                //Once we have deleted the posts, remove the images from the server
+                                for (let path of img_addr) {
+                                    fs.unlink(path, (err) => { if (err) { console.log(err) } });
+                                }
+                            }
+                        })
+
+                })
+                .catch(err => res.status(400).json('Error: ' + err));
+            res.json('user successfully deleted!')
+        })
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
@@ -219,7 +262,18 @@ router.route('/numPosts/:username').get((req, res) => {
             res.json(posts.length);
         })
         .catch(err => res.status(400).json('Error: ' + err));
-})
+});
+
+//Find the posts for a certain user, and returns them in a "trending" order
+router.route('/userPosts/:username').get((req, res) => {
+    const username = req.params.username;
+
+    Post.find({ username: username }).sort({ likeCount: -1 })
+        .then(posts => {
+            res.json(posts);
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+});
 
 //Verifies if the username/password combination is valid
 router.route('/verifyUser').post((req, res) => {
