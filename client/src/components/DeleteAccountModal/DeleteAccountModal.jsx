@@ -30,10 +30,6 @@ export const DeleteAccountModal = (props) => {
 
   // Resets the state when the modal is closed
   const handleClose = () => {
-    setAlert({
-      message: "Please enter your current password.",
-      severity: "info"
-    });
     props.onClose();
   };
 
@@ -63,6 +59,7 @@ export const DeleteAccountModal = (props) => {
     // }
   };
 
+  // Function that renders the alert to the user based on its current state
   const renderAlert = () => (
     <Alert severity={alert.severity}>
       {alert.message}

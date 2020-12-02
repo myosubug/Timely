@@ -29,10 +29,6 @@ export const EditPasswordModal = (props) => {
 
   // Resets the state when the modal is closed
   const handleClose = () => {
-    setAlert({
-      message: "Your password must be at least 3 characters long.",
-      severity: "info"
-    });
     props.onClose();
   };
 
