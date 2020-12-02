@@ -27,9 +27,15 @@ export const EditPasswordModal = (props) => {
     severity: "info"
   });
 
+  const [isDeleted, setIsDeleted] = useState(false);
+
   // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
+    setAlert({
+      message: "Your password must be at least 3 characters long.",
+      severity: "info"
+    });
   };
 
   // Function that handles the password change
@@ -59,11 +65,11 @@ export const EditPasswordModal = (props) => {
       // axios call 
       axios.post(SERVER_ADDRESS + '/users/update/pass/' + props.username, data)
         .then(res => {
-          console.log(res.data);
           console.log("Axios: password successfully updated!")
           setAlert({ message: "Password successfully updated!", severity: "success" });
         })
         .catch(err => (console.log(err)))
+        setIsDeleted(true);
     }
   };
 
@@ -119,18 +125,30 @@ export const EditPasswordModal = (props) => {
         {renderAlert()}
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={handleClose}
-          className="ConfirmButton"
-        >
-          Cancel
+      {isDeleted
+          ?
+          <Button
+            onClick={handleClose}
+            className="CloseButton"
+          >
+            Close
         </Button>
-        <Button
-          onClick={handleOnConfirmClick}
-          className="ConfirmButton"
-        >
-          Confirm
-        </Button>
+          :
+          <>
+            <Button
+              onClick={handleClose}
+              className="ConfirmButton"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleOnConfirmClick}
+              className="ConfirmButton"
+            >
+              Confirm
+            </Button>
+          </>
+        }
       </DialogActions>
     </Dialog>
   );
