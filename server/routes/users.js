@@ -178,11 +178,11 @@ router.route('/upload-profile/:username').post((req, res) => {
 
 // Determines the join date of the user
 // Finds user by their username
-router.route('/finduser/join-date/:username').get((req, res) => {
-    User.findOne({ username: req.params.createdAt })
-        .then(users => res.json(users))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
+// router.route('/finduser/join-date/:username').get((req, res) => {
+//     User.findOne({ username: req.params.createdAt })
+//         .then(users => res.json(users))
+//         .catch(err => res.status(400).json('Error: ' + err));
+// });
 
 // Promote user
 // Finds user by their username and set their isAdmin to true

@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState, useParams } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import {
   Avatar,
   Grid,
@@ -6,9 +6,7 @@ import {
   Typography,
   IconButton,
 } from '@material-ui/core';
-import PropTypes from 'prop-types';
 import DeleteAccountModal from '../DeleteAccountModal/DeleteAccountModal';
-import EditUsernameModal from '../EditUsernameModal/EditUsernameModal';
 import EditPasswordModal from '../EditPasswordModal/EditPasswordModal';
 import NavBar from '../NavBar/NavBar';
 import axios from 'axios';
@@ -24,10 +22,10 @@ const UserOverviewEdit = (props) => {
   const [isPassModalOpen, setPassModalOpen] = useState(false);
 
   const [userInfo, setUserInfo] = useState({});
+  const [postNum, setPostNum] = useState(0);
 
   useEffect(() => {
-    console.log("yeet");
-    console.log(props.username);
+    // Get logged in user's info
     axios.get(SERVER_ADDRESS + '/users/finduser/' + props.username)
       .then(({ data }) => {
         const userInfo = {
@@ -37,10 +35,18 @@ const UserOverviewEdit = (props) => {
           joinDate: data.createdAt,
           profileImage: data.profileImage,
         };
+        
+        // Update state
         setUserInfo(userInfo);
         setImage(userInfo.profileImage + "?" + Date.now());
-      }
-      )
+
+        // Get user's number of posts
+        axios.get(SERVER_ADDRESS + '/users/numposts/' + userInfo.username)
+          .then(res => {
+            setPostNum(res.data);
+          })
+          .catch(err => (console.log(err)));
+      })
       .catch(err => console.log(err));
   }, []);
 
@@ -91,16 +97,6 @@ const UserOverviewEdit = (props) => {
       .then(console.log("Axios: user successfully deleted!"))
       .catch(err => (console.log(err)));
   };
-
-  // Function that gets the join date of the user
-  // const handleFetchJoinDate = () => {
-  //   console.log(userInfo.username);
-  //   axios.get(SERVER_ADDRESS +  '/users/finduser/join-date' + userInfo.username)
-  //     .then(res => {
-  //       const joinDate = res.createdAt;
-
-  //     })
-  // }
 
   // Renders the profile pic and the delete account button
   const renderProfileGrid = () => {
@@ -168,7 +164,7 @@ const UserOverviewEdit = (props) => {
           </Typography>
           <Typography variant="body1">
             {/* PULL FROM SERVER */}
-            {userInfo.posts + " posts"}
+            {postNum + " active posts"}
           </Typography>
         </Grid>
 

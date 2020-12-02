@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogActions,
@@ -8,44 +8,64 @@ import {
   TextField,
   Button,
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+import { SERVER_ADDRESS, resetLoggedInUser } from '../../AppConfig.js'
 
 export const DeleteAccountModal = (props) => {
 
   DeleteAccountModal.propTypes = {
-    username: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
+    username: PropTypes.string,
+    password: PropTypes.string,
     delete: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
   };
+
+  const [alert, setAlert] = useState({
+    message: "Please enter your current password.",
+    severity: "info"
+  });
 
   // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
   };
 
-  // Checks if the password is valid
-  const isPasswordValid = () => {
-    if (!document.getElementById('confirmPass').value || props.password !== document.getElementById('confirmPass').value) {
-      console.log(document.getElementById('confirmPass'));
-      console.log("Password is incorrect.");
-      return false;
-    }
-    return true;
-  }
-
-  // Function that handles account deletion
+  // Function that checks if entered password is valid 
+  // If valid make axios call and redirect user back to landing page
   const handleOnConfirmClick = () => {
-    if (isPasswordValid()) {
+    // Check if the passwords match
+    // await axios.post(SERVER_ADDRESS + "/users/verifyUser", { username: props.username, password: document.getElementById('confirmPass').value })
+    //   .then(res => {
+    //     if (!res) {
+    //       console.log(res);
+    //       return res;
+    //     }
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     setAlert({ message: "Password is incorrect. Please try again!", severity: "error" });
+    //   });
+
+    // Password is valid 
+      setAlert({message: "Account successfully deleted!", severity: "success"});
       console.log("Account successfully deleted!");
       props.delete(props.username);
+      resetLoggedInUser();
       handleClose();
-      // TODO: NEED TO REROUTE THE USER OR SOMETHING
-    } else {
-      console.log("Account failed to delete!");
-    }
+      window.location.href = '/' ; // relative to domain
+    // }
   };
+
+  // Function that renders the alert to the user based on its current state
+  const renderAlert = () => (
+    <Alert severity={alert.severity}>
+      {alert.message}
+    </Alert>
+    );
+
 
   return (
     <Dialog
@@ -71,6 +91,7 @@ export const DeleteAccountModal = (props) => {
           fullWidth
           required
         />
+        {renderAlert()}
       </DialogContent>
       <DialogActions>
         <Button

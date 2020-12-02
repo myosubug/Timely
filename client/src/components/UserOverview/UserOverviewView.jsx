@@ -1,14 +1,11 @@
-import React, { createRef, useEffect, useState, useParams } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import {
   Avatar,
   Grid,
-  Button,
   Typography,
   IconButton,
 } from '@material-ui/core';
-import PropTypes from 'prop-types';
 import DeleteAccountModal from '../DeleteAccountModal/DeleteAccountModal';
-import EditUsernameModal from '../EditUsernameModal/EditUsernameModal';
 import EditPasswordModal from '../EditPasswordModal/EditPasswordModal';
 import NavBar from '../NavBar/NavBar';
 import axios from 'axios';
@@ -25,10 +22,10 @@ const UserOverviewView = (props) => {
   const [isPassModalOpen, setPassModalOpen] = useState(false);
 
   const [userInfo, setUserInfo] = useState({});
+  const [postNum, setPostNum] = useState(0);
 
   useEffect(() => {
-    console.log("yeet");
-    console.log(props.username);
+    // Get logged in user's info
     axios.get(SERVER_ADDRESS + '/users/finduser/' + props.username)
       .then(({ data }) => {
         const userInfo = {
@@ -38,10 +35,18 @@ const UserOverviewView = (props) => {
           joinDate: data.createdAt,
           profileImage: data.profileImage,
         };
+
+        // Update state
         setUserInfo(userInfo);
         setImage(userInfo.profileImage + "?" + Date.now());
-      }
-      )
+
+        // Get user's number of posts
+        axios.get(SERVER_ADDRESS + '/users/numposts/' + userInfo.username)
+          .then(res => {
+            setPostNum(res.data);
+          })
+          .catch(err => (console.log(err)));
+      })
       .catch(err => console.log(err));
   }, []);
 
@@ -93,16 +98,6 @@ const UserOverviewView = (props) => {
       .catch(err => (console.log(err)));
   };
 
-  // Function that gets the join date of the user
-  // const handleFetchJoinDate = () => {
-  //   console.log(userInfo.username);
-  //   axios.get(SERVER_ADDRESS +  '/users/finduser/join-date' + userInfo.username)
-  //     .then(res => {
-  //       const joinDate = res.createdAt;
-
-  //     })
-  // }
-
   // Renders the profile pic and the delete account button
   const renderProfileGrid = () => {
     return (
@@ -125,7 +120,6 @@ const UserOverviewView = (props) => {
             </label>
           </IconButton>
         </Grid>
-
       </Grid>
     );
   }
@@ -232,26 +226,6 @@ const UserOverviewView = (props) => {
           delete={handleDeleteAccount}
           isOpen={isDeleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
-        />
-
-        {/* EDIT EMAIL MODAL */}
-        {/* <EditEmailModal
-        username={props.username}
-        password={props.password}
-        email={props.email}
-        update={() => {}}
-        isOpen={state.isEditEmailOpen}
-        onClose={closeEmailModal}
-      /> */}
-
-        {/* EDIT USERNAME MODAL */}
-        <EditUsernameModal
-          // username={props.username}
-          // password={props.password}
-          username={userInfo.username}
-          password={userInfo.password}
-          isOpen={isUserModalOpen}
-          onClose={() => setUserModalOpen(false)}
         />
 
         {/* EDIT PASSWORD MODAL */}

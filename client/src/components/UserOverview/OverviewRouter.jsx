@@ -8,12 +8,9 @@ import { UserOverviewView } from './UserOverviewView.jsx';
 
 function OverviewRouter() {
 
-  let {username} = useParams();
+  let { username } = useParams();
 
   const renderOverview = () => {
-    console.log("Overview Router");
-    console.log("loggedInUser: " + loggedInUser.username + ", " + loggedInUser.isAdmin);
-    console.log("username: " + username);
     if(loggedInUser.username === username) {
       return (<UserOverviewEdit username={username} />);
     }

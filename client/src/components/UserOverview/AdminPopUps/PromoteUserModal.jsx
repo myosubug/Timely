@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextField,
   Button,
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
 
 export const PromoteUserModal = (props) => {
@@ -19,17 +19,36 @@ export const PromoteUserModal = (props) => {
     onClose: PropTypes.func.isRequired,
   };
 
+  const [alert, setAlert] = useState({
+    message: "You can promote the user at any time.",
+    severity: "info"
+  });
+
+  const [isDeleted, setIsDeleted] = useState(false);
+
   // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
+    setAlert({
+      message: "You can promote the user at any time.",
+      severity: "info"
+    });
   };
 
   // Function that handles account deletion
   const handleOnConfirmClick = () => {
-      console.log("Account successfully promoted!");
-      props.promote(props.username);
-      handleClose();
+    console.log("Account successfully promoted!");
+    setAlert({ message: "User successfully promoted!", severity: "success" });
+    props.promote(props.username);
+    setIsDeleted(true);
   };
+
+  // Function that renders the alert to the user based on its current state
+  const renderAlert = () => (
+    <Alert severity={alert.severity}>
+      {alert.message}
+    </Alert>
+  );
 
   return (
     <Dialog
@@ -45,20 +64,36 @@ export const PromoteUserModal = (props) => {
         <DialogContentText>
           Are you sure you want to promote this user?
         </DialogContentText>
+        <DialogContentText>
+          {"@" + props.username}
+        </DialogContentText>
+        {renderAlert()}
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={handleClose}
-          className="ConfirmButton"
-        >
-          Cancel
+        {isDeleted
+          ?
+          <Button
+            onClick={handleClose}
+            className="CloseButton"
+          >
+            Close
         </Button>
-        <Button
-          onClick={handleOnConfirmClick}
-          className="ConfirmButton"
-        >
-          Confirm
+          :
+          <>
+            <Button
+              onClick={handleClose}
+              className="ConfirmButton"
+            >
+              Cancel
         </Button>
+            <Button
+              onClick={handleOnConfirmClick}
+              className="ConfirmButton"
+            >
+              Confirm
+        </Button>
+          </>
+        }
       </DialogActions>
     </Dialog>
   );

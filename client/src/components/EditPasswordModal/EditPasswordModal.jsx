@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogActions,
@@ -8,6 +8,7 @@ import {
   TextField,
   Button,
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { SERVER_ADDRESS } from '../../AppConfig.js'
@@ -15,20 +16,30 @@ import { SERVER_ADDRESS } from '../../AppConfig.js'
 export const EditPasswordModal = (props) => {
 
   EditPasswordModal.propTypes = {
-    username: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
+    username: PropTypes.string,
+    password: PropTypes.string,
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
   };
 
+  const [alert, setAlert] = useState({
+    message: "Your password must be at least 3 characters long.",
+    severity: "info"
+  });
+
+  const [isDeleted, setIsDeleted] = useState(false);
+
   // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
+    setAlert({
+      message: "Your password must be at least 3 characters long.",
+      severity: "info"
+    });
   };
 
-  // Checks if the password is valid and checks if the passwords match
-  const isPasswordValid = async () => {
-
+  // Function that handles the password change
+  const handleOnConfirmClick = async () => {
     //Check if the passwords match
     await axios.post(SERVER_ADDRESS + "/users/verifyUser", { username: props.username, password: document.getElementById('currentPass').value })
       .then(res => {
@@ -38,34 +49,37 @@ export const EditPasswordModal = (props) => {
       })
       .catch(err => console.log(err));
 
+    // Check if new password meets requirements
     if (!document.getElementById('newPass').value || document.getElementById('newPass').value.length < 3) {
+      setAlert({ message: "New password must be at least 3 characters.", severity: "error" });
       console.log("New password must be at least 3 characters.");
-      return false;
     }
-    if (document.getElementById('newPass').value !== document.getElementById('confirmPass').value) {
+    // Passwords don't match
+    else if (document.getElementById('newPass').value !== document.getElementById('confirmPass').value) {
+      setAlert({ message: "Passwords must match.", severity: "error" });
       console.log("Passwords must match.");
-      return false;
     }
-    return true;
-  }
-
-  // Function that handles the password change
-  const handleOnConfirmClick = () => {
-    if (isPasswordValid()) {
+    // Passwords match and is updated
+    else {
       const data = { password: document.getElementById('newPass').value };
-      console.log(data);
       // axios call 
       axios.post(SERVER_ADDRESS + '/users/update/pass/' + props.username, data)
         .then(res => {
-          console.log(res.data);
           console.log("Axios: password successfully updated!")
+          setAlert({ message: "Password successfully updated!", severity: "success" });
         })
         .catch(err => (console.log(err)))
-      handleClose();
-    } else {
-      console.log("Password failed to update!");
+        setIsDeleted(true);
     }
   };
+
+  // Function that renders the current alert set in the state
+  const renderAlert = () => (
+    <Alert severity={alert.severity}>
+      {alert.message}
+    </Alert>
+  );
+
 
   return (
     <Dialog
@@ -108,20 +122,33 @@ export const EditPasswordModal = (props) => {
           fullWidth
           required
         />
+        {renderAlert()}
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={handleClose}
-          className="ConfirmButton"
-        >
-          Cancel
+      {isDeleted
+          ?
+          <Button
+            onClick={handleClose}
+            className="CloseButton"
+          >
+            Close
         </Button>
-        <Button
-          onClick={handleOnConfirmClick}
-          className="ConfirmButton"
-        >
-          Confirm
-        </Button>
+          :
+          <>
+            <Button
+              onClick={handleClose}
+              className="ConfirmButton"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleOnConfirmClick}
+              className="ConfirmButton"
+            >
+              Confirm
+            </Button>
+          </>
+        }
       </DialogActions>
     </Dialog>
   );

@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextField,
   Button,
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
 
 export const BanUserModal = (props) => {
@@ -19,17 +19,36 @@ export const BanUserModal = (props) => {
     onClose: PropTypes.func.isRequired,
   };
 
+  const [alert, setAlert] = useState({
+    message: "Banning a user will delete them from the server.",
+    severity: "info"
+  });
+
+  const [isDeleted, setIsDeleted] = useState(false);
+
   // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
+    setAlert({
+      message: "Banning a user will delete them from the server.",
+      severity: "info"
+    });
   };
 
   // Function that handles account deletion
   const handleOnConfirmClick = () => {
-      console.log("Account successfully banned!");
-      props.ban(props.username);
-      handleClose();
+    console.log("Account successfully banned!");
+    setAlert({ message: "Account successfully banned!", severity: "success" });
+    props.ban(props.username);
+    setIsDeleted(true);
   };
+
+  // Function that renders the alert to the user based on its current state
+  const renderAlert = () => (
+    <Alert severity={alert.severity}>
+      {alert.message}
+    </Alert>
+  );
 
   return (
     <Dialog
@@ -46,20 +65,33 @@ export const BanUserModal = (props) => {
           Are you sure you want to ban this user?
           This cannot be undone.
         </DialogContentText>
+        {renderAlert()}
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={handleClose}
-          className="ConfirmButton"
-        >
-          Cancel
+        {isDeleted
+          ?
+          <Button
+            onClick={handleClose}
+            className="CloseButton"
+          >
+            Close
         </Button>
-        <Button
-          onClick={handleOnConfirmClick}
-          className="ConfirmButton"
-        >
-          Confirm
-        </Button>
+          :
+          <>
+            <Button
+              onClick={handleClose}
+              className="ConfirmButton"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleOnConfirmClick}
+              className="ConfirmButton"
+            >
+              Confirm
+            </Button>
+          </>
+        }
       </DialogActions>
     </Dialog>
   );

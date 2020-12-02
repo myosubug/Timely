@@ -20,6 +20,7 @@ const UserOverviewAdmin = (props) => {
 
   const inputFileRef = createRef(null);
   const [image, _setImage] = useState(null);
+  const [postNum, setPostNum] = useState(0);
 
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isDemoteModalOpen, setDemoteModalOpen] = useState(false);
@@ -29,8 +30,7 @@ const UserOverviewAdmin = (props) => {
   const [userInfo, setUserInfo] = useState({});
 
   useEffect(() => {
-    console.log("yeet");
-    console.log(props.username);
+    // Get logged in user's info
     axios.get(SERVER_ADDRESS + '/users/finduser/' + props.username)
       .then(({ data }) => {
         const userInfo = {
@@ -40,10 +40,19 @@ const UserOverviewAdmin = (props) => {
           joinDate: data.createdAt,
           profileImage: data.profileImage,
         };
+
+        // Update state
         setUserInfo(userInfo);
         setImage(userInfo.profileImage + "?" + Date.now());
-      }
-      )
+
+        // Get user's number of posts
+        axios.get(SERVER_ADDRESS + '/users/numposts/' + userInfo.username)
+          .then(res => {
+            setPostNum(res.data);
+          })
+          .catch(err => (console.log(err)));
+
+      })
       .catch(err => console.log(err));
   }, []);
 
@@ -89,7 +98,6 @@ const UserOverviewAdmin = (props) => {
 
   // Function that makes the axios call to ban an account from the db
   const handleDeleteAccount = () => {
-    console.log(userInfo.username);
     axios.post(SERVER_ADDRESS + '/users/delete/' + userInfo.username)
       .then(console.log("Axios: user successfully deleted!"))
       .catch(err => (console.log(err)));
@@ -116,16 +124,6 @@ const UserOverviewAdmin = (props) => {
       })
       .catch(err => (console.log(err)));
   };
-
-  // Function that gets the join date of the user
-  // const handleFetchJoinDate = () => {
-  //   console.log(userInfo.username);
-  //   axios.get(SERVER_ADDRESS +  '/users/finduser/join-date' + userInfo.username)
-  //     .then(res => {
-  //       const joinDate = res.createdAt;
-
-  //     })
-  // }
 
   // Renders the profile pic and the delete account button
   const renderProfileGrid = () => {
@@ -172,17 +170,9 @@ const UserOverviewAdmin = (props) => {
 
         {/* PROMOTE OR DEMOTE USER */}
         <Grid item xs={3} className="PromoteDemoteUser">
-          {!userInfo.Admin
+        {console.log(userInfo)}
+          {userInfo.isAdmin
             ?
-            <Button
-              variant="contained"
-              className="PromoteDemoteUserButton"
-              onClick={() => setPromoteModalOpen(true)}
-              size="medium"
-            >
-              Promote
-            </Button>
-            :
             <Button
               variant="contained"
               className="PromoteDemoteUserButton"
@@ -190,6 +180,15 @@ const UserOverviewAdmin = (props) => {
               size="medium"
             >
               Demote
+            </Button>
+            :
+            <Button
+              variant="contained"
+              className="PromotePromoteUserButton"
+              onClick={() => setPromoteModalOpen(true)}
+              size="medium"
+            >
+              Promote
             </Button>
           }
         </Grid>
@@ -214,12 +213,10 @@ const UserOverviewAdmin = (props) => {
           </Typography>
           {userInfo.isAdmin ? " 👑 " : ""}
           <Typography variant="body1">
-            {/* CREATION DATE IS STORED IN USER SCHEMA */}
             {"Member since " + userInfo.joinDate}
           </Typography>
           <Typography variant="body1">
-            {/* PULL FROM SERVER */}
-            {userInfo.posts + " posts"}
+            {postNum + " posts"}
           </Typography>
         </Grid>
 
