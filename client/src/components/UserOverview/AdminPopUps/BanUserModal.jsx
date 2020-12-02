@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextField,
   Button,
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
 
 export const BanUserModal = (props) => {
@@ -19,6 +19,11 @@ export const BanUserModal = (props) => {
     onClose: PropTypes.func.isRequired,
   };
 
+  const [alert, setAlert] = useState({
+    message: "Banning a user will delete them from the server.",
+    severity: "info"
+  });
+
   // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
@@ -26,10 +31,18 @@ export const BanUserModal = (props) => {
 
   // Function that handles account deletion
   const handleOnConfirmClick = () => {
-      console.log("Account successfully banned!");
-      props.ban(props.username);
-      handleClose();
+    console.log("Account successfully banned!");
+    setAlert({ message: "Account successfully banned!", severity: "success" });
+    props.ban(props.username);
+    handleClose();
   };
+
+  // Function that renders the alert to the user based on its current state
+  const renderAlert = () => (
+    <Alert severity={alert.severity}>
+      {alert.message}
+    </Alert>
+  );
 
   return (
     <Dialog
@@ -46,6 +59,7 @@ export const BanUserModal = (props) => {
           Are you sure you want to ban this user?
           This cannot be undone.
         </DialogContentText>
+        {renderAlert()}
       </DialogContent>
       <DialogActions>
         <Button
