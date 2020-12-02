@@ -17,7 +17,7 @@ export const NavBar = (props) => {
           <div className="flex justify-center text-white font-medium text-3xl">
             {/* Landing Page */}
             <Link to="/">
-              <img width="150px" draggable="false" src="https://i.imgur.com/ATuMhih.png"></img>
+              <img width="150px" draggable="false" src="https://i.imgur.com/ATuMhih.png" alt="Timely"></img>
             </Link>
           </div>
         </div>
