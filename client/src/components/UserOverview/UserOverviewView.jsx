@@ -25,7 +25,6 @@ const UserOverviewView = (props) => {
   const [postNum, setPostNum] = useState(0);
 
   useEffect(() => {
-    console.log(props.username);
     // Get logged in user's info
     axios.get(SERVER_ADDRESS + '/users/finduser/' + props.username)
       .then(({ data }) => {
