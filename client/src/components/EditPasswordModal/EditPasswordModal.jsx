@@ -47,14 +47,17 @@ export const EditPasswordModal = (props) => {
       })
       .catch(err => console.log(err));
 
+    // Check if new password meets requirements
     if (!document.getElementById('newPass').value || document.getElementById('newPass').value.length < 3) {
       setAlert({ message: "New password must be at least 3 characters.", severity: "error" });
       console.log("New password must be at least 3 characters.");
     }
+    // Passwords don't match
     else if (document.getElementById('newPass').value !== document.getElementById('confirmPass').value) {
       setAlert({ message: "Passwords must match.", severity: "error" });
       console.log("Passwords must match.");
     }
+    // Passwords match and is updated
     else {
       const data = { password: document.getElementById('newPass').value };
       console.log(data);
