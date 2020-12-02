@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextField,
   Button,
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
 
 export const DemoteAdminModal = (props) => {
@@ -19,6 +19,11 @@ export const DemoteAdminModal = (props) => {
     onClose: PropTypes.func.isRequired,
   };
 
+  const [alert, setAlert] = useState({
+    message: "You can promote the user at any time.",
+    severity: "info"
+  });
+
   // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
@@ -26,10 +31,18 @@ export const DemoteAdminModal = (props) => {
 
   // Function that handles account deletion
   const handleOnConfirmClick = () => {
-      console.log("Account successfully demoted!");
-      props.demote(props.username);
-      handleClose();
+    console.log("Account successfully demoted!");
+    setAlert({ message: "User successfully demoted!", severity: "success" });
+    props.demote(props.username);
+    handleClose();
   };
+
+  // Function that renders the alert to the user based on its current state
+  const renderAlert = () => (
+    <Alert severity={alert.severity}>
+      {alert.message}
+    </Alert>
+  );
 
   return (
     <Dialog
@@ -45,6 +58,7 @@ export const DemoteAdminModal = (props) => {
         <DialogContentText>
           Are you sure you want to demote this user?
         </DialogContentText>
+        {renderAlert()}
       </DialogContent>
       <DialogActions>
         <Button
