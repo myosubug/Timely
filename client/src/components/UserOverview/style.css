@@ -1,0 +1,32 @@
+.UserSettingsPage {
+  width: 100%;
+}
+
+.header {
+  background-color: rgb(126,211,214);
+  padding: 16px;
+  width: 90%;
+  }
+
+  .headerTitle {
+    color: #ffffff;
+    font-weight: 300;
+  }
+
+  hr {
+    color: black;
+  }
+
+ .MuiAvatar-root {
+   height: 150px;
+   width: 150px;
+ }
+
+ .MuiAvatar-circle {
+  height: 60px !important;
+  width: 60px !important;
+ }
+  
+  .DisplayGrid {
+    padding: 10px;
+  }
