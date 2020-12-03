@@ -225,25 +225,25 @@ const UserOverviewView = (props) => {
           />
         </Grid>
         <Grid item xs={1} />
-          {/* Profile pic grid */}
-          <Grid item xs={2} className="ProfileGrid">
-            {renderProfileGrid()}
-          </Grid>
-          {/* User Info */}
-          <Grid item xs={8} className="UserInfoGrid">
-            {renderUserGrid()}
-          </Grid>
-          <Grid item xs={1} />
-           
-          <Grid item xs={3} />
-          <Grid item xs={8}>
+        {/* Profile pic grid */}
+        <Grid item xs={2} className="ProfileGrid">
+          {renderProfileGrid()}
+        </Grid>
+        {/* User Info */}
+        <Grid item xs={8} className="UserInfoGrid">
+          {renderUserGrid()}
+        </Grid>
+        <Grid item xs={1} />
+
+        <Grid item xs={3} />
+        <Grid item xs={8}>
           <Typography variant="h5" component="span">
             Post Activity
           </Typography>
-            {posts}
-          </Grid>
-          <Grid item xs={1} />
+          {posts}
         </Grid>
+        <Grid item xs={1} />
+      </Grid>
     </div>
   );
 
