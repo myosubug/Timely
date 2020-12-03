@@ -33,9 +33,9 @@ export const NavBar = (props) => {
   const renderBars = () => {
     if (isLocationMain) {
       return (
-        <div className="flex justify-start" onClick={renderLeftMenu}>
+        <div className="flex justify-start">
           <div className="items-center cursor-pointer pl-4 block md:hidden" style={{ paddingTop: "0.45rem" }}>
-            <FontAwesomeIcon icon={faBars} />
+            <FontAwesomeIcon icon={faBars} onClick={renderLeftMenu} />
           </div>
         </div>
       );
@@ -45,9 +45,9 @@ export const NavBar = (props) => {
   const renderDots = () => {
     if (isLocationMain) {
       return (
-        <div className="flex justify-end" onClick={renderRightMenu}>
+        <div className="flex justify-end">
           <div className="items-center cursor-pointer pr-4 block xl:hidden" style={{ paddingTop: "0.45rem" }}>
-            <FontAwesomeIcon icon={faPowerOff} />
+            <FontAwesomeIcon icon={faPowerOff} onClick={renderRightMenu} />
           </div>
         </div>
       );

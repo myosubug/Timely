@@ -44,6 +44,20 @@ const LandingPage = (props) => {
 
     //Add an event listener to the window
     useEffect(() => {
+
+        //Gets called whenever the window is resized, checks for the window size and closes the sidebars if the length exceeds
+        const resize = () => {
+            console.log("resizing");
+            if (window.innerWidth >= 1280) {
+                setIsRightMenuOpen(false);
+            }
+
+            if (window.innerWidth > 768) {
+                setIsLeftMenuOpen(false);
+            }
+
+        }
+
         window.addEventListener("resize", resize);
 
         return () => {
@@ -247,19 +261,6 @@ const LandingPage = (props) => {
                 {renderLeftSideBar()}
             </Drawer>
         );
-    }
-
-    //Gets called whenever the window is resized, checks for the window size and closes the sidebars if the length exceeds
-    const resize = () => {
-        console.log("resizing");
-        if (window.innerWidth > 1280) {
-            setIsRightMenuOpen(false);
-        }
-
-        if (window.innerWidth > 768) {
-            setIsLeftMenuOpen(false);
-        }
-
     }
 
     // Function that determines what modal to render
