@@ -224,6 +224,7 @@ const UserOverviewView = (props) => {
             username={props.username}
           />
         </Grid>
+        
         <Grid item xs={1} />
         {/* Profile pic grid */}
         <Grid item xs={2} className="ProfileGrid">
