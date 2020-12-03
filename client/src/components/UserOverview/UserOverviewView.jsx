@@ -131,41 +131,61 @@ const UserOverviewView = (props) => {
       .catch(err => (console.log(err)));
   };
 
+  // Renders the profile pic and the delete account button
+  const renderProfileGrid = () => {
+    return (
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignContent="center"
+        alignItems="center"
+        spacing={1}
+      >
+        <Grid item xs={9} className="ProfilePic">
+          <IconButton color="primary" >
+            <label htmlFor="avatar-image-upload">
+              <Avatar
+                alt="Avatar"
+                src={image}
+                className={classes.large}
+              />
+            </label>
+          </IconButton>
+        </Grid>
+      </Grid>
+    );
+  }
+
   // Renders the users information
   const renderUserGrid = () => {
     return (
-      <div>
-        <div className="grid grid-cols-12 gap-2 border-b-2 border-gray-200 items-center p-5">
-          <div className="col-span-1 flex justify-center">
-            <Grid item xs={9} className="ProfilePic">
-                <IconButton color="primary" >
-                  <label htmlFor="avatar-image-upload">
-                    <Avatar
-                      alt="Avatar"
-                      src={image}
-                      className="avatar"
-                    />
-                  </label>
-                </IconButton>
-              </Grid>
-          </div>
+      <Grid
+        container
+        direction="column"
+        justify="flex-start"
+        alignItems="stretch"
+        spacing={1}
+      >
+        <Grid item xs className="UserInfo">
+          <Typography variant="h5" component="span">
+            {"@" + userInfo.username}
+          </Typography>
+          {userInfo.isAdmin ? " 👑 " : ""}
+          <Typography variant="body1">
+            {/* CREATION DATE IS STORED IN USER SCHEMA */}
+            {"Member since " + userInfo.joinDate}
+          </Typography>
+          <Typography variant="body1">
+            {/* PULL FROM SERVER */}
+            {posts.length + " post(s)"}
+          </Typography>
+        </Grid>
 
-          <div className="UserInfo col-span-11" style={{ marginRight: "0.25rem", marginLeft: "2.5rem" }}>
-            <div style={{color: "#53b7bb" }} className="text-2xl font-medium">
-              {"@" + userInfo.username} <span className="text-sm text-gray-600 font-normal">{postNum} active posts</span>
-            </div>
-            {userInfo.isAdmin ? " 👑 " : ""}
-            <div className="text-md font-sm">
-              {/* CREATION DATE IS STORED IN USER SCHEMA */}
-              {"Member since " + userInfo.joinDate}
-            </div>
-          </div>
-        </div>
-
-        <div className="UserActions pl-8 py-5">
+        <Grid item xs className="UserActions">
           {renderUserActions()}
-        </div>
-      </div>
+        </Grid>
+      </Grid>
     )
   }
 
