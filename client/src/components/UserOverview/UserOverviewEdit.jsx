@@ -137,36 +137,63 @@ const UserOverviewEdit = (props) => {
       .catch(err => (console.log(err)));
   };
 
-  // Renders the profile pic and the delete account button
-  const renderProfileGrid = () => {
+  // Renders the users information
+  const renderUserGrid = () => {
     return (
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignContent="center"
-        alignItems="center"
-        spacing={1}
-      >
-        <Grid item xs={9} className="ProfilePic">
-          <IconButton color="primary" >
-            <input
-              accept="image/*"
-              // ref={inputFileRef}
-              hidden
-              id="avatar-image-upload"
-              type="file"
-              onChange={handleOnImgChange}
-            />
-            <label htmlFor="avatar-image-upload">
-              <Avatar
-                alt="Avatar"
-                src={image}
-                className={classes.large}
-              />
-            </label>
-          </IconButton>
-        </Grid>
+      <div>
+        <div className="grid grid-cols-12 gap-2 border-b-2 border-gray-200 items-center p-5">
+
+              <div className="col-span-1 flex justify-center">
+                <Grid item xs={9} className="ProfilePic">
+                    <IconButton color="primary" >
+                      <input
+                        accept="image/*"
+                        // ref={inputFileRef}
+                        hidden
+                        id="avatar-image-upload"
+                        type="file"
+                        onChange={handleOnImgChange}
+                      />
+                      <label htmlFor="avatar-image-upload">
+                        <Avatar
+                          alt="Avatar"
+                          src={image}
+                          className="avatar"
+                        />
+                      </label>
+                    </IconButton>
+                  </Grid>
+              </div>
+
+              <div className="UserInfo col-span-11" style={{ marginRight: "0.25rem", marginLeft: "2.5rem" }}>
+                <div style={{color: "#53b7bb" }} className="text-2xl font-medium">
+                  {"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""} <span className="text-sm text-gray-600 font-normal">{postNum} active posts</span>
+                </div>
+                <div className="text-md font-sm">
+                  {/* CREATION DATE IS STORED IN USER SCHEMA */}
+                  {"Member since " + userInfo.joinDate}
+                </div>
+              </div>
+        </div>
+
+        <div className="UserActions pl-8 py-5">
+          {renderUserActions()}
+        </div>
+      </div>
+    )
+  }
+
+  // Renders the action buttons: edit username, edit password
+  const renderUserActions = () => {
+    return (
+      <div>
+        {/* Username */}
+        <Grid container spacing={1}>
+
+          <Grid item xs={8}>
+            <Typography variant="h6">Username</Typography>
+            {userInfo.username}
+          </Grid>
 
         <Grid item xs={3} className="DeleteAccount">
           <Button
@@ -178,54 +205,7 @@ const UserOverviewEdit = (props) => {
             Delete
           </Button>
         </Grid>
-
-      </Grid>
-    );
-  }
-
-  // Renders the users information
-  const renderUserGrid = () => {
-    return (
-      <Grid
-        container
-        direction="column"
-        justify="flex-start"
-        alignItems="stretch"
-        spacing={1}
-      >
-        <Grid item xs className="UserInfo">
-          <Typography variant="h5" component="span">
-            {"@" + userInfo.username}
-          </Typography>
-          {userInfo.isAdmin ? " 👑 " : ""}
-          <Typography variant="body1">
-            {/* CREATION DATE IS STORED IN USER SCHEMA */}
-            {"Member since " + userInfo.joinDate}
-          </Typography>
-          <Typography variant="body1">
-            {/* PULL FROM SERVER */}
-            {posts.length + " active post(s)"}
-          </Typography>
-        </Grid>
-
-        <Grid item xs className="UserActions">
-          {renderUserActions()}
-        </Grid>
-      </Grid>
-    )
-  }
-
-  // Renders the action buttons: edit username, edit password
-  const renderUserActions = () => {
-    return (
-      <div>
-        {/* Username */}
-        <Grid container spacing={1}>
-          <Grid item xs={8}>
-            <Typography variant="h6">Username</Typography>
-            {userInfo.username}
-          </Grid>
-          <Grid item xs={4} />
+        
         </Grid>
 
         {/* Edit Password */}
@@ -234,6 +214,7 @@ const UserOverviewEdit = (props) => {
             <Typography variant="h6">Password</Typography>
             ********
           </Grid>
+
           <Grid item xs={4}>
             <Button
               variant="contained"
