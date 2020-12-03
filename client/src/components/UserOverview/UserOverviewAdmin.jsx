@@ -6,21 +6,33 @@ import {
   Typography,
   IconButton,
 } from '@material-ui/core';
-import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
 import BanUserModal from './AdminPopUps/BanUserModal';
 import AdminEditPasswordModal from './AdminPopUps/AdminEditPasswordModal';
 import DemoteAdminModal from './AdminPopUps/DemoteAdminModal';
 import PromoteUserModal from './AdminPopUps/PromoteUserModal';
 import NavBar from '../NavBar/NavBar';
+import { Post } from '../Post/Post';
 import axios from 'axios';
-import { SERVER_ADDRESS } from '../../AppConfig.js'
+import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
 import './style.css';
 
 const UserOverviewAdmin = (props) => {
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      display: 'flex',
+      '& > *': {
+        margin: theme.spacing(1),
+      },
+    },
+    large: {
+      width: '150px',
+      height: '150px',
+    },
+  }));
 
   const inputFileRef = createRef(null);
   const [image, _setImage] = useState(null);
-  const [postNum, setPostNum] = useState(0);
 
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isDemoteModalOpen, setDemoteModalOpen] = useState(false);
@@ -28,6 +40,11 @@ const UserOverviewAdmin = (props) => {
   const [isPassModalOpen, setPassModalOpen] = useState(false);
 
   const [userInfo, setUserInfo] = useState({});
+
+  const [posts, setPosts] = useState([]);
+
+  const classes = useStyles();
+
 
   useEffect(() => {
     // Get logged in user's info
@@ -45,12 +62,12 @@ const UserOverviewAdmin = (props) => {
         setUserInfo(userInfo);
         setImage(userInfo.profileImage + "?" + Date.now());
 
-        // Get user's number of posts
-        axios.get(SERVER_ADDRESS + '/users/numposts/' + userInfo.username)
-          .then(res => {
-            setPostNum(res.data);
-          })
-          .catch(err => (console.log(err)));
+        //Setup a socket listener
+        socket.on('update post list', () => {
+          renderPosts(userInfo);
+        });
+
+        renderPosts(userInfo);
 
       })
       .catch(err => console.log(err));
@@ -61,6 +78,25 @@ const UserOverviewAdmin = (props) => {
     // URL.revokeObjectURL(image);
     // inputFileRef.current.value = null;
   };
+
+  //Gets the posts from specified query, and sets the state
+  const renderPosts = (username_obj) => {
+    axios.get(SERVER_ADDRESS + "/users/userPosts/" + username_obj.username)
+      .then(res => {
+        console.log(res);
+        let new_posts = [];
+        for (let post of res.data) {
+          new_posts.push(
+            <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full" key={post._id}>
+              <Post isAdmin={loggedInUser.isAdmin} id={post._id} thisUsername={loggedInUser.username} />
+            </div>
+          )
+        }
+        setPosts(new_posts);
+
+      })
+      .catch(err => console.log(err));
+  }
 
   // Function that sets avatar image
   const setImage = (newImage) => {
@@ -129,7 +165,6 @@ const UserOverviewAdmin = (props) => {
   const renderUserGrid = () => {
     return (
       <div>
-
         <div className="grid grid-cols-12 gap-2 border-b-2 border-gray-200 items-center p-5">
 
               <div className="col-span-1 flex justify-center">
@@ -239,38 +274,34 @@ const UserOverviewAdmin = (props) => {
 
   return (
     <div className="UserOverviewEdit">
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignItems="stretch"
-        spacing={10}
-      >
-        <Grid item xs={1}>
+      <Grid container spacing={10}>
+      <Grid item xs={12}>
           <NavBar
             isLandingPg={false}
             username={props.username}
           />
         </Grid>
-
-        <Grid
-          item
-          container
-          xs={11}
-          direction="row"
-          justify="flex-start"
-          alignItems="flex-start"
-          className="ButtonGrid"
-        >
-          <Grid item xs={1} />
-          <Grid item xs={3} className="ProfileGrid">
-          </Grid>
-          <Grid item xs={7} className="UserInfoGrid">
-            {/* User Info */}
-            {renderUserGrid()}
-          </Grid>
-          <Grid item xs={1} />
+        <Grid item xs={1} />
+        {/* Profile pic grid */}
+        <Grid item xs={2} className="ProfileGrid">
+          {renderProfileGrid()}
         </Grid>
+        {/* User Info */}
+        <Grid item xs={8} className="UserInfoGrid">
+          {renderUserGrid()}
+        </Grid>
+        <Grid item xs={1} />
+
+        <Grid item xs={3} />
+        <Grid item xs={8}>
+        {posts.length > 0 && 
+          <Typography variant="h5" component="span">
+            Post Activity
+          </Typography>
+        }
+          {posts}
+        </Grid>
+        <Grid item xs={1} />
 
         {/* DELETE ACCOUNT MODAL */}
         <BanUserModal
@@ -303,7 +334,6 @@ const UserOverviewAdmin = (props) => {
           isOpen={isDemoteModalOpen}
           onClose={() => setDemoteModalOpen(false)}
         />
-
       </Grid>
     </div>
   );
