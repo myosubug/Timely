@@ -44,6 +44,19 @@ const LandingPage = (props) => {
 
     //Add an event listener to the window
     useEffect(() => {
+
+        //Gets called whenever the window is resized, checks for the window size and closes the sidebars if the length exceeds
+        const resize = () => {
+            if (window.innerWidth >= 1280) {
+                setIsRightMenuOpen(false);
+            }
+
+            if (window.innerWidth > 768) {
+                setIsLeftMenuOpen(false);
+            }
+
+        }
+
         window.addEventListener("resize", resize);
 
         return () => {
@@ -87,6 +100,7 @@ const LandingPage = (props) => {
     // Renders the modal based on the content passed in
     function renderModal(content) {
         return (
+
             <div className="fixed z-10 inset-0 overflow-y-auto">
                 <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                     <div className="fixed inset-0 transition-opacity">
@@ -249,19 +263,6 @@ const LandingPage = (props) => {
         );
     }
 
-    //Gets called whenever the window is resized, checks for the window size and closes the sidebars if the length exceeds
-    const resize = () => {
-        console.log("resizing");
-        if (window.innerWidth > 1280) {
-            setIsRightMenuOpen(false);
-        }
-
-        if (window.innerWidth > 768) {
-            setIsLeftMenuOpen(false);
-        }
-
-    }
-
     // Function that determines what modal to render
     function checkModalState() {
         if (renderModalObj.post) {
@@ -298,7 +299,7 @@ const LandingPage = (props) => {
 
             <div className="xl:hidden z-30 fixed right-0 bottom-0">
                 <div className="flex items-end justify-end pt-4 px-4 pb-5 text-center block p-0">
-                    <div class="rounded-full h-20 w-20 flex items-center justify-center bg-primary shadow-xl text-white text-3xl cursor-pointer" onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}>
+                    <div className="rounded-full h-20 w-20 flex items-center justify-center bg-primary shadow-xl text-white text-3xl cursor-pointer" onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}>
                         <FontAwesomeIcon icon={faFeather} />
                     </div>
                 </div>
