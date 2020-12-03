@@ -318,9 +318,11 @@ const UserOverviewAdmin = (props) => {
 
         <Grid item xs={3} />
         <Grid item xs={8}>
+        {posts.length > 0 && 
           <Typography variant="h5" component="span">
             Post Activity
           </Typography>
+        }
           {posts}
         </Grid>
         <Grid item xs={1} />
