@@ -15,6 +15,7 @@ import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser, resetLoggedInUser, populateUserInfo } from '../../AppConfig.js'
 
 import './LandingStyles.css';
+import { Drawer } from '@material-ui/core';
 let postQuery = "/posts/trending";
 const LandingPage = (props) => {
 
@@ -22,6 +23,8 @@ const LandingPage = (props) => {
     const [posts, setPosts] = useState([]);
     const [numPosts, setNumPosts] = useState(0);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isRightMenuOpen, setIsRightMenuOpen] = useState(false);
+    const [isLeftMenuOpen, setIsLeftMenuOpen] = useState(false);
 
     useEffect(() => {
         socket.on('update post list', () => {
@@ -155,6 +158,84 @@ const LandingPage = (props) => {
         }
     }
 
+
+    const renderLeftSideBar = () => {
+        return (
+            <div>
+                <div className="flex justify-center text-white mt-4 font-medium text-3xl">
+                    <img width="150px;" draggable="false" src="https://i.imgur.com/ATuMhih.png"></img>
+                    <div className="flex justify-center px-6">
+                    </div>
+                </div>
+
+                <div className="selector mt-4 ml-12 mb-8">
+
+                    <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer">
+                        <FontAwesomeIcon icon={faHome} /> <i style={{ paddingRight: "0.45rem" }} /> Home
+                        </div>
+
+                    <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
+                        onClick={() => changePostQuery('/posts/trending')}>
+                        <FontAwesomeIcon icon={faFire} /> <i className="pr-4" /> Trending
+                        </div>
+
+                    <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
+                        onClick={() => changePostQuery('/posts/newest-posts')}>
+                        <FontAwesomeIcon icon={faSun} /> <i className="fas fa-fire pr-3"></i> Newest
+                        </div>
+
+                    <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
+                        onClick={() => changePostQuery('/posts/expiring-soon')}>
+                        <FontAwesomeIcon icon={faClock} /> <i className="fas fa-fire pr-3"></i> Expiring
+                        </div>
+
+                    <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
+                        onClick={() => changePostQuery('/posts/time-remaining')}>
+                        <FontAwesomeIcon icon={faCalendar} /> <i className="fas fa-fire pr-4"></i> Longest
+                        </div>
+                </div>
+
+                <div className="flex justify-center px-6">
+                    <div
+                        onClick={() => setRenderModalObj(prev => ({ ...prev, "tags": true }))}
+                        className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
+                        style={{ height: "3.2rem" }}>
+                        <p style={{ paddingTop: "0.18rem" }}>Tags</p>
+                    </div>
+                </div>
+            </div>
+
+
+        );
+    }
+
+
+    const renderRightSideBarDrawer = () => {
+        return (
+            <Drawer
+                open={isRightMenuOpen}
+                onClose={() => setIsRightMenuOpen(false)}
+                anchor={"right"}
+                onClick={() => setIsRightMenuOpen(false)}
+            >
+                {renderRightSideBar()}
+            </Drawer>
+        );
+    }
+
+    const renderLeftSideBarDrawer = () => {
+        return (
+            <Drawer
+                open={isLeftMenuOpen}
+                onClose={() => setIsLeftMenuOpen(false)}
+                anchor={"left"}
+                onClick={() => setIsLeftMenuOpen(false)}
+            >
+                {renderLeftSideBar()}
+            </Drawer>
+        );
+    }
+
     // Function that determines what modal to render
     function checkModalState() {
         if (renderModalObj.post) {
@@ -183,15 +264,20 @@ const LandingPage = (props) => {
                 openSignInModal={() => setRenderModalObj(prev => ({ ...prev, "login": true }))}
                 isLandingPg={true}
                 username={loggedInUser.username}
+                rightSideBarRenderer={() => setIsRightMenuOpen(true)}
+                leftSideBarRenderer={() => setIsLeftMenuOpen(true)}
             />
 
-                <div className="xl:hidden z-30 fixed right-0 bottom-0">
-                    <div className="flex items-end justify-end pt-4 px-4 pb-5 text-center block p-0">
-                            <div class="rounded-full h-20 w-20 flex items-center justify-center bg-primary shadow-xl text-white text-3xl cursor-pointer">
-                              <FontAwesomeIcon icon={faFeather} />
-                            </div>
+            {renderRightSideBarDrawer()}
+            {renderLeftSideBarDrawer()}
+
+            <div className="xl:hidden z-30 fixed right-0 bottom-0">
+                <div className="flex items-end justify-end pt-4 px-4 pb-5 text-center block p-0">
+                    <div class="rounded-full h-20 w-20 flex items-center justify-center bg-primary shadow-xl text-white text-3xl cursor-pointer" onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}>
+                        <FontAwesomeIcon icon={faFeather} />
                     </div>
                 </div>
+            </div>
 
             {checkModalState()}
 
@@ -199,50 +285,8 @@ const LandingPage = (props) => {
             <div className="grid grid-cols-9 gap-4 w-full" style={{ backgroundColor: "#fcfcfc" }}>
 
                 <div className="hidden md:block xl:col-span-2 col-span-3 h-screen top-0 pt-24 sticky p-4 border-r-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
-                    <div className="flex justify-center text-white mt-4 font-medium text-3xl">
-                        <img width="150px;" draggable="false" src="https://i.imgur.com/ATuMhih.png"></img>
-                        <div className="flex justify-center px-6">
-                        </div>
-                    </div>
-
-                    <div className="selector mt-4 ml-12 mb-8">
-
-                        <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer">
-                            <FontAwesomeIcon icon={faHome} /> <i style={{ paddingRight: "0.45rem" }} /> Home
-                        </div>
-
-                        <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
-                            onClick={() => changePostQuery('/posts/trending')}>
-                            <FontAwesomeIcon icon={faFire} /> <i className="pr-4" /> Trending
-                        </div>
-
-                        <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
-                            onClick={() => changePostQuery('/posts/newest-posts')}>
-                            <FontAwesomeIcon icon={faSun} /> <i className="fas fa-fire pr-3"></i> Newest
-                        </div>
-
-                        <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
-                            onClick={() => changePostQuery('/posts/expiring-soon')}>
-                            <FontAwesomeIcon icon={faClock} /> <i className="fas fa-fire pr-3"></i> Expiring
-                        </div>
-
-                        <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
-                            onClick={() => changePostQuery('/posts/time-remaining')}>
-                            <FontAwesomeIcon icon={faCalendar} /> <i className="fas fa-fire pr-4"></i> Longest
-                        </div>
-                    </div>
-
-                    <div className="flex justify-center px-6">
-                        <div
-                            onClick={() => setRenderModalObj(prev => ({ ...prev, "tags": true }))}
-                            className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
-                            style={{ height: "3.2rem" }}>
-                            <p style={{ paddingTop: "0.18rem" }}>Tags</p>
-                        </div>
-                    </div>
-
+                    {renderLeftSideBar()}
                 </div>
-
                 <div className="col-span-9 md:col-span-6 xl:col-span-5 flex-grow justify-center w-full pt-16 xl:pt-20 px-5" style={{ backgroundColor: "#fcfcfc" }}>
                     <div className="justify-center">
 

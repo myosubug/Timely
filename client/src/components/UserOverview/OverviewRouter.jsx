@@ -11,20 +11,20 @@ function OverviewRouter() {
   let { username } = useParams();
 
   const renderOverview = () => {
-    if(loggedInUser.username === username) {
+    if (loggedInUser.username === username) {
       return (<UserOverviewEdit username={username} />);
     }
     else if (loggedInUser.isAdmin) {
-      return(<UserOverviewAdmin username={username} />);
+      return (<UserOverviewAdmin username={username} />);
     }
     else {
-      return(<UserOverviewView username={username} />);
+      return (<UserOverviewView username={username} />);
     }
   };
 
-  return(
+  return (
     <div>
-      { renderOverview() }
+      { renderOverview()}
     </div>
   );
 
