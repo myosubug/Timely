@@ -7,8 +7,6 @@ import { useState } from 'react';
 
 export const NavBar = (props) => {
 
-  const [dotsClick, setDotsClick] = useState(false);
-  const [barsClick, setBarsClick] = useState(false);
   const [isLocationMain,] = useState(window.location.pathname + window.location.search === "/");
 
   NavBar.propTypes = {
@@ -34,8 +32,8 @@ export const NavBar = (props) => {
     if (isLocationMain) {
       return (
         <div className="flex justify-start">
-          <div className="items-center cursor-pointer pl-4 block md:hidden" style={{ paddingTop: "0.45rem" }}>
-            <FontAwesomeIcon icon={faBars} onClick={renderLeftMenu} />
+          <div className="items-center cursor-pointer pl-4 block md:hidden" style={{ paddingTop: "0.45rem" }} onClick={renderLeftMenu}>
+            <FontAwesomeIcon icon={faBars} />
           </div>
         </div>
       );
@@ -46,8 +44,8 @@ export const NavBar = (props) => {
     if (isLocationMain) {
       return (
         <div className="flex justify-end">
-          <div className="items-center cursor-pointer pr-4 block xl:hidden" style={{ paddingTop: "0.45rem" }}>
-            <FontAwesomeIcon icon={faPowerOff} onClick={renderRightMenu} />
+          <div className="items-center cursor-pointer pr-4 block xl:hidden" style={{ paddingTop: "0.45rem" }} onClick={renderRightMenu} >
+            <FontAwesomeIcon icon={faPowerOff} />
           </div>
         </div>
       );
