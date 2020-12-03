@@ -5,7 +5,7 @@ import { PostCreator } from '../PostCreator/PostCreator.jsx';
 import { Post } from '../Post/Post.jsx';
 import { Sign } from '../SignInUp/Sign.jsx';
 
-import { faHome, faBell, faFire, faChartLine, faSun, faClock, faCalendar, faFeather } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faBell, faFire, faChartLine } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import TagFilter from '../TagFilter/TagFilter';
@@ -44,7 +44,7 @@ const LandingPage = (props) => {
                 let new_posts = [];
                 for (let post of res.data) {
                     new_posts.push(
-                        <div className="my-8 h-full" key={post._id}>
+                        <div className="border-solid border-2 rounded-lg my-8 border-gray-300 h-full" key={post._id}>
                             <Post isAdmin={loggedInUser.isAdmin} id={post._id} thisUsername={loggedInUser.username} />
                         </div>
                     )
@@ -185,14 +185,6 @@ const LandingPage = (props) => {
                 username={loggedInUser.username}
             />
 
-                <div className="xl:hidden z-30 fixed right-0 bottom-0">
-                    <div className="flex items-end justify-end pt-4 px-4 pb-5 text-center block p-0">
-                            <div class="rounded-full h-20 w-20 flex items-center justify-center bg-primary shadow-xl text-white text-3xl cursor-pointer">
-                              <FontAwesomeIcon icon={faFeather} />
-                            </div>
-                    </div>
-                </div>
-
             {checkModalState()}
 
 
@@ -213,22 +205,22 @@ const LandingPage = (props) => {
 
                         <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
                             onClick={() => changePostQuery('/posts/trending')}>
-                            <FontAwesomeIcon icon={faFire} /> <i className="pr-4" /> Trending
+                            <FontAwesomeIcon icon={faFire} /> <i className="pr-3" /> Trending
                         </div>
 
                         <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
                             onClick={() => changePostQuery('/posts/newest-posts')}>
-                            <FontAwesomeIcon icon={faSun} /> <i className="fas fa-fire pr-3"></i> Newest
+                            <i className="fas fa-fire pr-3" style={{ fontSize: "1.6rem" }}></i> Newest
                         </div>
 
                         <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
                             onClick={() => changePostQuery('/posts/expiring-soon')}>
-                            <FontAwesomeIcon icon={faClock} /> <i className="fas fa-fire pr-3"></i> Expiring
+                            <i className="fas fa-fire pr-3" style={{ fontSize: "1.6rem" }}></i> Expiring
                         </div>
 
                         <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
                             onClick={() => changePostQuery('/posts/time-remaining')}>
-                            <FontAwesomeIcon icon={faCalendar} /> <i className="fas fa-fire pr-4"></i> Longest
+                            <i className="fas fa-fire pr-3" style={{ fontSize: "1.6rem" }}></i> Longest
                         </div>
                     </div>
 
@@ -243,7 +235,7 @@ const LandingPage = (props) => {
 
                 </div>
 
-                <div className="col-span-9 md:col-span-6 xl:col-span-5 flex-grow justify-center w-full pt-16 xl:pt-20 px-5" style={{ backgroundColor: "#fcfcfc" }}>
+                <div className="col-span-9 md:col-span-6 xl:col-span-5 flex-grow justify-center w-full pt-24 px-5" style={{ backgroundColor: "#fcfcfc" }}>
                     <div className="justify-center">
 
 
