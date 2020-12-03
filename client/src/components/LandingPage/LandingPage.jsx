@@ -37,6 +37,18 @@ const LandingPage = (props) => {
         setLoggedIn(loggedInUser.username !== "");
         getNumPosts();
 
+
+
+
+    }, []);
+
+    //Add an event listener to the window
+    useEffect(() => {
+        window.addEventListener("resize", resize);
+
+        return () => {
+            window.removeEventListener("resize", resize);
+        }
     }, []);
 
 
@@ -158,7 +170,7 @@ const LandingPage = (props) => {
         }
     }
 
-
+    //Renders the left side bar
     const renderLeftSideBar = () => {
         return (
             <div>
@@ -209,7 +221,7 @@ const LandingPage = (props) => {
         );
     }
 
-
+    //Renders the left side bar, but as a drawer
     const renderRightSideBarDrawer = () => {
         return (
             <Drawer
@@ -223,6 +235,7 @@ const LandingPage = (props) => {
         );
     }
 
+    //Renders teh right side bar, but as a drawer
     const renderLeftSideBarDrawer = () => {
         return (
             <Drawer
@@ -234,6 +247,19 @@ const LandingPage = (props) => {
                 {renderLeftSideBar()}
             </Drawer>
         );
+    }
+
+    //Gets called whenever the window is resized, checks for the window size and closes the sidebars if the length exceeds
+    const resize = () => {
+        console.log("resizing");
+        if (window.innerWidth > 1280) {
+            setIsRightMenuOpen(false);
+        }
+
+        if (window.innerWidth > 768) {
+            setIsLeftMenuOpen(false);
+        }
+
     }
 
     // Function that determines what modal to render
@@ -267,7 +293,6 @@ const LandingPage = (props) => {
                 rightSideBarRenderer={() => setIsRightMenuOpen(true)}
                 leftSideBarRenderer={() => setIsLeftMenuOpen(true)}
             />
-
             {renderRightSideBarDrawer()}
             {renderLeftSideBarDrawer()}
 
