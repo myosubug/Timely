@@ -80,7 +80,6 @@ const UserOverviewEdit = (props) => {
   const renderPosts = (username_obj) => {
     axios.get(SERVER_ADDRESS + "/users/userPosts/" + username_obj.username)
       .then(res => {
-        console.log(res);
         let new_posts = [];
         for (let post of res.data) {
           new_posts.push(
@@ -110,14 +109,18 @@ const UserOverviewEdit = (props) => {
     // console.log(newImage);
 
     if (newImage) {
-      const imgData = new FormData();
-      imgData.append('myFile', newImage);
-      axios.post(SERVER_ADDRESS + "/users/upload-profile/" + userInfo.username, imgData)
-        .then(({ data }) => {
-          // setImage(data);
-        })
-        .catch(err => console.log(err));
-      setImage(URL.createObjectURL(newImage));
+      //Only update if we are uploading an image
+      if (newImage.type.split("/")[0] === "image") {
+        const imgData = new FormData();
+        imgData.append('myFile', newImage);
+        axios.post(SERVER_ADDRESS + "/users/upload-profile/" + userInfo.username, imgData)
+          .then(({ data }) => {
+            // setImage(data);
+          })
+          .catch(err => console.log(err));
+        setImage(URL.createObjectURL(newImage));
+      }
+
     }
   };
 
@@ -272,9 +275,9 @@ const UserOverviewEdit = (props) => {
 
         <Grid item xs={3} />
         <Grid item xs={8}>
-          {posts.length > 0 && 
-          <Typography variant="h5" component="span">
-            Post Activity
+          {posts.length > 0 &&
+            <Typography variant="h5" component="span">
+              Post Activity
           </Typography>
           }
           {posts}
