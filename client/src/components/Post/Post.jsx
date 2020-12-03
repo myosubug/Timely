@@ -241,7 +241,7 @@ const Post = (props) => {
             return <img src={postDetails.imgSrc} />
         }
         else {
-            return <p> {postDetails.textContent} </p>
+            return <div>{postDetails.textContent}</div>
         }
     }
 
