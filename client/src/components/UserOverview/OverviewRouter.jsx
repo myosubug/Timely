@@ -6,12 +6,18 @@ import { UserOverviewAdmin } from './UserOverviewAdmin.jsx';
 import { UserOverviewView } from './UserOverviewView.jsx';
 import axios from 'axios';
 import NotFound from '../NotFound/NotFound.jsx';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Grid } from '@material-ui/core';
+import './OverviewRouter.css';
 
-const load = <div>
-  <CircularProgress />
-</div>
-
+const load =
+  <Grid
+    container
+    direction="row"
+    justify="center"
+    alignItems="center"
+  >
+    <CircularProgress className="CircularProgress" />
+  </Grid>
 
 function OverviewRouter() {
 
