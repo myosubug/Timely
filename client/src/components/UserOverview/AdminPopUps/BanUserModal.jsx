@@ -26,6 +26,8 @@ export const BanUserModal = (props) => {
 
   const [isDeleted, setIsDeleted] = useState(false);
 
+  const [isBanned, setIsBanned] = useState(false);
+
   // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
@@ -33,6 +35,10 @@ export const BanUserModal = (props) => {
       message: "Banning a user will delete them from the server.",
       severity: "info"
     });
+    if(isBanned) {
+      window.location.href = '/'; // relative to domain
+      setIsBanned(false);
+    }
   };
 
   // Function that handles account deletion
@@ -41,6 +47,7 @@ export const BanUserModal = (props) => {
     setAlert({ message: "Account successfully banned!", severity: "success" });
     props.ban(props.username);
     setIsDeleted(true);
+    setIsBanned(true);
   };
 
   // Function that renders the alert to the user based on its current state
