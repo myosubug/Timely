@@ -266,6 +266,21 @@ const LandingPage = (props) => {
         );
     }
 
+    //Conditionally renders the button for posting a new post
+    const renderMobileNewPost = () => {
+        if (isLoggedIn) {
+            return (
+                <div className="xl:hidden z-30 fixed right-0 bottom-0">
+                    <div className="flex items-end justify-end pt-4 px-4 pb-5 text-center block p-0">
+                        <div className="rounded-full h-20 w-20 flex items-center justify-center bg-primary shadow-xl text-white text-3xl cursor-pointer" onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}>
+                            <FontAwesomeIcon icon={faFeather} />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+    }
+
     // Function that determines what modal to render
     function checkModalState() {
         if (renderModalObj.post) {
@@ -300,13 +315,9 @@ const LandingPage = (props) => {
             {renderRightSideBarDrawer()}
             {renderLeftSideBarDrawer()}
 
-            <div className="xl:hidden z-30 fixed right-0 bottom-0">
-                <div className="flex items-end justify-end pt-4 px-4 pb-5 text-center block p-0">
-                    <div className="rounded-full h-20 w-20 flex items-center justify-center bg-primary shadow-xl text-white text-3xl cursor-pointer" onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}>
-                        <FontAwesomeIcon icon={faFeather} />
-                    </div>
-                </div>
-            </div>
+
+            {renderMobileNewPost()}
+
 
             {checkModalState()}
 

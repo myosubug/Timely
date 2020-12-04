@@ -80,7 +80,14 @@ const PostCreator = (props) => {
         let final_tags = [];
         for (let tag of tags) {
             if (tag !== "") {
-                final_tags.push(tag);
+                const tag_ar = tag.split(",");
+                for (let sub_tag of tag_ar) {
+                    if (sub_tag !== "") {
+                        final_tags.push(sub_tag);
+                    }
+
+                }
+
             }
         }
 
