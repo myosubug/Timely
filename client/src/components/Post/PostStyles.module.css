@@ -6,6 +6,7 @@
 
 .profile_info{
     cursor: pointer;
+    width: fit-content;
 }
 
 .action_btn{
