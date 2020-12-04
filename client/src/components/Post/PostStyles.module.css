@@ -70,6 +70,11 @@
     margin-left: 5%;
 }
 
+#show_more_btn:focus{
+    outline: none;
+    box-shadow: none;
+}
+
 #timer{
     margin-top: auto;
     margin-bottom: auto;
@@ -80,4 +85,8 @@
 
 .bottom_options{
     padding: 10px;
+}
+
+#tag_container{
+    margin: 0 3% 1% 3%;
 }

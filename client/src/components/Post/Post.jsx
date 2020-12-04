@@ -10,6 +10,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
+import Chip from '@material-ui/core/Chip';
 
 import { Button } from '@material-ui/core';
 import { faClock } from "@fortawesome/free-solid-svg-icons";
@@ -34,6 +35,15 @@ const BorderLinearProgress = withStyles((theme) => ({
         backgroundColor: '#afc5d3',
     },
 }))(LinearProgress);
+
+
+const TagChip = withStyles({
+    root: {
+        backgroundColor: '#afc5d3',
+        margin: "5px"
+    }
+})(Chip);
+
 
 /* 
     Props:
@@ -64,6 +74,7 @@ const Post = (props) => {
                     const type = obj.type;
                     const expiryDate = obj.expiryDate;
                     const timePosted = new Date(obj.dateCreated);
+                    const tags = obj.tags;
 
                     const maxTime = obj.maxTime;
                     let time = (new Date(expiryDate) - new Date()) / 1000; //Time difference in seconds
@@ -115,7 +126,8 @@ const Post = (props) => {
                                 dislikeCount: dislikeCount,
                                 textContent: text_content,
                                 imgSrc: img_src,
-                                profileImage: profileImage
+                                profileImage: profileImage,
+                                tags: tags
 
                             });
                         }
@@ -247,7 +259,7 @@ const Post = (props) => {
 
     //Truncates the like/dislike number if it exceeds 1000
     const renderLikeInfo = (num) => {
-        if (num > 1000) {
+        if (num >= 1000) {
             num = Math.floor(num / 1000);
 
             return num.toString() + "K";
@@ -272,6 +284,16 @@ const Post = (props) => {
         }
 
         return min.toString() + "m " + sec.toString() + "s";
+    }
+
+    //Renders the tags
+    const renderTags = () => {
+        if (postDetails.tags !== undefined && postDetails.tags.length > 0) {
+            return <div id={styles.tag_container}>
+                {postDetails.tags.map(tag => <TagChip label={tag} color="primary" />)}
+            </div>
+        }
+
     }
 
     //Handles like click
@@ -329,6 +351,10 @@ const Post = (props) => {
                         </Grid>
                         <Grid item xs={6} className={styles.bottom_options}>
                             <p style={{ color: "#aaaaaa" }} id={styles.timer} className={styles.no_text_select}> <span style={{ color: "#9c9c9c" }} ><FontAwesomeIcon icon={faClock} /></span> {renderTimeInfo()} </p>
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            {renderTags()}
                         </Grid>
 
                         <Grid item xs={12}>
