@@ -29,3 +29,7 @@
 body {
   background-color: rgb(252, 252, 252);
 }
+
+.RightSideDrawer {
+  padding: 30px;
+}

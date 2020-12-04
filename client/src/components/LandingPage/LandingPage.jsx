@@ -172,12 +172,14 @@ const LandingPage = (props) => {
         }
         else {
             return (
-                <div className="justify-center px-6">
-                    <div
-                        onClick={() => setRenderModalObj(prev => ({ ...prev, "login": true }))}
-                        className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
-                        style={{ height: "3.2rem" }}>
-                        <p style={{ paddingTop: "0.18rem" }}>Sign In/Up</p>
+                <div className="RightSideDrawer">
+                    <div className="justify-center px-6">
+                        <div
+                            onClick={() => setRenderModalObj(prev => ({ ...prev, "login": true }))}
+                            className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
+                            style={{ height: "3.2rem" }}>
+                            <p style={{ paddingTop: "0.18rem" }}>Sign In/Up</p>
+                        </div>
                     </div>
                 </div>
             );
@@ -243,6 +245,7 @@ const LandingPage = (props) => {
                 onClose={() => setIsRightMenuOpen(false)}
                 anchor={"right"}
                 onClick={() => setIsRightMenuOpen(false)}
+                className="RightSideDrawer"
             >
                 {renderRightSideBar()}
             </Drawer>
