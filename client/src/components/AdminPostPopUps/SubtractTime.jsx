@@ -34,7 +34,7 @@ export const SubTime = (props) => {
       return;
     }
 
-    if (time >= 10800) {
+    if (time > 10800) {
       setErrormsg("You can only subtract the post by a maximum of 10800 seconds (3h) at a time");
       return;
     }
