@@ -26,8 +26,8 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     background: '#7ED3D6',
     '&:hover': {
-        background: "#53b7bb",
-      },
+      background: "#53b7bb",
+    },
     margin: theme.spacing(2, 0, 2),
   },
 }));
@@ -62,7 +62,7 @@ export default function SignIn(props) {
       })
 
   }
-  if (!isSignInOkay){
+  if (!isSignInOkay) {
     return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -73,9 +73,11 @@ export default function SignIn(props) {
           <form onSubmit={handleSignIn} className={classes.form} noValidate>
             <TextField variant="outlined" margin="normal" required fullWidth id="username" label="User Name" name="email" autoComplete="email" autoFocus />
             <TextField variant="outlined" margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
-            <Alert item xs={12} variant="outlined" severity="error">
-              Your user name or password is wrong, please check again.    
+            <Grid item xs={12}>
+              <Alert variant="outlined" severity="error">
+                Your user name or password is wrong, please check again.
             </Alert>
+            </Grid>
             <Grid item xs={12}>
               <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
                 Sign In
@@ -90,32 +92,32 @@ export default function SignIn(props) {
         </div>
       </Container>
     );
-    } else {
-      return (
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <div className={classes.paper}>
-            <Typography component="h1" variant="h5">
-              Sign in
+  } else {
+    return (
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Typography component="h1" variant="h5">
+            Sign in
             </Typography>
-            <form onSubmit={handleSignIn} className={classes.form} noValidate>
-              <TextField variant="outlined" margin="normal" required fullWidth id="username" label="User Name" name="email" autoComplete="email" autoFocus />
-              <TextField variant="outlined" margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
-              <Grid item xs={12}>
-                <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-                  Sign In
+          <form onSubmit={handleSignIn} className={classes.form} noValidate>
+            <TextField variant="outlined" margin="normal" required fullWidth id="username" label="User Name" name="email" autoComplete="email" autoFocus />
+            <TextField variant="outlined" margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
+            <Grid item xs={12}>
+              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+                Sign In
                   </Button>
-              </Grid>
-              <Grid item xs={12}>
-                <Button fullWidth variant="contained" color="primary" onClick={props.onCancel} className={classes.submit}>
-                  Cancel
+            </Grid>
+            <Grid item xs={12}>
+              <Button fullWidth variant="contained" color="primary" onClick={props.onCancel} className={classes.submit}>
+                Cancel
                   </Button>
-              </Grid>
-            </form>
-          </div>
-        </Container>
-      );
-    }
+            </Grid>
+          </form>
+        </div>
+      </Container>
+    );
+  }
 }
 
 SignIn.propTypes = {

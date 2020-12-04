@@ -54,7 +54,7 @@ const PostCreator = (props) => {
             dateCreated: new Date().toUTCString(),
             type: isText ? "text" : "img",
             textContent: isText ? postText : "",
-            tags: postTags
+            tags: [... new Set(postTags)] //Elimiate any duplicate tags
         };
 
         axios.post(SERVER_ADDRESS + "/posts/add", post)

@@ -24,12 +24,18 @@ export const SubTime = (props) => {
   };
 
   const handleClose = () => {
+    setErrormsg("");
     props.onClose();
   };
 
   const handleOnConfirmClick = () => {
     if (time <= 0) {
       setErrormsg("Number of seconds must be a postive number");
+      return;
+    }
+
+    if (time >= 10800) {
+      setErrormsg("You can only subtract the post by a maximum of 10800 seconds (3h) at a time");
       return;
     }
 
