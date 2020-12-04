@@ -107,48 +107,54 @@ router.route('/token').post((req, res) => {
 // Delete account
 router.route('/delete/:username').post((req, res) => {
     User.findOneAndDelete({ username: req.params.username })
-        .then(() => {
-            //Find all posts of that user
-            Post.find({ username: req.params.username })
-                .then(posts => {
-                    //Arrays for storing the results
-                    let all_posts = [];
-                    let img_addr = []; //Addresses of images to be deleted later
+        .then((user) => {
+            if (user) {
+                //Find all posts of that user
+                Post.find({ username: req.params.username })
+                    .then(posts => {
+                        //Arrays for storing the results
+                        let all_posts = [];
+                        let img_addr = []; //Addresses of images to be deleted later
 
 
-                    const IMAGE_DIR = require('path').dirname(require.main.filename) + "/images/"; //The directory for the images
+                        const IMAGE_DIR = require('path').dirname(require.main.filename) + "/images/"; //The directory for the images
 
-                    //Push the ids of the posts
-                    for (post of posts) {
-                        all_posts.push(post._id);
+                        //Push the ids of the posts
+                        for (post of posts) {
+                            all_posts.push(post._id);
 
-                        if (post.type === "img") {
-                            const addr_ar = post.imageURL.split('/');
-                            const img_filename = addr_ar[addr_ar.length - 1];
+                            if (post.type === "img") {
+                                const addr_ar = post.imageURL.split('/');
+                                const img_filename = addr_ar[addr_ar.length - 1];
 
-                            const file_path = IMAGE_DIR + "posts/" + img_filename;
-                            img_addr.push(file_path);
-                        }
-                    }
-
-                    //Remove all posts that we have found
-                    Post.deleteMany({ _id: { $in: all_posts } })
-                        .then(res => {
-                            if (res.deletedCount > 0) {
-                                //Notify everyone to update
-                                io.emit('update post list');
-
-
-                                //Once we have deleted the posts, remove the images from the server
-                                for (let path of img_addr) {
-                                    fs.unlink(path, (err) => { if (err) { console.log(err) } });
-                                }
+                                const file_path = IMAGE_DIR + "posts/" + img_filename;
+                                img_addr.push(file_path);
                             }
-                        })
+                        }
 
-                })
-                .catch(err => res.status(400).json('Error: ' + err));
-            res.json('user successfully deleted!')
+                        //Remove all posts that we have found
+                        Post.deleteMany({ _id: { $in: all_posts } })
+                            .then(res => {
+                                if (res.deletedCount > 0) {
+                                    //Notify everyone to update
+                                    io.emit('update post list');
+
+
+                                    //Once we have deleted the posts, remove the images from the server
+                                    for (let path of img_addr) {
+                                        fs.unlink(path, (err) => { if (err) { console.log(err) } });
+                                    }
+                                }
+                            })
+
+                    })
+                    .catch(err => res.status(400).json('Error: ' + err));
+                res.json('user successfully deleted!');
+            }
+            else {
+                res.json('ERROR: no such user found');
+            }
+
         })
         .catch(err => res.status(400).json('Error: ' + err));
 });

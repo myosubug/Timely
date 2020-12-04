@@ -14,7 +14,7 @@ export let loggedInUser = {
 export const populateUserInfo = async (token) => {
     await axios.post(SERVER_ADDRESS + "/users/token", { "token": token })
         .then(({ data }) => {
-            if (data.isValid) {
+            if (data.isValid && data.object !== null) {
                 loggedInUser.username = data.object.username;
                 loggedInUser.id = data.object._id;
                 loggedInUser.isAdmin = data.object.isAdmin;
