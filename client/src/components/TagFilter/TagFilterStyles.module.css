@@ -35,3 +35,7 @@
 .filterInput {
     flex: 1 1 auto;
 }
+
+.error_msg {
+    color: red;
+}

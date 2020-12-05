@@ -44,6 +44,8 @@ export default function TagFilter(props) {
 
     const [tags, setTags] = React.useState([]);
 
+    const [errorMsg, setErrorMsg] = React.useState("");
+
     const handleClearInput = () => {
         setValues({...values, input: ''});
     }
@@ -62,8 +64,12 @@ export default function TagFilter(props) {
                 inputTags.push(i.tag);
             }
         }
-        if(inputTags.length === 0) {
-            return;
+    
+        if(inputTags.length === 1) {
+            if(values.input.trim() ===""){
+                setErrorMsg("Must search for at least one tag.");
+                return;
+            }
         }
         inputTags.forEach((item, index) => {
             if(item !== "") {
@@ -75,6 +81,7 @@ export default function TagFilter(props) {
         });
         props.queryTags("/posts/find-tag/" + completedQuery);
         setValues({...values, open: false, input: ''});
+        setErrorMsg("");
         props.onCancel();
     }
 
@@ -129,6 +136,9 @@ export default function TagFilter(props) {
                                 </Button>
                             );
                         })}
+                    </div>
+                    <div className={styles.error_msg}>
+                        <p> {errorMsg === "" ? <span>&nbsp;</span> : errorMsg} </p>
                     </div>
                     <div className={styles.tagFilterActionDiv}>
                         <Button className={styles.actionButton} variant="contained" color="secondary" onClick={props.onCancel}>
