@@ -290,7 +290,7 @@ const Post = (props) => {
     const renderTags = () => {
         if (postDetails.tags !== undefined && postDetails.tags.length > 0) {
             return <div id={styles.tag_container}>
-                {postDetails.tags.map(tag => <TagChip label={tag} color="primary" />)}
+                {postDetails.tags.map(tag => <TagChip label={tag} color="primary" key={tag} />)}
             </div>
         }
 

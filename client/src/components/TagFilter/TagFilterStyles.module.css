@@ -19,12 +19,22 @@
 }
 
 .filterButton {
-    margin: 5px !important;
+    margin: 5px !important;   
+}
+
+.filterButton:focus{
+    outline: none;
+    box-shadow: none;
 }
 
 .filterButtonSelected {
     margin: 5px !important;
     border-color: red !important;
+}
+
+.filterButtonSelected:focus{
+    outline: none;
+    box-shadow: none;
 }
 
 .inputWrapper {
