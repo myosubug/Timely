@@ -15,9 +15,20 @@ import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser, resetLoggedInUser, populateUserInfo } from '../../AppConfig.js'
 
 import './LandingStyles.css';
-import { Drawer } from '@material-ui/core';
+import { Dialog, DialogContent, Drawer, makeStyles } from '@material-ui/core';
+
+
+const useStyles = makeStyles({
+    paper: {
+        background: '#ededed',
+    }
+});
+
+
 let postQuery = "/posts/trending";
 const LandingPage = (props) => {
+
+    const styles = useStyles();
 
     const [renderModalObj, setRenderModalObj] = useState({ "tags": false, "login": false, "post": false });
     const [posts, setPosts] = useState([]);
@@ -100,18 +111,16 @@ const LandingPage = (props) => {
     // Renders the modal based on the content passed in
     function renderModal(content) {
         return (
+            <Dialog
+                open={true}
+                fullWidth
+                maxWidth={"md"}
+            >
+                <DialogContent>
+                    {content}
+                </DialogContent>
 
-            <div className="fixed z-10 inset-0 overflow-y-auto">
-                <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                    <div className="fixed inset-0 transition-opacity">
-                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                    </div>
-                    <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
-                    <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-1/2" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
-                        {content}
-                    </div>
-                </div>
-            </div>
+            </Dialog>
         )
     }
 
@@ -243,8 +252,11 @@ const LandingPage = (props) => {
                 onClose={() => setIsRightMenuOpen(false)}
                 anchor={"right"}
                 onClick={() => setIsRightMenuOpen(false)}
+                classes={{ paper: styles.paper }}
             >
-                {renderRightSideBar()}
+                <div className="pt-32 p-4">
+                    {renderRightSideBar()}
+                </div>
             </Drawer>
         );
     }
@@ -257,8 +269,11 @@ const LandingPage = (props) => {
                 onClose={() => setIsLeftMenuOpen(false)}
                 anchor={"left"}
                 onClick={() => setIsLeftMenuOpen(false)}
+                classes={{ paper: styles.paper }}
             >
-                {renderLeftSideBar()}
+                <div className="pt-24 p-4">
+                    {renderLeftSideBar()}
+                </div>
             </Drawer>
         );
     }

@@ -6,6 +6,13 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Button } from '@material-ui/core';
 
 import styles from "./PostCreatorStyles.module.css";
+import { withStyles } from '@material-ui/styles';
+
+const SelectButton = withStyles({
+    root: {
+        color: '#7ed3d6',
+    }
+})((props) => <Radio color="default" {...props} />);
 
 const PostCreatorBase = (props) => {
     return (
@@ -15,7 +22,7 @@ const PostCreatorBase = (props) => {
                     value="text"
                     checked={props.isText}
                     onChange={props.handleRadioClick}
-                    control={<Radio color="primary" />}
+                    control={<SelectButton />}
                     label="Text"
                     labelPlacement="start"
                 />
@@ -23,7 +30,7 @@ const PostCreatorBase = (props) => {
                     value="img"
                     checked={!props.isText}
                     onChange={props.handleRadioClick}
-                    control={<Radio color="primary" />}
+                    control={<SelectButton />}
                     label="Image"
                     labelPlacement="start"
                 />
@@ -38,7 +45,7 @@ const PostCreatorBase = (props) => {
                     <p> {props.errorMsg === "" ? <span>&nbsp;</span> : props.errorMsg} </p>
                 </div>
 
-                <h2> Tags </h2>
+                <p id={styles.tag_header}> Tags </p>
                 <input id={styles.tags_input_area} onChange={props.handleTagsChange}></input>
                 <div>
                     <div className={styles.action_btn}>
