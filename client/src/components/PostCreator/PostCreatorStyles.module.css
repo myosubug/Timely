@@ -33,7 +33,7 @@
 
 #tags_input_area{
     width: 80%;
-    outline: 1px solid black;
+    outline: 1px solid #ccc;
 }
 
 .selectBtns{

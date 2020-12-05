@@ -6,6 +6,11 @@
     border-bottom: 5px solid #53b7bb;
   }
 
+  .button-cancel {
+    background-color: rgb(207, 60, 60);
+    border-bottom: 5px solid rgb(197, 57, 57);
+  }
+
   .bg-primary {
     background-color: #7ed3d6;
   }
@@ -13,6 +18,11 @@
   .button:hover {
     background-color: #71bdc0;
     border-bottom: 5px solid #4ba4a8;
+  }
+
+  .button-cancel:hover {
+    background-color: rgb(158, 47, 47);
+    border-bottom: 5px solid  rgb(131, 35, 35);
   }
 
   .navbar {

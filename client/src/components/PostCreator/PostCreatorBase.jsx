@@ -45,14 +45,24 @@ const PostCreatorBase = (props) => {
                     <p> {props.errorMsg === "" ? <span>&nbsp;</span> : props.errorMsg} </p>
                 </div>
 
-                <p id={styles.tag_header}> Tags </p>
+                <p id={styles.tag_header} className="font-semibold"> Tags </p>
                 <input id={styles.tags_input_area} onChange={props.handleTagsChange}></input>
                 <div>
                     <div className={styles.action_btn}>
-                        <Button variant="contained" color="secondary" onClick={props.onCancel}> Cancel</Button>
+                        <button
+                            onClick={props.onCancel}
+                            className="button-cancel text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
+                            style={{ height: "3rem" }}>
+                            <p style={{ padding: "0.1rem" }}> Cancel </p>
+                        </button>
                     </div>
                     <div className={styles.action_btn}>
-                        <Button variant="contained" color="primary" type="submit" > Submit </Button>
+                        <button
+                            type="submit"
+                            className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
+                            style={{ height: "3rem" }}>
+                            <p style={{ padding: "0.1rem" }}> Submit </p>
+                        </button>
                     </div>
                 </div>
 
