@@ -125,6 +125,25 @@ router.route('/tags').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 })
 
+//Seaches all the tags for which the specified query is a substring of
+router.route('/seach-tags').get((req, res) => {
+    const tag_ref = req.query.tag;
+    Post.find()
+        .then(posts => {
+            let tags_res = [];
+            for (let post of posts) {
+                for (let tag of post.tags) {
+                    if (tag.includes(tag_ref) && !tags_res.includes(tag)) {
+                        tags_res.push(tag);
+                    }
+                }
+            }
+
+            res.json(tags_res);
+        })
+        .catch(err => res.status(400).json('Error: ' + err))
+});
+
 //Returns a Post object by ID
 router.route('/:id').get((req, res) => {
     Post.findById(req.params.id)

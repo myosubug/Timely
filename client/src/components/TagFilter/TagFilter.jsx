@@ -66,10 +66,8 @@ export default function TagFilter(props) {
         }
 
         if (inputTags.length === 1) {
-            if (values.input.trim() === "") {
-                setErrorMsg("Must search for at least one tag.");
-                return;
-            }
+            setErrorMsg("Must search for at least one tag.");
+            return;
         }
         inputTags.forEach((item, index) => {
             if (item !== "") {
@@ -84,6 +82,22 @@ export default function TagFilter(props) {
         setValues({ ...values, open: false, input: '' });
         setErrorMsg("");
         props.onCancel();
+    }
+
+    const handleGetTags = () => {
+        setTags([]);
+        axios.get(SERVER_ADDRESS + "/posts/seach-tags?tag=" + values.input)
+            .then(({ data }) => {
+                let tags = [];
+                for (let retrievedTag of data) {
+                    tags.push({
+                        "tag": retrievedTag,
+                        "isSelected": false
+                    });
+                }
+                setTags(tags);
+            })
+            .catch(err => console.log(err));
     }
 
     const handleTagClick = (index) => {
@@ -116,7 +130,7 @@ export default function TagFilter(props) {
                                 </InputAdornment>
                             }
                         />
-                        <IconButton onClick={handleSearch}>
+                        <IconButton onClick={handleGetTags}>
                             <SearchIcon
 
                             />
