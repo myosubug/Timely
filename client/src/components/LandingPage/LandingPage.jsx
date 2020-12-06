@@ -21,6 +21,7 @@ import { Dialog, DialogContent, Drawer, makeStyles } from '@material-ui/core';
 const useStyles = makeStyles({
     paper: {
         background: '#ededed',
+        width: "350px"
     }
 });
 
@@ -203,22 +204,22 @@ const LandingPage = (props) => {
 
                 <div className="selector mt-4 mb-8 md:px-5">
 
-                    <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
+                    <div className={"menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer" + (postQuery === "/posts/trending" ? " menu-item-select" : "")}
                         onClick={() => changePostQuery('/posts/trending')}>
                         <FontAwesomeIcon icon={faFire} /> <i className="pr-4" /> Trending
                         </div>
 
-                    <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
+                    <div className={"menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer" + (postQuery === "/posts/newest-posts" ? " menu-item-select" : "")}
                         onClick={() => changePostQuery('/posts/newest-posts')}>
                         <FontAwesomeIcon icon={faSun} /> <i className="fas fa-fire pr-3"></i> Newest
                         </div>
 
-                    <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
+                    <div className={"menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer" + (postQuery === "/posts/expiring-soon" ? " menu-item-select" : "")}
                         onClick={() => changePostQuery('/posts/expiring-soon')}>
                         <FontAwesomeIcon icon={faClock} /> <i className="fas fa-fire pr-3"></i> Expiring
                         </div>
 
-                    <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
+                    <div className={"menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer" + (postQuery === "/posts/time-remaining" ? " menu-item-select" : "")}
                         onClick={() => changePostQuery('/posts/time-remaining')}>
                         <FontAwesomeIcon icon={faCalendar} /> <i className="fas fa-fire pr-4"></i> Longest
                         </div>
