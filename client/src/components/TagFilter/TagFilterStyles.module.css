@@ -16,12 +16,12 @@
 .tagsWrapperDiv {
     margin-top: 25px;
     max-height: 30vh;
-    overflow: scroll;
+    overflow: auto;
 }
 
 .filterButton {
     margin: 5px !important;
-    max-width: 100%;
+    max-width: 95%;
     width: fit-content;
     text-align: left;
     border: 1px solid black;
@@ -38,7 +38,7 @@
 .filterButtonSelected {
     margin: 5px !important;
     width: fit-content;
-    max-width: 100%;
+    max-width: 95%;
     text-align: left;
     border: 1px solid red;
 

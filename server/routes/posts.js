@@ -125,9 +125,10 @@ router.route('/tags').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 })
 
+//Seaches all the tags for which the specified query is a substring of
 router.route('/seach-tags').get((req, res) => {
     const tag_ref = req.query.tag;
-    Post.find()
+    Post.find().sort({ likeCount: -1 })
         .then(posts => {
             let tags_res = [];
             for (let post of posts) {
