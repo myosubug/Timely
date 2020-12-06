@@ -44,6 +44,8 @@ export default function TagFilter(props) {
 
     const [tags, setTags] = React.useState([]);
 
+    const [errorMsg, setErrorMsg] = React.useState("");
+
     const handleClearInput = () => {
         setValues({ ...values, input: '' });
     }
@@ -62,8 +64,12 @@ export default function TagFilter(props) {
                 inputTags.push(i.tag);
             }
         }
-        if (inputTags.length === 0) {
-            return;
+
+        if (inputTags.length === 1) {
+            if (values.input.trim() === "") {
+                setErrorMsg("Must search for at least one tag.");
+                return;
+            }
         }
         inputTags.forEach((item, index) => {
             if (item !== "") {
@@ -74,7 +80,9 @@ export default function TagFilter(props) {
             }
         });
         props.queryTags("/posts/find-tag/" + completedQuery);
+
         setValues({ ...values, open: false, input: '' });
+        setErrorMsg("");
         props.onCancel();
     }
 
@@ -118,21 +126,24 @@ export default function TagFilter(props) {
                         {tags.map((tag, index) => {
                             return (
                                 tag.isSelected ?
-                                    <Button variant="outlined" className={styles.filterButtonSelected}
+                                    <button className={styles.filterButtonSelected}
                                         onClick={() => handleTagClick(index)}
                                         key={index}
                                     >
                                         {tag.tag}
-                                    </Button>
+                                    </button>
                                     :
-                                    <Button variant="outlined" className={styles.filterButton}
+                                    <button className={styles.filterButton}
                                         onClick={() => handleTagClick(index)}
                                         key={index}
                                     >
                                         {tag.tag}
-                                    </Button>
+                                    </button>
                             );
                         })}
+                    </div>
+                    <div className={styles.error_msg}>
+                        <p> {errorMsg === "" ? <span>&nbsp;</span> : errorMsg} </p>
                     </div>
                     <div className={styles.tagFilterActionDiv}>
                         <button
