@@ -159,7 +159,7 @@ const LandingPage = (props) => {
                         </div>
                     </div>
 
-                    <div className="justify-center px-6">
+                    <div className="justify-center px-0 md:px-6">
 
                         {/* IF LOGGED IN */}
                         <div
@@ -199,11 +199,9 @@ const LandingPage = (props) => {
             <div>
                 <div className="flex justify-center text-white mt-4 font-medium text-3xl">
                     <img width="150px;" draggable="false" src="https://i.imgur.com/ATuMhih.png"></img>
-                    <div className="flex justify-center px-6">
-                    </div>
                 </div>
 
-                <div className="selector mt-4 ml-12 mb-8">
+                <div className="selector mt-4 mb-8 md:px-5">
 
                     <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
                         onClick={() => changePostQuery('/posts/trending')}>
@@ -226,7 +224,7 @@ const LandingPage = (props) => {
                         </div>
                 </div>
 
-                <div className="flex justify-center px-6">
+                <div className="flex justify-center px-0 md:px-6">
                     <div
                         onClick={() => setRenderModalObj(prev => ({ ...prev, "tags": true }))}
                         className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"

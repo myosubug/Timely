@@ -31,11 +31,9 @@ export const NavBar = (props) => {
   const renderBars = () => {
     if (isLocationMain) {
       return (
-        <div className="flex justify-start">
           <div className="items-center cursor-pointer pl-4 block md:hidden" style={{ paddingTop: "0.45rem" }} onClick={renderLeftMenu}>
             <FontAwesomeIcon icon={faBars} />
           </div>
-        </div>
       );
     }
   }
@@ -43,11 +41,9 @@ export const NavBar = (props) => {
   const renderDots = () => {
     if (isLocationMain) {
       return (
-        <div className="flex justify-end">
           <div className="items-center cursor-pointer pr-4 block xl:hidden" style={{ paddingTop: "0.45rem" }} onClick={renderRightMenu} >
             <FontAwesomeIcon icon={faPowerOff} />
           </div>
-        </div>
       );
     }
   }
@@ -58,7 +54,9 @@ export const NavBar = (props) => {
         <div className="p-2 mt-0 z-40 fixed w-full z-10 top-0 shadow-lg navbar">
           <div className="grid grid-cols-3 text-white font-medium text-3xl">
 
+            <div className="flex justify-start">
             {renderBars()}
+            </div>
 
             <div className="flex justify-center">
               <Link to="/">
@@ -66,7 +64,9 @@ export const NavBar = (props) => {
               </Link>
             </div>
 
+            <div className="flex justify-end">
             {renderDots()}
+            </div>
 
           </div>
         </div>
