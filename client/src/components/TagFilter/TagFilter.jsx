@@ -17,20 +17,20 @@ import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
  * When DB integration added, onEnter callback can be used to populate
  * tag list for buttons
  */
-  
+
 export default function TagFilter(props) {
 
     React.useEffect(() => {
         axios.get(SERVER_ADDRESS + '/posts/tags')
             .then(res => {
                 let tags = [];
-                for(let retrievedTag of res.data) {
+                for (let retrievedTag of res.data) {
                     tags.push({
-                    "tag": retrievedTag,
-                    "isSelected": false
+                        "tag": retrievedTag,
+                        "isSelected": false
                     });
                 }
-               
+
                 setTags([]);
                 setTags(tags);
 
@@ -47,40 +47,41 @@ export default function TagFilter(props) {
     const [errorMsg, setErrorMsg] = React.useState("");
 
     const handleClearInput = () => {
-        setValues({...values, input: ''});
+        setValues({ ...values, input: '' });
     }
 
     const handleInputChange = (event) => {
-        setValues({...values, input: event.target.value});
+        setValues({ ...values, input: event.target.value });
     }
 
     const handleSearch = () => {
         let inputTags = values.input.trim().split(' ');
-        
+
         let clickedTags = [...tags];
         let completedQuery = "?";
-        for(let i of clickedTags) {
-            if(i.isSelected) {
+        for (let i of clickedTags) {
+            if (i.isSelected) {
                 inputTags.push(i.tag);
             }
         }
-    
-        if(inputTags.length === 1) {
-            if(values.input.trim() ===""){
+
+        if (inputTags.length === 1) {
+            if (values.input.trim() === "") {
                 setErrorMsg("Must search for at least one tag.");
                 return;
             }
         }
         inputTags.forEach((item, index) => {
-            if(item !== "") {
-                completedQuery += "tag="+item;
+            if (item !== "") {
+                completedQuery += "tag=" + item;
             }
-            if(index !== inputTags.length -1) {
+            if (index !== inputTags.length - 1) {
                 completedQuery += "&";
             }
         });
         props.queryTags("/posts/find-tag/" + completedQuery);
-        setValues({...values, open: false, input: ''});
+
+        setValues({ ...values, open: false, input: '' });
         setErrorMsg("");
         props.onCancel();
     }
@@ -91,7 +92,7 @@ export default function TagFilter(props) {
         setTags([]);
         setTags(newTags);
     }
-    
+
     return (
         <div>
             <Container id={styles.container} maxWidth="lg">
@@ -107,33 +108,37 @@ export default function TagFilter(props) {
                             placeholder="Search"
                             endAdornment={
                                 <InputAdornment position="end">
-                                    <IconButton>
+                                    <IconButton onClick={handleClearInput}>
                                         <ClearIcon
-                                            onClick={handleClearInput}
+
                                         />
                                     </IconButton>
                                 </InputAdornment>
                             }
                         />
-                        <IconButton>
+                        <IconButton onClick={handleSearch}>
                             <SearchIcon
-                                onClick={handleSearch}
+
                             />
                         </IconButton>
                     </div>
                     <div id="tag-button-container" className={styles.tagsWrapperDiv}>
                         {tags.map((tag, index) => {
-                            return(
+                            return (
                                 tag.isSelected ?
-                                <Button variant="outlined" className={styles.filterButtonSelected} 
-                                    onClick={() => handleTagClick(index)}>
-                                    {tag.tag}
-                                </Button>
-                                : 
-                                <Button variant="outlined" className={styles.filterButton} 
-                                    onClick={() => handleTagClick(index)}>
-                                    {tag.tag}
-                                </Button>
+                                    <button className={styles.filterButtonSelected}
+                                        onClick={() => handleTagClick(index)}
+                                        key={index}
+                                    >
+                                        {tag.tag}
+                                    </button>
+                                    :
+                                    <button className={styles.filterButton}
+                                        onClick={() => handleTagClick(index)}
+                                        key={index}
+                                    >
+                                        {tag.tag}
+                                    </button>
                             );
                         })}
                     </div>
@@ -141,12 +146,19 @@ export default function TagFilter(props) {
                         <p> {errorMsg === "" ? <span>&nbsp;</span> : errorMsg} </p>
                     </div>
                     <div className={styles.tagFilterActionDiv}>
-                        <Button className={styles.actionButton} variant="contained" color="secondary" onClick={props.onCancel}>
-                            Cancel
-                        </Button>
-                        <Button className={styles.actionButton} variant="contained" onClick={handleSearch} color="primary">
-                            Confirm
-                        </Button>
+                        <button
+                            onClick={props.onCancel}
+                            className="button-cancel text-white text-2xl font-semibold mb-2 text-center rounded cursor-pointer shadow-md"
+                            style={{ height: "3rem", padding: " 0 1rem 0 1rem", margin: "10px" }}>
+                            <p style={{ padding: "0.1rem" }}> Cancel </p>
+                        </button>
+
+                        <button
+                            onClick={handleSearch}
+                            className="button text-white text-2xl font-semibold mb-2 text-center rounded cursor-pointer shadow-md"
+                            style={{ height: "3rem", padding: " 0 1rem 0 1rem", margin: "10px" }}>
+                            <p style={{ padding: "0.1rem" }}> Confirm </p>
+                        </button>
                     </div>
                 </div>
             </Container>

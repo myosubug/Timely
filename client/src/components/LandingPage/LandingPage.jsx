@@ -171,7 +171,7 @@ const LandingPage = (props) => {
 
                         <div
                             onClick={handleLogOut}
-                            className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
+                            className="button-cancel text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
                             style={{ height: "3.2rem" }}>
                             <p style={{ paddingTop: "0.18rem" }}>Log Out</p>
                         </div>
@@ -204,10 +204,6 @@ const LandingPage = (props) => {
                 </div>
 
                 <div className="selector mt-4 ml-12 mb-8">
-
-                    <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer">
-                        <FontAwesomeIcon icon={faHome} /> <i style={{ paddingRight: "0.45rem" }} /> Home
-                        </div>
 
                     <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
                         onClick={() => changePostQuery('/posts/trending')}>

@@ -52,7 +52,7 @@ const PostCreatorBase = (props) => {
                         <button
                             onClick={props.onCancel}
                             className="button-cancel text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
-                            style={{ height: "3rem" }}>
+                            style={{ height: "3rem", padding: " 0 1rem 0 1rem" }}>
                             <p style={{ padding: "0.1rem" }}> Cancel </p>
                         </button>
                     </div>
@@ -60,7 +60,7 @@ const PostCreatorBase = (props) => {
                         <button
                             type="submit"
                             className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
-                            style={{ height: "3rem" }}>
+                            style={{ height: "3rem", padding: " 0 1rem 0 1rem" }}>
                             <p style={{ padding: "0.1rem" }}> Submit </p>
                         </button>
                     </div>
