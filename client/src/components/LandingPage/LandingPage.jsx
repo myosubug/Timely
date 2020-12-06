@@ -15,12 +15,13 @@ import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser, resetLoggedInUser, populateUserInfo } from '../../AppConfig.js'
 
 import './LandingStyles.css';
-import { Dialog, DialogContent, Drawer, makeStyles } from '@material-ui/core';
+import { Dialog, DialogContent, makeStyles, SwipeableDrawer } from '@material-ui/core';
 
 
 const useStyles = makeStyles({
     paper: {
         background: '#ededed',
+        width: "300px"
     }
 });
 
@@ -36,6 +37,8 @@ const LandingPage = (props) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isRightMenuOpen, setIsRightMenuOpen] = useState(false);
     const [isLeftMenuOpen, setIsLeftMenuOpen] = useState(false);
+    const [isLeftMenuAvail, setIsLeftMenuAvail] = useState(false);
+    const [isRightMenuAvail, setIsRightMenuAvail] = useState(false);
 
     useEffect(() => {
         socket.on('update post list', () => {
@@ -60,15 +63,24 @@ const LandingPage = (props) => {
         const resize = () => {
             if (window.innerWidth >= 1280) {
                 setIsRightMenuOpen(false);
+                setIsRightMenuAvail(false);
+            }
+            else {
+                setIsRightMenuAvail(true);
             }
 
             if (window.innerWidth > 768) {
                 setIsLeftMenuOpen(false);
+                setIsLeftMenuAvail(false);
+            }
+            else {
+                setIsLeftMenuAvail(true);
             }
 
         }
 
         window.addEventListener("resize", resize);
+        resize();
 
         return () => {
             window.removeEventListener("resize", resize);
@@ -163,7 +175,11 @@ const LandingPage = (props) => {
 
                         {/* IF LOGGED IN */}
                         <div
-                            onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}
+                            onClick={() => {
+                                setRenderModalObj(prev => ({ ...prev, "post": true }));
+                                setIsRightMenuOpen(false);
+                            }
+                            }
                             className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
                             style={{ height: "3.2rem" }}>
                             <p style={{ paddingTop: "0.18rem" }}>Create Post</p>
@@ -203,30 +219,45 @@ const LandingPage = (props) => {
 
                 <div className="selector mt-4 mb-8 md:px-5">
 
-                    <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
-                        onClick={() => changePostQuery('/posts/trending')}>
+                    <div className={"menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer" + (postQuery === "/posts/trending" ? " menu-item-select" : "")}
+                        onClick={() => {
+                            changePostQuery('/posts/trending');
+                            setIsLeftMenuOpen(false);
+                        }}>
                         <FontAwesomeIcon icon={faFire} /> <i className="pr-4" /> Trending
                         </div>
 
-                    <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
-                        onClick={() => changePostQuery('/posts/newest-posts')}>
+                    <div className={"menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer" + (postQuery === "/posts/newest-posts" ? " menu-item-select" : "")}
+                        onClick={() => {
+                            changePostQuery('/posts/newest-posts');
+                            setIsLeftMenuOpen(false);
+                        }}>
                         <FontAwesomeIcon icon={faSun} /> <i className="fas fa-fire pr-3"></i> Newest
                         </div>
 
-                    <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
-                        onClick={() => changePostQuery('/posts/expiring-soon')}>
+                    <div className={"menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer" + (postQuery === "/posts/expiring-soon" ? " menu-item-select" : "")}
+                        onClick={() => {
+                            changePostQuery('/posts/expiring-soon');
+                            setIsLeftMenuOpen(false);
+                        }}>
                         <FontAwesomeIcon icon={faClock} /> <i className="fas fa-fire pr-3"></i> Expiring
                         </div>
 
-                    <div className="menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer"
-                        onClick={() => changePostQuery('/posts/time-remaining')}>
+                    <div className={"menu-item text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 cursor-pointer" + (postQuery === "/posts/time-remaining" ? " menu-item-select" : "")}
+                        onClick={() => {
+                            changePostQuery('/posts/time-remaining');
+                            setIsLeftMenuOpen(false)
+                        }}>
                         <FontAwesomeIcon icon={faCalendar} /> <i className="fas fa-fire pr-4"></i> Longest
                         </div>
                 </div>
 
                 <div className="flex justify-center px-0 md:px-6">
                     <div
-                        onClick={() => setRenderModalObj(prev => ({ ...prev, "tags": true }))}
+                        onClick={() => {
+                            setRenderModalObj(prev => ({ ...prev, "tags": true }));
+                            setIsLeftMenuOpen(false);
+                        }}
                         className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
                         style={{ height: "3.2rem" }}>
                         <p style={{ paddingTop: "0.18rem" }}>Tags</p>
@@ -241,34 +272,36 @@ const LandingPage = (props) => {
     //Renders the left side bar, but as a drawer
     const renderRightSideBarDrawer = () => {
         return (
-            <Drawer
+            <SwipeableDrawer
                 open={isRightMenuOpen}
+                disableSwipeToOpen={!isRightMenuAvail}
+                onOpen={() => setIsRightMenuOpen(true)}
                 onClose={() => setIsRightMenuOpen(false)}
                 anchor={"right"}
-                onClick={() => setIsRightMenuOpen(false)}
                 classes={{ paper: styles.paper }}
             >
                 <div className="pt-32 p-4">
                     {renderRightSideBar()}
                 </div>
-            </Drawer>
+            </SwipeableDrawer >
         );
     }
 
     //Renders teh right side bar, but as a drawer
     const renderLeftSideBarDrawer = () => {
         return (
-            <Drawer
+            <SwipeableDrawer
                 open={isLeftMenuOpen}
+                disableSwipeToOpen={!isLeftMenuAvail}
+                onOpen={() => { setIsLeftMenuOpen(true) }}
                 onClose={() => setIsLeftMenuOpen(false)}
                 anchor={"left"}
-                onClick={() => setIsLeftMenuOpen(false)}
                 classes={{ paper: styles.paper }}
             >
                 <div className="pt-24 p-4">
                     {renderLeftSideBar()}
                 </div>
-            </Drawer>
+            </SwipeableDrawer>
         );
     }
 

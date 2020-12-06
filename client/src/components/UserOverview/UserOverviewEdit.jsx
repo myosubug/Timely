@@ -147,40 +147,40 @@ const UserOverviewEdit = (props) => {
 
         <div className="lg:flex items-baseline border-b-2 border-gray-200 items-center py-5">
           <div className="w-full lg:w-1/2">
-              <div className="flex justify-center lg:justify-start">
-                <div className="flex justify-start">
-                  <Grid item xs={9} className="ProfilePic">
-                      <IconButton color="primary" >
-                          <input
-                          accept="image/*"
-                          // ref={inputFileRef}
-                          hidden
-                          id="avatar-image-upload"
-                          type="file"
-                          onChange={handleOnImgChange}
-                        />
-                        <label htmlFor="avatar-image-upload">
-                          <Avatar
-                            alt="Avatar"
-                            src={image}
-                            className="avatar"
-                          />
-                        </label>
-                      </IconButton>
-                    </Grid>
-                </div>
+            <div className="flex justify-center lg:justify-start">
+              <div className="flex justify-start">
+                <Grid item xs={9} className="ProfilePic">
+                  <IconButton color="primary" >
+                    <input
+                      accept="image/*"
+                      // ref={inputFileRef}
+                      hidden
+                      id="avatar-image-upload"
+                      type="file"
+                      onChange={handleOnImgChange}
+                    />
+                    <label htmlFor="avatar-image-upload">
+                      <Avatar
+                        alt="Avatar"
+                        src={image}
+                        className="avatar"
+                      />
+                    </label>
+                  </IconButton>
+                </Grid>
+              </div>
 
-                <div className="UserInfo pl-2" style={{ marginRight: "0.25rem" }}>
-                  <div style={{color: "#53b7bb" }} className="text-2xl font-medium">
-                    {"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""} <span className="text-sm text-gray-600 font-normal">{posts.length} active posts</span>
-                  </div>
-                  <div className="text-md font-sm">
-                    {/* CREATION DATE IS STORED IN USER SCHEMA */}
-                    {"Member since " + userInfo.joinDate}
-                  </div>
+              <div className="UserInfo pl-2" style={{ marginRight: "0.25rem" }}>
+                <div style={{ color: "#53b7bb" }} className="text-2xl font-medium">
+                  {"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""} <span className="text-sm text-gray-600 font-normal">{posts.length} active posts</span>
+                </div>
+                <div className="text-md font-sm">
+                  {/* CREATION DATE IS STORED IN USER SCHEMA */}
+                  {"Member since " + userInfo.joinDate}
                 </div>
               </div>
             </div>
+          </div>
         </div>
 
         <div className="UserActions pl-8 py-5">
@@ -197,26 +197,26 @@ const UserOverviewEdit = (props) => {
         {/* Username */}
 
         <div className="lg:flex items-baseline">
-          <div className="w-full lg:w-1/2"><h3 class="font-semibold text-center lg:text-left m-0 p-0 text-2xl text-gray-700">
-                Username
+          <div className="w-full lg:w-1/2"><h3 className="font-semibold text-center lg:text-left m-0 p-0 text-2xl text-gray-700">
+            Username
               </h3><h5 className="font-normal text-center lg:text-left m-0 p-0 text-sm lg:text-base">
               {userInfo.username}
-              </h5>
+            </h5>
           </div>
 
           <div className="w-full lg:w-1/2 mt-4 lg:mt-2 h-12 px-16 flex justify-center lg:justify-end">
             <div
-                onClick={() => setDeleteModalOpen(true)}
-                className="flex w-32 justify-center items-center button-cancel text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
-                <span>Delete</span>
+              onClick={() => setDeleteModalOpen(true)}
+              className="flex w-32 justify-center items-center button-cancel text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
+              <span>Delete</span>
             </div>
           </div>
 
         </div>
 
         <div className="lg:flex items-baseline">
-          <div className="w-full lg:w-1/2"><h3 class="font-semibold text-center lg:text-left m-0 p-0 text-2xl text-gray-700">
-                Password
+          <div className="w-full lg:w-1/2"><h3 className="font-semibold text-center lg:text-left m-0 p-0 text-2xl text-gray-700">
+            Password
               </h3><h5 className="font-normal text-center lg:text-left m-0 p-0 text-sm lg:text-base">
               ********
               </h5>
@@ -224,9 +224,9 @@ const UserOverviewEdit = (props) => {
 
           <div className="w-full lg:w-1/2 mt-4 lg:mt-2 h-12 px-16 flex justify-center lg:justify-end">
             <div
-                onClick={() => setPassModalOpen(true)}
-                className="flex w-32 justify-center items-center button text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
-                <span>Change</span>
+              onClick={() => setPassModalOpen(true)}
+              className="flex w-32 justify-center items-center button text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
+              <span>Change</span>
             </div>
           </div>
 
@@ -238,52 +238,52 @@ const UserOverviewEdit = (props) => {
 
   return (
     <div className="UserOverviewEdit">
-          <NavBar
-            isLandingPg={false}
-            username={props.username}
-          />
+      <NavBar
+        isLandingPg={false}
+        username={props.username}
+      />
 
 
-          <div className="grid grid-cols-9 gap-4 w-full">
+      <div className="grid grid-cols-9 gap-4 w-full">
 
-          <div className="hidden xl:block xl:col-span-2 col-span-3 h-screen top-0 pt-24 sticky p-4 border-r-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
-          </div>
+        <div className="hidden xl:block xl:col-span-2 col-span-3 h-screen top-0 pt-24 sticky p-4 border-r-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
+        </div>
 
-          <div className="col-span-9 xl:col-span-5 flex-grow justify-center w-full pt-16 xl:pt-20 px-5" style={{ backgroundColor: "#fcfcfc" }}>
-                    <div className="justify-center">
-                    {renderUserGrid()}
+        <div className="col-span-9 xl:col-span-5 flex-grow justify-center w-full pt-16 xl:pt-20 px-5" style={{ backgroundColor: "#fcfcfc" }}>
+          <div className="justify-center">
+            {renderUserGrid()}
 
-                    {posts.length > 0 &&
-                      <div className="text-2xl font-semibold text-gray-800 mb-5 ml-2 mt-5">
-                        Post Activity
+            {posts.length > 0 &&
+              <div className="text-2xl font-semibold text-gray-800 mb-5 ml-2 mt-5">
+                Post Activity
                     </div>
-                    }
-                    {posts}
+            }
+            {posts}
 
-
-                    </div>
-                </div>
-          
-          <div className="hidden xl:block col-span-2 h-screen top-0 sticky pt-32 p-4 border-l-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
-          </div>
 
           </div>
+        </div>
 
-        {/* DELETE ACCOUNT MODAL */}
-        <DeleteAccountModal
-          username={userInfo.username}
-          delete={handleDeleteAccount}
-          isOpen={isDeleteModalOpen}
-          onClose={() => setDeleteModalOpen(false)}
-        />
+        <div className="hidden xl:block col-span-2 h-screen top-0 sticky pt-32 p-4 border-l-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
+        </div>
 
-        {/* EDIT PASSWORD MODAL */}
-        <EditPasswordModal
-          username={userInfo.username}
-          password={userInfo.password}
-          isOpen={isPassModalOpen}
-          onClose={() => setPassModalOpen(false)}
-        />
+      </div>
+
+      {/* DELETE ACCOUNT MODAL */}
+      <DeleteAccountModal
+        username={userInfo.username}
+        delete={handleDeleteAccount}
+        isOpen={isDeleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+      />
+
+      {/* EDIT PASSWORD MODAL */}
+      <EditPasswordModal
+        username={userInfo.username}
+        password={userInfo.password}
+        isOpen={isPassModalOpen}
+        onClose={() => setPassModalOpen(false)}
+      />
     </div>
   );
 
