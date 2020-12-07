@@ -164,7 +164,7 @@ const LandingPage = (props) => {
                                 <h2 className="text-lg font-semibold text-gray-700 border-gray-400 pb-1 border-b-2"> {loggedInUser.username} </h2>
                             </Link>
                             <div className="text-gray-600" style={{ marginTop: "0.2rem", fontSize: "13px" }}>
-                                <p>Posts Active: <b className="text-gray-700"> {numPosts} </b></p>
+                                <p>Active Posts: <b className="text-gray-700"> {numPosts} </b></p>
                             </div>
                         </div>
                     </div>
