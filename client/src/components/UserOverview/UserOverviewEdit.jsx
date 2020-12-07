@@ -140,6 +140,55 @@ const UserOverviewEdit = (props) => {
       .catch(err => (console.log(err)));
   };
 
+   // Converts join date to readable string
+   const convertJoinDate = () => {
+    let userJoinDate = JSON.stringify(userInfo.joinDate);
+    userJoinDate = userJoinDate?.substring(6,8);
+    console.log(userJoinDate);
+
+    switch(userJoinDate) {
+      case '01':
+        userJoinDate = "January ";
+        break;
+      case '02':
+        userJoinDate = "February ";
+        break;
+      case '03':
+        userJoinDate = "March ";
+        break;
+      case '04':
+        userJoinDate = "April ";
+        break;
+      case '05':
+        userJoinDate = "May ";
+        break;
+      case '06':
+        userJoinDate = "June ";
+        break;
+      case '07':
+        userJoinDate = "July ";
+        break;
+      case '08':
+        userJoinDate = "August ";
+        break;
+      case '09':
+        userJoinDate = "September ";
+        break;
+      case '10':
+        userJoinDate = "October ";
+        break;
+      case '11':
+        userJoinDate = "November ";
+        break;
+      case '12':
+        userJoinDate = "December ";
+        break;
+      default:
+        userJoinDate = "Maytember? ";
+    }
+    return userJoinDate;
+  };
+
   // Renders the users information
   const renderUserGrid = () => {
     return (
@@ -176,7 +225,7 @@ const UserOverviewEdit = (props) => {
                 </div>
                 <div className="text-md font-sm">
                   {/* CREATION DATE IS STORED IN USER SCHEMA */}
-                  {"Member since " + userInfo.joinDate}
+                  {"Member since " + convertJoinDate() + "2020"}
                 </div>
               </div>
             </div>
