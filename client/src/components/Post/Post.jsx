@@ -39,7 +39,8 @@ const BorderLinearProgress = withStyles((theme) => ({
 
 const TagChip = withStyles({
     root: {
-        backgroundColor: '#afc5d3',
+        backgroundColor: '#7ed3d6',
+        opacity: '75%',
         margin: "5px",
         maxWidth: "100%"
     }

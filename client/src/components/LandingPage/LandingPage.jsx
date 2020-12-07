@@ -373,7 +373,7 @@ const LandingPage = (props) => {
                     {/* Check if there are any posts, if not display a default message */}
                         {posts.length < 1
                             ? (
-                                <div className="flex justify-center text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 pt-10 opacity-50 cursor-pointer">
+                                <div className="flex justify-center text-2xl font-semibold text-gray-700 rounded-full px-3 py-3 pt-10 opacity-50 cursor-pointer">
                                     <i className="pr-4" />
                                         No Active Posts 😔
                                 </div>)
