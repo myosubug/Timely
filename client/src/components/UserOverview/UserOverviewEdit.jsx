@@ -14,7 +14,6 @@ import NavBar from '../NavBar/NavBar';
 import { Post } from '../Post/Post';
 import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
-import './style.css';
 
 const UserOverviewEdit = (props) => {
   const useStyles = makeStyles((theme) => ({
