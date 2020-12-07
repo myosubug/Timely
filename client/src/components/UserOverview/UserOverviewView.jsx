@@ -1,12 +1,8 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Avatar,
   Grid,
-  Typography,
-  IconButton,
 } from '@material-ui/core';
-import DeleteAccountModal from '../DeleteAccountModal/DeleteAccountModal';
-import EditPasswordModal from '../EditPasswordModal/EditPasswordModal';
 import NavBar from '../NavBar/NavBar';
 import { Post } from '../Post/Post';
 import axios from 'axios';
@@ -14,13 +10,7 @@ import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
 
 const UserOverviewView = (props) => {
 
-  const inputFileRef = createRef(null);
   const [image, _setImage] = useState(null);
-
-  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [isUserModalOpen, setUserModalOpen] = useState(false);
-  const [isPassModalOpen, setPassModalOpen] = useState(false);
-
   const [userInfo, setUserInfo] = useState({});
   const [posts, setPosts] = useState([]);
 
@@ -48,16 +38,7 @@ const UserOverviewView = (props) => {
         renderPosts(userInfo);
       })
       .catch(err => console.log(err));
-
-
   }, []);
-
-  // Function that cleans up avatar image
-  const cleanup = () => {
-    // URL.revokeObjectURL(image);
-    // inputFileRef.current.value = null;
-  };
-
 
   //Gets the posts from specified query, and sets the state
   const renderPosts = (username_obj) => {
@@ -72,26 +53,13 @@ const UserOverviewView = (props) => {
           )
         }
         setPosts(new_posts);
-
       })
       .catch(err => console.log(err));
   }
 
   // Function that sets avatar image
   const setImage = (newImage) => {
-    if (image) {
-      cleanup();
-    }
     _setImage(newImage);
-    // console.log(newImage);
-  };
-
-  // Function the makes the axios call to delete an account from the db
-  const handleDeleteAccount = () => {
-    console.log(userInfo.username);
-    axios.post(SERVER_ADDRESS + '/users/delete/' + userInfo.username)
-      .then(console.log("Axios: user successfully deleted!"))
-      .catch(err => (console.log(err)));
   };
 
   // Converts join date to readable string
@@ -168,7 +136,6 @@ const UserOverviewView = (props) => {
                   {"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""} <span className="text-sm text-gray-600 font-normal">{posts.length} active posts</span>
                 </div>
                 <div className="text-md font-sm">
-                  {/* CREATION DATE IS STORED IN USER SCHEMA */}
                   {"Member since " + convertJoinDate() + "2020"}
                 </div>
               </div>
@@ -186,25 +153,22 @@ const UserOverviewView = (props) => {
         isLandingPg={false}
         username={props.username}
       />
-
-
+      
       <div className="grid grid-cols-9 gap-4 w-full">
-
         <div className="hidden xl:block xl:col-span-2 col-span-3 h-screen top-0 pt-24 sticky p-4 border-r-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
         </div>
 
         <div className="col-span-9 xl:col-span-5 flex-grow justify-center w-full pt-16 xl:pt-20 px-5" style={{ backgroundColor: "#fcfcfc" }}>
           <div className="justify-center">
+          {/* User grid */}
             {renderUserGrid()}
 
+          {/* Post activity */}
             {posts.length > 0 &&
               <div className="text-2xl font-semibold text-gray-800 mb-5 ml-2 mt-5">
                 Post Activity
-              </div>
-            }
+              </div>}
             {posts}
-
-
           </div>
         </div>
 
@@ -212,22 +176,6 @@ const UserOverviewView = (props) => {
         </div>
 
       </div>
-
-      {/* DELETE ACCOUNT MODAL */}
-      <DeleteAccountModal
-        username={userInfo.username}
-        delete={handleDeleteAccount}
-        isOpen={isDeleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
-      />
-
-      {/* EDIT PASSWORD MODAL */}
-      <EditPasswordModal
-        username={userInfo.username}
-        password={userInfo.password}
-        isOpen={isPassModalOpen}
-        onClose={() => setPassModalOpen(false)}
-      />
     </div>
   );
 

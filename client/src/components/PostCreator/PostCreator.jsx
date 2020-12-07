@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { DropzoneArea } from 'material-ui-dropzone'
 import { PostCreatorBase } from './PostCreatorBase';
-
 import { SERVER_ADDRESS, loggedInUser } from '../../AppConfig.js'
-
 import axios from 'axios';
 
 import styles from "./PostCreatorStyles.module.css";

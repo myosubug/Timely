@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
+import {
+  Button,
+  CssBaseline,
+  TextField,
+  Grid,
+  Typography,
+  Container,
+  makeStyles
+} from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { SERVER_ADDRESS } from '../../AppConfig.js'
-import { loggedInUser } from '../../AppConfig.js'
+import { SERVER_ADDRESS, loggedInUser } from '../../AppConfig.js'
 
 const useStyles = makeStyles((theme) => ({
   paper: {

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { Button } from '@material-ui/core';
+import {
+    Radio,
+    RadioGroup,
+    FormControlLabel
+} from '@material-ui/core'
 
 import styles from "./PostCreatorStyles.module.css";
 import { withStyles } from '@material-ui/styles';

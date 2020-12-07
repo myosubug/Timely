@@ -50,7 +50,6 @@ export const PromotePost = (props) => {
         </Button>
         <Button
           onClick={handleOnConfirmClick}
-          // onClick={handleOnConfirmClick}
           className="ConfirmButton"
         >
           Confirm

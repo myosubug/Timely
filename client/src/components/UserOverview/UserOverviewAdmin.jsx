@@ -1,13 +1,10 @@
-import React, { createRef, useEffect, useState, useParams } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Avatar,
   Grid,
-  Button,
-  Typography,
   IconButton,
   Tooltip
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import BanUserModal from './AdminPopUps/BanUserModal';
 import AdminEditPasswordModal from './AdminPopUps/AdminEditPasswordModal';
 import DemoteAdminModal from './AdminPopUps/DemoteAdminModal';
@@ -18,20 +15,6 @@ import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
 
 const UserOverviewAdmin = (props) => {
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      display: 'flex',
-      '& > *': {
-        margin: theme.spacing(1),
-      },
-    },
-    large: {
-      width: '150px',
-      height: '150px',
-    },
-  }));
-
-  const inputFileRef = createRef(null);
   const [image, _setImage] = useState(null);
 
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -40,11 +23,7 @@ const UserOverviewAdmin = (props) => {
   const [isPassModalOpen, setPassModalOpen] = useState(false);
 
   const [userInfo, setUserInfo] = useState({});
-
   const [posts, setPosts] = useState([]);
-
-  const classes = useStyles();
-
 
   useEffect(() => {
     // Get logged in user's info
@@ -73,12 +52,6 @@ const UserOverviewAdmin = (props) => {
       .catch(err => console.log(err));
   }, []);
 
-  // Function that cleans up avatar image
-  const cleanup = () => {
-    // URL.revokeObjectURL(image);
-    // inputFileRef.current.value = null;
-  };
-
   //Gets the posts from specified query, and sets the state
   const renderPosts = (username_obj) => {
     axios.get(SERVER_ADDRESS + "/users/userPosts/" + username_obj.username)
@@ -99,17 +72,12 @@ const UserOverviewAdmin = (props) => {
 
   // Function that sets avatar image
   const setImage = (newImage) => {
-    if (image) {
-      cleanup();
-    }
     _setImage(newImage);
-    // console.log(newImage);
   };
 
   // Takes uploaded img and passes it to setImg function to be set
   const handleOnImgChange = (event) => {
     const newImage = event.target?.files?.[0];
-    // console.log(newImage);
 
     if (newImage) {
       //Only update if we are uploading an image
@@ -124,14 +92,6 @@ const UserOverviewAdmin = (props) => {
         setImage(URL.createObjectURL(newImage));
       }
 
-    }
-  };
-
-  // Handling when avatar image is clicked
-  const handleAvatarClick = (event) => {
-    if (image) {
-      event.preventDefault();
-      setImage(image);
     }
   };
 
@@ -168,7 +128,6 @@ const UserOverviewAdmin = (props) => {
    const convertJoinDate = () => {
     let userJoinDate = JSON.stringify(userInfo.joinDate);
     userJoinDate = userJoinDate?.substring(6,8);
-    console.log(userJoinDate);
 
     switch(userJoinDate) {
       case '01':
@@ -213,77 +172,6 @@ const UserOverviewAdmin = (props) => {
     return userJoinDate;
   };
 
-  // Renders the profile pic and the delete account button
-  const renderProfileGrid = () => {
-    return (
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignContent="center"
-        alignItems="center"
-        spacing={1}
-      >
-        <Grid item xs={9} className="ProfilePic">
-          <IconButton color="primary" >
-            <input
-              accept="image/*"
-              // ref={inputFileRef}
-              hidden
-              id="avatar-image-upload"
-              type="file"
-              onChange={handleOnImgChange}
-            />
-            <label htmlFor="avatar-image-upload">
-              <Avatar
-                alt="Avatar"
-                src={image}
-                className={classes.large}
-              />
-            </label>
-          </IconButton>
-        </Grid>
-
-        {/* BAN USER */}
-        <Grid item xs={3} className="DeleteAccount">
-          <Button
-            variant="contained"
-            className="DeleteAccountButton"
-            onClick={() => setDeleteModalOpen(true)}
-            size="medium"
-          >
-            Ban User
-          </Button>
-        </Grid>
-
-        {/* PROMOTE OR DEMOTE USER */}
-        <Grid item xs={3} className="PromoteDemoteUser">
-          {console.log(userInfo)}
-          {userInfo.isAdmin
-            ?
-            <Button
-              variant="contained"
-              className="PromoteDemoteUserButton"
-              onClick={() => setDemoteModalOpen(true)}
-              size="medium"
-            >
-              Demote
-            </Button>
-            :
-            <Button
-              variant="contained"
-              className="PromotePromoteUserButton"
-              onClick={() => setPromoteModalOpen(true)}
-              size="medium"
-            >
-              Promote
-            </Button>
-          }
-        </Grid>
-      </Grid>
-    );
-  }
-
   // Renders the users information
   const renderUserGrid = () => {
     return (
@@ -291,12 +179,12 @@ const UserOverviewAdmin = (props) => {
         <div className="lg:flex items-baseline border-b-2 border-gray-200 items-center py-5">
           <div className="w-full lg:w-1/2">
             <div className="flex justify-center lg:justify-start">
+            {/* Avatar */}
               <div className="flex justify-start">
                 <Grid item xs={9} className="ProfilePic">
                   <IconButton color="primary" >
                     <input
                       accept="image/*"
-                      // ref={inputFileRef}
                       hidden
                       id="avatar-image-upload"
                       type="file"
@@ -318,19 +206,16 @@ const UserOverviewAdmin = (props) => {
                   {"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""} <span className="text-sm text-gray-600 font-normal">{posts.length} active posts</span>
                 </div>
                 <div className="text-md font-sm">
-                  {/* CREATION DATE IS STORED IN USER SCHEMA */}
                   {"Member since " + convertJoinDate() + "2020"}
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Demote/promote user  */}
           <div className="w-full lg:w-1/2 mt-4 lg:mt-2 h-12 flex justify-center lg:justify-end lg:pr-16">
-
             {userInfo.isAdmin
               ?
-
-
               <Tooltip title="Demote admin to user">
                 <div
                   onClick={() => setDemoteModalOpen(true)}
@@ -347,14 +232,12 @@ const UserOverviewAdmin = (props) => {
                   <span>Promote User</span>
                 </div>
               </Tooltip>
-
             }
-
           </div>
-
 
         </div>
 
+        {/* Account actions */}
         <div className="UserActions pl-8 py-5">
           {renderUserActions()}
         </div>
@@ -367,7 +250,6 @@ const UserOverviewAdmin = (props) => {
     return (
       <div>
         {/* Username */}
-
         <div className="lg:flex items-baseline">
           <div className="w-full lg:w-1/2"><h3 className="font-semibold text-center lg:text-left m-0 p-0 text-2xl text-gray-700">
             Username
@@ -385,9 +267,9 @@ const UserOverviewAdmin = (props) => {
             </div>
           </Tooltip>
           </div>
-
         </div>
 
+        {/* Password */}
         <div className="lg:flex items-baseline">
           <div className="w-full lg:w-1/2"><h3 className="font-semibold text-center lg:text-left m-0 p-0 text-2xl text-gray-700">
             Password
@@ -427,8 +309,10 @@ const UserOverviewAdmin = (props) => {
 
         <div className="col-span-9 xl:col-span-5 flex-grow justify-center w-full pt-16 xl:pt-20 px-5" style={{ backgroundColor: "#fcfcfc" }}>
           <div className="justify-center">
+            {/* User Info */}
             {renderUserGrid()}
 
+            {/* Post activity */}
             {posts.length > 0 &&
               <div className="text-2xl font-semibold text-gray-800 mb-5 ml-2 mt-5">
                 Post Activity

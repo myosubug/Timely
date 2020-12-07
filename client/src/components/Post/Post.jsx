@@ -1,26 +1,22 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
-import Grid from '@material-ui/core/Grid';
-import Tooltip from '@material-ui/core/Tooltip';
-import LinearProgress from '@material-ui/core/LinearProgress';
-
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import Chip from '@material-ui/core/Chip';
-
-import { Button } from '@material-ui/core';
+import {
+    withStyles,
+    Avatar,
+    Grid,
+    Tooltip,
+    LinearProgress,
+    Card,
+    CardContent,
+    CardHeader,
+    Chip,
+    Button
+} from '@material-ui/core';
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PostSubMenu } from './PostSubMenu.jsx';
-
 import axios from 'axios';
 import { SERVER_ADDRESS, socket } from '../../AppConfig.js'
-
 import styles from './PostStyles.module.css';
 
 const BorderLinearProgress = withStyles((theme) => ({

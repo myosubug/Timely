@@ -1,11 +1,18 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { 
+    Dialog, 
+    DialogContent, 
+    makeStyles, 
+    SwipeableDrawer, 
+    Tooltip 
+} from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { PostCreator } from '../PostCreator/PostCreator.jsx';
 import { Post } from '../Post/Post.jsx';
 import { Sign } from '../SignInUp/Sign.jsx';
 
-import { faHome, faBell, faFire, faChartLine, faSun, faClock, faCalendar, faFeather } from "@fortawesome/free-solid-svg-icons";
+import { faFire, faSun, faClock, faCalendar, faFeather } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import TagFilter from '../TagFilter/TagFilter';
@@ -15,7 +22,6 @@ import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser, resetLoggedInUser, populateUserInfo } from '../../AppConfig.js'
 
 import './LandingStyles.css';
-import { Dialog, DialogContent, makeStyles, SwipeableDrawer, Tooltip } from '@material-ui/core';
 
 
 const useStyles = makeStyles({
@@ -45,15 +51,10 @@ const LandingPage = (props) => {
             renderPosts();
         });
 
-
         populateUserInfo(localStorage.getItem('token'));
         renderPosts();
         setLoggedIn(loggedInUser.username !== "");
         getNumPosts();
-
-
-
-
     }, []);
 
     //Add an event listener to the window
@@ -105,9 +106,6 @@ const LandingPage = (props) => {
 
             })
             .catch(err => console.log(err));
-
-
-
     }
 
     //Gets the number of posts the current user has
@@ -117,7 +115,6 @@ const LandingPage = (props) => {
                 .then(({ data }) => setNumPosts(data))
                 .catch(err => console.log(err));
         }
-
     }
 
     // Renders the modal based on the content passed in
@@ -159,7 +156,7 @@ const LandingPage = (props) => {
                     <div className="flex mb-8">
                         <Link to={"/useroverview/" + loggedInUser.username}>
                             <Tooltip title="View your settings">
-                                <img className="place-self-center h-16 w-16 mr-6 ml-6 mt-2 rounded-full" src={loggedInUser.profileImage}></img>
+                                <img className="place-self-center h-16 w-16 mr-6 ml-6 mt-2 rounded-full" src={loggedInUser.profileImage} alt="profile picture"></img>
                             </Tooltip>
                         </Link>
                         <div className="text-left">
@@ -217,7 +214,7 @@ const LandingPage = (props) => {
         return (
             <div>
                 <div className="flex justify-center text-white mt-4 font-medium text-3xl">
-                    <img width="150px;" draggable="false" src="https://i.imgur.com/ATuMhih.png"></img>
+                    <img width="150px;" draggable="false" src="https://i.imgur.com/ATuMhih.png" alt="Timely logo"></img>
                 </div>
 
                 <div className="selector mt-4 mb-8 md:px-5">
@@ -360,13 +357,8 @@ const LandingPage = (props) => {
             />
             {renderRightSideBarDrawer()}
             {renderLeftSideBarDrawer()}
-
-
             {renderMobileNewPost()}
-
-
             {checkModalState()}
-
 
             <div className="grid grid-cols-9 gap-4 w-full" style={{ backgroundColor: "#fcfcfc" }}>
 
@@ -388,10 +380,7 @@ const LandingPage = (props) => {
                 </div>
 
                 <div className="hidden xl:block col-span-2 h-screen top-0 sticky pt-32 p-4 border-l-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
-
-
                     {renderRightSideBar()}
-
                 </div>
 
             </div>

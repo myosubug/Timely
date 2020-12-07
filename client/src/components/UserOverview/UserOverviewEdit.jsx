@@ -1,13 +1,10 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Avatar,
   Grid,
-  Button,
-  Typography,
   IconButton,
   Tooltip,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import DeleteAccountModal from '../DeleteAccountModal/DeleteAccountModal';
 import EditPasswordModal from '../EditPasswordModal/EditPasswordModal';
 import NavBar from '../NavBar/NavBar';
@@ -16,34 +13,15 @@ import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
 
 const UserOverviewEdit = (props) => {
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      display: 'flex',
-      '& > *': {
-        margin: theme.spacing(1),
-      },
-    },
-    large: {
-      width: '150px',
-      height: '150px',
-    },
-  }));
-
-  const inputFileRef = createRef(null);
   const [image, _setImage] = useState(null);
 
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isPassModalOpen, setPassModalOpen] = useState(false);
 
   const [userInfo, setUserInfo] = useState({});
-
   const [posts, setPosts] = useState([]);
 
-  const classes = useStyles();
-
-
   useEffect(() => {
-
     // Get logged in user's info
     axios.get(SERVER_ADDRESS + '/users/finduser/' + props.username)
       .then(({ data }) => {
@@ -69,13 +47,6 @@ const UserOverviewEdit = (props) => {
       .catch(err => console.log(err));
   }, []);
 
-  // Function that cleans up avatar image
-  const cleanup = () => {
-    // URL.revokeObjectURL(image);
-    // inputFileRef.current.value = null;
-  };
-
-
   //Gets the posts from specified query, and sets the state
   const renderPosts = (username_obj) => {
     axios.get(SERVER_ADDRESS + "/users/userPosts/" + username_obj.username)
@@ -89,24 +60,18 @@ const UserOverviewEdit = (props) => {
           )
         }
         setPosts(new_posts);
-
       })
       .catch(err => console.log(err));
   }
 
   // Function that sets avatar image
   const setImage = (newImage) => {
-    if (image) {
-      cleanup();
-    }
     _setImage(newImage);
-    // console.log(newImage);
   };
 
   // Takes uploaded img and passes it to setImg function to be set
   const handleOnImgChange = (event) => {
     const newImage = event.target?.files?.[0];
-    // console.log(newImage);
 
     if (newImage) {
       //Only update if we are uploading an image
@@ -124,14 +89,6 @@ const UserOverviewEdit = (props) => {
     }
   };
 
-  // Handling when avatar image is clicked
-  const handleAvatarClick = (event) => {
-    if (image) {
-      event.preventDefault();
-      setImage(image);
-    }
-  };
-
   // Function the makes the axios call to delete an account from the db
   const handleDeleteAccount = () => {
     console.log(userInfo.username);
@@ -144,7 +101,6 @@ const UserOverviewEdit = (props) => {
    const convertJoinDate = () => {
     let userJoinDate = JSON.stringify(userInfo.joinDate);
     userJoinDate = userJoinDate?.substring(6,8);
-    console.log(userJoinDate);
 
     switch(userJoinDate) {
       case '01':
@@ -202,7 +158,6 @@ const UserOverviewEdit = (props) => {
                   <IconButton color="primary" >
                     <input
                       accept="image/*"
-                      // ref={inputFileRef}
                       hidden
                       id="avatar-image-upload"
                       type="file"
@@ -224,7 +179,6 @@ const UserOverviewEdit = (props) => {
                   {"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""} <span className="text-sm text-gray-600 font-normal">{posts.length} active posts</span>
                 </div>
                 <div className="text-md font-sm">
-                  {/* CREATION DATE IS STORED IN USER SCHEMA */}
                   {"Member since " + convertJoinDate() + "2020"}
                 </div>
               </div>
@@ -244,7 +198,6 @@ const UserOverviewEdit = (props) => {
     return (
       <div>
         {/* Username */}
-
         <div className="lg:flex items-baseline">
           <div className="w-full lg:w-1/2"><h3 className="font-semibold text-center lg:text-left m-0 p-0 text-2xl text-gray-700">
             Username
@@ -265,6 +218,7 @@ const UserOverviewEdit = (props) => {
 
         </div>
 
+        {/* Password */}
         <div className="lg:flex items-baseline">
           <div className="w-full lg:w-1/2"><h3 className="font-semibold text-center lg:text-left m-0 p-0 text-2xl text-gray-700">
             Password
@@ -312,8 +266,6 @@ const UserOverviewEdit = (props) => {
                     </div>
             }
             {posts}
-
-
           </div>
         </div>
 

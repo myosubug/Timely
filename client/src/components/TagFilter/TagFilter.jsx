@@ -1,16 +1,16 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+import {
+    IconButton,
+    OutlinedInput,
+    InputAdornment,
+    Container
+} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
-import IconButton from '@material-ui/core/IconButton';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Container from '@material-ui/core/Container'
 import styles from './TagFilterStyles.module.css';
 
-
 import axios from 'axios';
-import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
+import { SERVER_ADDRESS } from '../../AppConfig.js'
 
 /**
  * TagFilter Overlay used to filter posts by hashtag
