@@ -25,10 +25,11 @@
     max-width: 95%;
     width: fit-content;
     text-align: left;
-    border: 1.5px solid black;
+    border: 1.5px solid white;
     padding: 8px;
     border-radius: 15px;
-    background-color: white;
+    background-color:#7ed3d6;
+    color: white;
 
     overflow-wrap: break-word;
 }
@@ -43,10 +44,11 @@
     width: fit-content;
     max-width: 95%;
     text-align: left;
-    border: 1.5px solid rgb(0, 0, 0);
+    border: 1.5px solid white;
     padding: 8px;
     border-radius: 15px;
-    background-color: #4ba4a8;
+    background-color: #9c9c9c;
+    color: white;
 
     overflow-wrap: break-word;
 }
@@ -55,10 +57,12 @@
 
     .filterButton:hover{
         background-color: #7ed3d6;
+        opacity: 90%;
     }
-
+    
     .filterButtonSelected:hover{
-        background-color: #7ed3d6;
+        background-color: #9c9c9c;
+        opacity: 90%;
     }
 }
 

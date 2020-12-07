@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogActions,
@@ -10,7 +10,6 @@ import {
   InputAdornment,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 
 export const AddTime = (props) => {
 
@@ -89,7 +88,6 @@ export const AddTime = (props) => {
         </Button>
         <Button
           onClick={handleOnConfirmClick}
-          // onClick={handleOnConfirmClick}
           className="ConfirmButton"
         >
           Confirm

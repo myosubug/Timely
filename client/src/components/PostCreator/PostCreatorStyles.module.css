@@ -17,6 +17,11 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     resize: none;
+    padding: 6px;
+}
+
+#text_input_area:focus{
+    outline: none;
 }
 
 #error_msg{
@@ -32,11 +37,13 @@
 }
 
 #tags_input_area{
+    padding: 6px;
     width: 80%;
     outline: 1px solid #ccc;
 }
 
 .selectBtns{
+    padding-bottom: 10px;
     justify-content: center;
 }
 

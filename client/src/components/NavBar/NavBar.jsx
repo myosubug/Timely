@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { faBars, faSignOutAlt, faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from 'react';
 
 export const NavBar = (props) => {
 
@@ -12,7 +11,6 @@ export const NavBar = (props) => {
   NavBar.propTypes = {
     openSignInModal: PropTypes.func,
     isLandingPg: PropTypes.bool.isRequired,
-    username: PropTypes.string.isRequired,
     rightSideBarRenderer: PropTypes.func,
     leftSideBarRenderer: PropTypes.func
   };

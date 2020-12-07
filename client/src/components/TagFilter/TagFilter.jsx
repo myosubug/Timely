@@ -1,16 +1,16 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+import {
+    IconButton,
+    OutlinedInput,
+    InputAdornment,
+    Container
+} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
-import IconButton from '@material-ui/core/IconButton';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Container from '@material-ui/core/Container'
 import styles from './TagFilterStyles.module.css';
 
-
 import axios from 'axios';
-import { SERVER_ADDRESS, socket, loggedInUser } from '../../AppConfig.js'
+import { SERVER_ADDRESS } from '../../AppConfig.js'
 
 /**
  * TagFilter Overlay used to filter posts by hashtag
@@ -111,6 +111,14 @@ export default function TagFilter(props) {
         <div>
             <Container id={styles.container} maxWidth="lg">
                 <div>
+                    <div className="flex justify-center text-3xl font-semibold text-gray-700 rounded-full pb-4 cursor-pointer">
+                        <i className="pr-0" />
+                            Post Filter
+                    </div>
+                    <div className="flex justify-center text-xl  text-gray-700 rounded-full pb-5 cursor-pointer">
+                        <i className="pr-0" />
+                            To filter your posts, use the search bar or click one of the active tags below.
+                    </div>
                     <div id="input-wrapper" className={styles.inputWrapper}>
                         <OutlinedInput
                             autoFocus

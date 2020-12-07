@@ -1,11 +1,18 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { 
+    Dialog, 
+    DialogContent, 
+    makeStyles, 
+    SwipeableDrawer, 
+    Tooltip 
+} from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { PostCreator } from '../PostCreator/PostCreator.jsx';
 import { Post } from '../Post/Post.jsx';
 import { Sign } from '../SignInUp/Sign.jsx';
 
-import { faHome, faBell, faFire, faChartLine, faSun, faClock, faCalendar, faFeather } from "@fortawesome/free-solid-svg-icons";
+import { faFire, faSun, faClock, faCalendar, faFeather } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import TagFilter from '../TagFilter/TagFilter';
@@ -15,7 +22,6 @@ import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser, resetLoggedInUser, populateUserInfo } from '../../AppConfig.js'
 
 import './LandingStyles.css';
-import { Dialog, DialogContent, makeStyles, SwipeableDrawer } from '@material-ui/core';
 
 
 const useStyles = makeStyles({
@@ -45,15 +51,10 @@ const LandingPage = (props) => {
             renderPosts();
         });
 
-
         populateUserInfo(localStorage.getItem('token'));
         renderPosts();
         setLoggedIn(loggedInUser.username !== "");
         getNumPosts();
-
-
-
-
     }, []);
 
     //Add an event listener to the window
@@ -105,9 +106,6 @@ const LandingPage = (props) => {
 
             })
             .catch(err => console.log(err));
-
-
-
     }
 
     //Gets the number of posts the current user has
@@ -117,7 +115,6 @@ const LandingPage = (props) => {
                 .then(({ data }) => setNumPosts(data))
                 .catch(err => console.log(err));
         }
-
     }
 
     // Renders the modal based on the content passed in
@@ -131,7 +128,6 @@ const LandingPage = (props) => {
                 <DialogContent>
                     {content}
                 </DialogContent>
-
             </Dialog>
         )
     }
@@ -159,14 +155,16 @@ const LandingPage = (props) => {
                 <div>
                     <div className="flex mb-8">
                         <Link to={"/useroverview/" + loggedInUser.username}>
-                            <img className="place-self-center h-16 w-16 mr-6 ml-6 mt-2 rounded-full" src={loggedInUser.profileImage}></img>
+                            <Tooltip title="View your settings">
+                                <img className="place-self-center h-16 w-16 mr-6 ml-6 mt-2 rounded-full" src={loggedInUser.profileImage} alt="profile picture"></img>
+                            </Tooltip>
                         </Link>
                         <div className="text-left">
                             <Link to={"/useroverview/" + loggedInUser.username}>
                                 <h2 className="text-lg font-semibold text-gray-700 border-gray-400 pb-1 border-b-2"> {loggedInUser.username} </h2>
                             </Link>
                             <div className="text-gray-600" style={{ marginTop: "0.2rem", fontSize: "13px" }}>
-                                <p>Posts Active: <b className="text-gray-700"> {numPosts} </b></p>
+                                <p>Active Posts: <b className="text-gray-700"> {numPosts} </b></p>
                             </div>
                         </div>
                     </div>
@@ -214,7 +212,7 @@ const LandingPage = (props) => {
         return (
             <div>
                 <div className="flex justify-center text-white mt-4 font-medium text-3xl">
-                    <img width="150px;" draggable="false" src="https://i.imgur.com/ATuMhih.png"></img>
+                    <img width="150px;" draggable="false" src="https://i.imgur.com/ATuMhih.png" alt="Timely logo"></img>
                 </div>
 
                 <div className="selector mt-4 mb-8 md:px-5">
@@ -253,6 +251,7 @@ const LandingPage = (props) => {
                 </div>
 
                 <div className="flex justify-center px-0 md:px-6">
+                <Tooltip title="Filter posts by tags">
                     <div
                         onClick={() => {
                             setRenderModalObj(prev => ({ ...prev, "tags": true }));
@@ -262,6 +261,7 @@ const LandingPage = (props) => {
                         style={{ height: "3.2rem" }}>
                         <p style={{ paddingTop: "0.18rem" }}>Tags</p>
                     </div>
+                </Tooltip>
                 </div>
             </div>
 
@@ -283,7 +283,7 @@ const LandingPage = (props) => {
                 <div className="pt-32 p-4">
                     {renderRightSideBar()}
                 </div>
-            </SwipeableDrawer >
+            </SwipeableDrawer>
         );
     }
 
@@ -311,9 +311,11 @@ const LandingPage = (props) => {
             return (
                 <div className="xl:hidden z-30 fixed right-0 bottom-0">
                     <div className="flex items-end justify-end pt-4 px-4 pb-5 text-center block p-0">
+                    <Tooltip title="Create Post">
                         <div className="rounded-full h-20 w-20 flex items-center justify-center bg-primary shadow-xl text-white text-3xl cursor-pointer" onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}>
                             <FontAwesomeIcon icon={faFeather} />
                         </div>
+                    </Tooltip>
                     </div>
                 </div>
             );
@@ -353,13 +355,8 @@ const LandingPage = (props) => {
             />
             {renderRightSideBarDrawer()}
             {renderLeftSideBarDrawer()}
-
-
             {renderMobileNewPost()}
-
-
             {checkModalState()}
-
 
             <div className="grid grid-cols-9 gap-4 w-full" style={{ backgroundColor: "#fcfcfc" }}>
 
@@ -368,18 +365,20 @@ const LandingPage = (props) => {
                 </div>
                 <div className="col-span-9 md:col-span-6 xl:col-span-5 flex-grow justify-center w-full pt-16 xl:pt-20 px-5" style={{ backgroundColor: "#fcfcfc" }}>
                     <div className="justify-center">
-
-
-                        {posts}
-
+                    {/* Check if there are any posts, if not display a default message */}
+                        {posts.length < 1
+                            ? (
+                                <div className="flex justify-center text-2xl font-semibold text-gray-700 rounded-full px-3 py-3 pt-10 opacity-50 cursor-pointer">
+                                    <i className="pr-4" />
+                                        No Active Posts 😔
+                                </div>)
+                            : posts
+                        }
                     </div>
                 </div>
 
                 <div className="hidden xl:block col-span-2 h-screen top-0 sticky pt-32 p-4 border-l-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
-
-
                     {renderRightSideBar()}
-
                 </div>
 
             </div>

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { Button } from '@material-ui/core';
+import {
+    Radio,
+    RadioGroup,
+    FormControlLabel
+} from '@material-ui/core'
 
 import styles from "./PostCreatorStyles.module.css";
 import { withStyles } from '@material-ui/styles';
@@ -17,7 +18,11 @@ const SelectButton = withStyles({
 const PostCreatorBase = (props) => {
     return (
         <div className={styles.container}>
-            <RadioGroup row aria-label="position" name="position" defaultValue="top" className={styles.selectBtns}>
+            <div className="flex justify-center text-3xl font-semibold text-gray-700 rounded-full pb-4 pb-2 cursor-pointer">
+                <i className="pr-0.5" />
+                    Create Post
+            </div>
+               <RadioGroup row aria-label="position" name="position" defaultValue="top" className={styles.selectBtns}>
                 <FormControlLabel
                     value="text"
                     checked={props.isText}

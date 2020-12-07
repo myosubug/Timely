@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
 import { loggedInUser, SERVER_ADDRESS } from '../../AppConfig.js'
 import { UserOverviewEdit } from './UserOverviewEdit.jsx';
@@ -52,7 +52,7 @@ function OverviewRouter() {
 
   return (
     <div>
-      { ret}
+      { ret }
     </div>
   );
 
