@@ -5,6 +5,7 @@ import {
   Button,
   Typography,
   IconButton,
+  Tooltip,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import DeleteAccountModal from '../DeleteAccountModal/DeleteAccountModal';
@@ -254,11 +255,13 @@ const UserOverviewEdit = (props) => {
           </div>
 
           <div className="w-full lg:w-1/2 mt-4 lg:mt-2 h-12 px-16 flex justify-center lg:justify-end">
-            <div
-              onClick={() => setDeleteModalOpen(true)}
-              className="flex w-32 justify-center items-center button-cancel text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
-              <span>Delete</span>
-            </div>
+            <Tooltip title="Delete account">
+              <div
+                onClick={() => setDeleteModalOpen(true)}
+                className="flex w-32 justify-center items-center button-cancel text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
+                <span>Delete</span>
+              </div>
+            </Tooltip>
           </div>
 
         </div>
@@ -272,11 +275,13 @@ const UserOverviewEdit = (props) => {
           </div>
 
           <div className="w-full lg:w-1/2 mt-4 lg:mt-2 h-12 px-16 flex justify-center lg:justify-end">
+          <Tooltip title="Change password">
             <div
               onClick={() => setPassModalOpen(true)}
               className="flex w-32 justify-center items-center button text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
               <span>Change</span>
             </div>
+            </Tooltip>
           </div>
 
         </div>

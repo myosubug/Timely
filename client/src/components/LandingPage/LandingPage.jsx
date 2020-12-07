@@ -15,7 +15,7 @@ import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser, resetLoggedInUser, populateUserInfo } from '../../AppConfig.js'
 
 import './LandingStyles.css';
-import { Dialog, DialogContent, makeStyles, SwipeableDrawer } from '@material-ui/core';
+import { Dialog, DialogContent, makeStyles, SwipeableDrawer, Tooltip } from '@material-ui/core';
 
 
 const useStyles = makeStyles({
@@ -131,7 +131,6 @@ const LandingPage = (props) => {
                 <DialogContent>
                     {content}
                 </DialogContent>
-
             </Dialog>
         )
     }
@@ -159,7 +158,9 @@ const LandingPage = (props) => {
                 <div>
                     <div className="flex mb-8">
                         <Link to={"/useroverview/" + loggedInUser.username}>
-                            <img className="place-self-center h-16 w-16 mr-6 ml-6 mt-2 rounded-full" src={loggedInUser.profileImage}></img>
+                            <Tooltip title="View your settings">
+                                <img className="place-self-center h-16 w-16 mr-6 ml-6 mt-2 rounded-full" src={loggedInUser.profileImage}></img>
+                            </Tooltip>
                         </Link>
                         <div className="text-left">
                             <Link to={"/useroverview/" + loggedInUser.username}>
@@ -255,6 +256,7 @@ const LandingPage = (props) => {
                 </div>
 
                 <div className="flex justify-center px-0 md:px-6">
+                <Tooltip title="Filter posts by tags">
                     <div
                         onClick={() => {
                             setRenderModalObj(prev => ({ ...prev, "tags": true }));
@@ -264,6 +266,7 @@ const LandingPage = (props) => {
                         style={{ height: "3.2rem" }}>
                         <p style={{ paddingTop: "0.18rem" }}>Tags</p>
                     </div>
+                </Tooltip>
                 </div>
             </div>
 
@@ -285,7 +288,7 @@ const LandingPage = (props) => {
                 <div className="pt-32 p-4">
                     {renderRightSideBar()}
                 </div>
-            </SwipeableDrawer >
+            </SwipeableDrawer>
         );
     }
 
@@ -313,9 +316,11 @@ const LandingPage = (props) => {
             return (
                 <div className="xl:hidden z-30 fixed right-0 bottom-0">
                     <div className="flex items-end justify-end pt-4 px-4 pb-5 text-center block p-0">
+                    <Tooltip title="Create Post">
                         <div className="rounded-full h-20 w-20 flex items-center justify-center bg-primary shadow-xl text-white text-3xl cursor-pointer" onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}>
                             <FontAwesomeIcon icon={faFeather} />
                         </div>
+                    </Tooltip>
                     </div>
                 </div>
             );

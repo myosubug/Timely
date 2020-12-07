@@ -9,6 +9,7 @@ import {
     MenuList,
     IconButton,
     makeStyles,
+    Tooltip,
 } from "@material-ui/core";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import PromotePost from "../AdminPostPopUps/PromotePost";
@@ -145,16 +146,18 @@ const PostSubMenu = (props) => {
     return (
         <div className={classes.root}>
             <div>
-                <IconButton
-                    className="px-0 py-0"
-                    ref={anchorRef}
-                    aria-controls={open ? "menu-list-grow" : undefined}
-                    aria-haspopup="true"
-                    onClick={handleToggle}
-                    aria-label="settings"
-                >
-                    <MoreVertIcon />
-                </IconButton>
+                <Tooltip title="Post Actions">
+                    <IconButton
+                        className="px-0 py-0"
+                        ref={anchorRef}
+                        aria-controls={open ? "menu-list-grow" : undefined}
+                        aria-haspopup="true"
+                        onClick={handleToggle}
+                        aria-label="settings"
+                    >
+                        <MoreVertIcon />
+                    </IconButton>
+                </Tooltip>
 
                 <Popper
                     className={classes.menu}

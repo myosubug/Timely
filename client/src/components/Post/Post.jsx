@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
+import Tooltip from '@material-ui/core/Tooltip';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 import Card from '@material-ui/core/Card';
@@ -225,7 +226,7 @@ const Post = (props) => {
 
         const header = <CardHeader
             style={{ width: "100%" }}
-            avatar={<Avatar className={styles.profile_info} onClick={handleUserClick} src={`${postDetails.profileImage}?${Date.now()}`}></Avatar>}
+            avatar={<Tooltip title="View profile"><Avatar className={styles.profile_info} onClick={handleUserClick} src={`${postDetails.profileImage}?${Date.now()}`}></Avatar></Tooltip>}
             title={<p className={styles.profile_info} onClick={handleUserClick}> {postDetails.username} </p>}
             subheader={postDetails.timePosted}
             action={renderActions()}

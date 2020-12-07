@@ -5,6 +5,7 @@ import {
   Button,
   Typography,
   IconButton,
+  Tooltip
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BanUserModal from './AdminPopUps/BanUserModal';
@@ -331,19 +332,22 @@ const UserOverviewAdmin = (props) => {
               ?
 
 
-              <div
-                onClick={() => setDemoteModalOpen(true)}
-                className="flex w-32 justify-center items-center button text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
-                <span>Demote User</span>
-              </div>
+              <Tooltip title="Demote admin to user">
+                <div
+                  onClick={() => setDemoteModalOpen(true)}
+                  className="flex w-32 justify-center items-center button text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
+                  <span>Demote User</span>
+                </div>
+              </Tooltip>
 
               :
-
-              <div
-                onClick={() => setPromoteModalOpen(true)}
-                className="flex w-32 justify-center items-center button text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
-                <span>Promote User</span>
-              </div>
+              <Tooltip title="Promote user to admin">
+                <div
+                  onClick={() => setPromoteModalOpen(true)}
+                  className="flex w-32 justify-center items-center button text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
+                  <span>Promote User</span>
+                </div>
+              </Tooltip>
 
             }
 
@@ -374,11 +378,13 @@ const UserOverviewAdmin = (props) => {
           </div>
 
           <div className="w-full lg:w-1/2 mt-4 lg:mt-2 h-12 px-16 flex justify-center lg:justify-end">
+          <Tooltip title="Delete user from Timely">
             <div
               onClick={() => setDeleteModalOpen(true)}
               className="flex w-32 justify-center items-center button-cancel text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
               <span>Ban User</span>
             </div>
+          </Tooltip>
           </div>
 
         </div>
@@ -392,11 +398,13 @@ const UserOverviewAdmin = (props) => {
           </div>
 
           <div className="w-full lg:w-1/2 mt-4 lg:mt-2 h-12 px-16 flex justify-center lg:justify-end">
+          <Tooltip title="Change user's password">
             <div
               onClick={() => setPassModalOpen(true)}
               className="flex w-32 justify-center items-center button text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
               <span>Change</span>
             </div>
+          </Tooltip>
           </div>
 
         </div>
