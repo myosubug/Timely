@@ -111,6 +111,14 @@ export default function TagFilter(props) {
         <div>
             <Container id={styles.container} maxWidth="lg">
                 <div>
+                    <div className="flex justify-center text-3xl font-semibold text-gray-700 rounded-full pb-4 cursor-pointer">
+                        <i className="pr-0" />
+                            Post Filter
+                    </div>
+                    <div className="flex justify-center text-xl  text-gray-700 rounded-full pb-5 cursor-pointer">
+                        <i className="pr-0" />
+                            To filter your posts, use the search bar or click one of the active tags below.
+                    </div>
                     <div id="input-wrapper" className={styles.inputWrapper}>
                         <OutlinedInput
                             autoFocus
