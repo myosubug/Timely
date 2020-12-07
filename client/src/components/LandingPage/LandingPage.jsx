@@ -15,7 +15,7 @@ import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser, resetLoggedInUser, populateUserInfo } from '../../AppConfig.js'
 
 import './LandingStyles.css';
-import { Dialog, DialogContent, makeStyles, SwipeableDrawer } from '@material-ui/core';
+import { Dialog, DialogContent, makeStyles, SwipeableDrawer, Typography } from '@material-ui/core';
 
 
 const useStyles = makeStyles({
@@ -280,12 +280,7 @@ const LandingPage = (props) => {
                 onOpen={() => setIsRightMenuOpen(true)}
                 onClose={() => setIsRightMenuOpen(false)}
                 anchor={"right"}
-<<<<<<< HEAD
-                onClick={() => setIsRightMenuOpen(false)}
-                className="RightSideDrawer"
-=======
                 classes={{ paper: styles.paper }}
->>>>>>> master
             >
                 <div className="pt-32 p-4">
                     {renderRightSideBar()}
@@ -375,10 +370,15 @@ const LandingPage = (props) => {
                 </div>
                 <div className="col-span-9 md:col-span-6 xl:col-span-5 flex-grow justify-center w-full pt-16 xl:pt-20 px-5" style={{ backgroundColor: "#fcfcfc" }}>
                     <div className="justify-center">
-
-
-                        {posts}
-
+                    {/* Check if there are any posts, if not display a default message */}
+                        {posts.length < 1
+                            ? (
+                                <div className="flex justify-center text-2xl font-semibold text-gray-700 rounded-full px-3 py-2 pt-10 opacity-50 cursor-pointer">
+                                    <i className="pr-4" />
+                                        No Active Posts 😔
+                                </div>)
+                            : posts
+                        }
                     </div>
                 </div>
 
