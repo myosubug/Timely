@@ -1,9 +1,28 @@
 .menu-item:hover {
     background-color: #e0e0e0;
   }
+
+  .menu-item-select {
+    background-color: #e0e0e0;
+  }
   .button {
     background-color: #7ed3d6;
     border-bottom: 5px solid #53b7bb;
+  }
+
+  .button:focus{
+    outline: none;
+    box-shadow: none;
+  }
+
+  .button-cancel {
+    background-color: rgb(207, 60, 60);
+    border-bottom: 5px solid rgb(172, 50, 50);
+  }
+
+  .button-cancel:focus{
+    outline: none;
+    box-shadow: none;
   }
 
   .bg-primary {
@@ -13,6 +32,11 @@
   .button:hover {
     background-color: #71bdc0;
     border-bottom: 5px solid #4ba4a8;
+  }
+
+  .button-cancel:hover {
+    background-color: rgb(179, 51, 51);
+    border-bottom: 5px solid  rgb(131, 35, 35);
   }
 
   .navbar {

@@ -1,6 +1,7 @@
 const router = require('express').Router();
 let Post = require('../models/post.model');
 let io = require('../server.js').io;
+const fs = require('fs');
 
 const IMAGE_DIR = require('path').dirname(require.main.filename) + "/images/";
 
@@ -123,6 +124,25 @@ router.route('/tags').get((req, res) => {
         .then(post => res.json(topTags.slice(0, 5)))
         .catch(err => res.status(400).json('Error: ' + err));
 })
+
+//Seaches all the tags for which the specified query is a substring of
+router.route('/seach-tags').get((req, res) => {
+    const tag_ref = req.query.tag;
+    Post.find()
+        .then(posts => {
+            let tags_res = [];
+            for (let post of posts) {
+                for (let tag of post.tags) {
+                    if (tag.includes(tag_ref) && !tags_res.includes(tag)) {
+                        tags_res.push(tag);
+                    }
+                }
+            }
+
+            res.json(tags_res);
+        })
+        .catch(err => res.status(400).json('Error: ' + err))
+});
 
 //Returns a Post object by ID
 router.route('/:id').get((req, res) => {
@@ -327,6 +347,14 @@ router.route('/delete').post((req, res) => {
         .then(post => {
             res.status(200).json("Deleted post " + post);
             io.emit('update post list');
+
+            //Delete the image if the post is an image
+            if (post.type === "img") {
+                const addr_ar = post.imageURL.split('/');
+                const img_filename = addr_ar[addr_ar.length - 1];
+                const file_path = IMAGE_DIR + "posts/" + img_filename;
+                fs.unlink(file_path, (err) => { if (err) { console.log(err) } });
+            }
         })
         .catch(err => res.status(400).json('Error: ' + err))
 });
