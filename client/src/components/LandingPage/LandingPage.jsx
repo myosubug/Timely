@@ -15,7 +15,7 @@ import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser, resetLoggedInUser, populateUserInfo } from '../../AppConfig.js'
 
 import './LandingStyles.css';
-import { Dialog, DialogContent, makeStyles, SwipeableDrawer, Typography } from '@material-ui/core';
+import { Dialog, DialogContent, makeStyles, SwipeableDrawer } from '@material-ui/core';
 
 
 const useStyles = makeStyles({
