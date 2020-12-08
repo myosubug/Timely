@@ -159,7 +159,7 @@ const LandingPage = (props) => {
                                 <img className="place-self-center h-16 w-16 mr-6 mt-2 rounded-full" src={loggedInUser.profileImage} alt="profile picture"></img>
                             </Tooltip>
                         </Link>
-                        <div className="text-left truncate max-w-0 overflow-ellipsis ml-4 xl:ml-0">
+                        <div className="text-left truncate max-w-0 overflow-ellipsis ml-4 lg:ml-0">
                             <Link to={"/useroverview/" + loggedInUser.username}>
                                 <h2 className="text-lg font-semibold text-gray-700 border-gray-400 pb-1 border-b-2 w-36 truncate ..." > {loggedInUser.username} </h2>
                             </Link>
