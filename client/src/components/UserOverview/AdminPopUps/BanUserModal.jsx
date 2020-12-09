@@ -35,7 +35,7 @@ export const BanUserModal = (props) => {
       message: "Banning a user will delete them from the server.",
       severity: "info"
     });
-    if(isBanned) {
+    if (isBanned) {
       window.location.href = '/'; // relative to domain
       setIsBanned(false);
     }
@@ -65,7 +65,7 @@ export const BanUserModal = (props) => {
       className="BanUserModal"
     >
       <DialogTitle id="title">
-        🚨 Ban user 🚨
+        <span role="img" aria-label="alarm"> 🚨 </span> Ban user <span role="img" aria-label="alarm"> 🚨 </span>
       </DialogTitle>
       <DialogContent>
         <DialogContentText>

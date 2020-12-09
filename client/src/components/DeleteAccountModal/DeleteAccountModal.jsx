@@ -76,7 +76,7 @@ export const DeleteAccountModal = (props) => {
       className="DeleteAccountModal"
     >
       <DialogTitle id="title">
-        🚨 Delete account 🚨
+        <span role="img" aria-label="alarm"> 🚨 </span> Delete account <span role="img" aria-label="alarm"> 🚨 </span>
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
