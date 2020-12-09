@@ -64,51 +64,9 @@ const UserOverviewView = (props) => {
 
   // Converts join date to readable string
   const convertJoinDate = () => {
-    let userJoinDate = JSON.stringify(userInfo.joinDate);
-    userJoinDate = userJoinDate?.substring(6,8);
-    console.log(userJoinDate);
-
-    switch(userJoinDate) {
-      case '01':
-        userJoinDate = "January ";
-        break;
-      case '02':
-        userJoinDate = "February ";
-        break;
-      case '03':
-        userJoinDate = "March ";
-        break;
-      case '04':
-        userJoinDate = "April ";
-        break;
-      case '05':
-        userJoinDate = "May ";
-        break;
-      case '06':
-        userJoinDate = "June ";
-        break;
-      case '07':
-        userJoinDate = "July ";
-        break;
-      case '08':
-        userJoinDate = "August ";
-        break;
-      case '09':
-        userJoinDate = "September ";
-        break;
-      case '10':
-        userJoinDate = "October ";
-        break;
-      case '11':
-        userJoinDate = "November ";
-        break;
-      case '12':
-        userJoinDate = "December ";
-        break;
-      default:
-        userJoinDate = "Maytember? ";
-    }
-    return userJoinDate;
+    let date = JSON.stringify(userInfo.joinDate);
+    date = date?.substring(1,11);
+    return date;
   };
 
   // Renders the users information
@@ -136,7 +94,7 @@ const UserOverviewView = (props) => {
                   {"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""} <span className="text-sm text-gray-600 font-normal">{posts.length} active posts</span>
                 </div>
                 <div className="text-md font-sm">
-                  {"Member since " + convertJoinDate() + "2020"}
+                  {"Member since " + convertJoinDate()}
                 </div>
               </div>
             </div>
