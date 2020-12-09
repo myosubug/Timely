@@ -100,7 +100,7 @@ const LandingPage = (props) => {
                 setIsRightMenuAvail(true);
             }
 
-            if (window.innerWidth > 768) {
+            if (window.innerWidth >= 768) {
                 setIsLeftMenuOpen(false);
                 setIsLeftMenuAvail(false);
             }
