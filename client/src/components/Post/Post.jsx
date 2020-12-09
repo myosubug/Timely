@@ -158,6 +158,8 @@ const Post = (props) => {
 
         //On the first render, get the data
         populateDate();
+
+        return () => { socket.off(update_event_name) }
     }, [props.id, props.thisUsername, props.username]);
 
     //Sets the interval for the timer

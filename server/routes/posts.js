@@ -262,8 +262,9 @@ router.route('/upload-post/:postid').post((req, res) => {
             //Update the post in case of race conditions
             const event_name = "update post " + post_id;
             io.emit(event_name);
+            res.json("Successfully uploaded image post");
         })
-        .catch(err => console.log(err));
+        .catch(err => res.status(400).json('Error: ' + err));
 });
 
 //Adds a post to the db
