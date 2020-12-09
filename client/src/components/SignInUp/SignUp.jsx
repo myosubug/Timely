@@ -1,40 +1,15 @@
 import React, { useState } from 'react';
 import {
-  Button,
   CssBaseline,
   TextField,
   Grid,
-  Typography,
-  Container,
-  makeStyles
+  Container
 } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { SERVER_ADDRESS, loggedInUser } from '../../AppConfig.js'
 import styles from './Sign.module.css';
-
-
-// const useStyles = makeStyles((theme) => ({
-//   paper: {
-//     marginTop: theme.spacing(4),
-//     display: 'flex',
-//     flexDirection: 'column',
-//     alignItems: 'center',
-//   },
-//   form: {
-//     width: '100%',
-//     marginTop: theme.spacing(3),
-//   },
-//   submit: {
-//     background: '#7ED3D6',
-//     '&:hover': {
-//       background: "#53b7bb",
-//     },
-//     margin: theme.spacing(2, 0, 2),
-//   }
-// }));
-
 export default function SignUp(props) {
   const [errorMsg, setErrorMsg] = useState("");
   // const classes = useStyles();
@@ -118,7 +93,7 @@ export default function SignUp(props) {
         <form onSubmit={handleSignUp} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField variant="outlined" required fullWidth id="username" label="User Name" name="email" autoComplete="email" />
+              <TextField variant="outlined" required fullWidth id="username" label="Username" name="email" autoComplete="email" />
             </Grid>
             <Grid item xs={12}>
               <TextField variant="outlined" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
@@ -129,14 +104,9 @@ export default function SignUp(props) {
             {renderError()}
           </Grid>
           <div>
-            <div className="flex justify-center pt-5 pb-4">
-              <button onClick={props.onSwitchPopUp}>
-                <p className="text-lg">Already have an account? Click here</p>
-              </button>
-            </div>
-
             <div className={styles.buttonDiv}>
               <button
+                type="button"
                 onClick={props.onCancel}
                 className="button-cancel text-white text-2xl font-semibold mb-2 text-center rounded cursor-pointer shadow-md"
                 style={{ height: "3rem", padding: " 0 1rem 0 1rem", margin: "10px" }}>
@@ -158,10 +128,8 @@ export default function SignUp(props) {
 
 }
 
-
 SignUp.propTypes = {
-  onCancel: PropTypes.func,
-  onSwitchPopUp: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
 };
 
 export { SignUp };
