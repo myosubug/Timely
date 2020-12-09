@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { faBars, faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import styles from './NavBar.module.css';
+
 export const NavBar = (props) => {
 
   const [isLocationMain,] = useState(window.location.pathname + window.location.search === "/");
@@ -29,9 +31,9 @@ export const NavBar = (props) => {
   const renderBars = () => {
     if (isLocationMain) {
       return (
-          <div className="items-center cursor-pointer pl-4 block md:hidden" style={{ paddingTop: "0.45rem" }} onClick={renderLeftMenu}>
-            <FontAwesomeIcon icon={faBars} />
-          </div>
+        <div className="items-center cursor-pointer pl-4 block md:hidden" style={{ paddingTop: "0.45rem" }} onClick={renderLeftMenu}>
+          <FontAwesomeIcon icon={faBars} />
+        </div>
       );
     }
   }
@@ -39,9 +41,9 @@ export const NavBar = (props) => {
   const renderDots = () => {
     if (isLocationMain) {
       return (
-          <div className="items-center cursor-pointer pr-4 block xl:hidden" style={{ paddingTop: "0.45rem" }} onClick={renderRightMenu} >
-            <FontAwesomeIcon icon={faPowerOff} />
-          </div>
+        <div className="items-center cursor-pointer pr-4 block xl:hidden" style={{ paddingTop: "0.45rem" }} onClick={renderRightMenu} >
+          <FontAwesomeIcon icon={faPowerOff} />
+        </div>
       );
     }
   }
@@ -53,17 +55,20 @@ export const NavBar = (props) => {
           <div className="grid grid-cols-3 text-white font-medium text-3xl">
 
             <div className="flex justify-start">
-            {renderBars()}
+              {renderBars()}
             </div>
 
             <div className="flex justify-center">
               <Link to="/">
-                <img width="150px" draggable="false" src="https://i.imgur.com/ATuMhih.png" alt="Timely"></img>
+                <div className="inline-block align-middle">
+                  <img width="150px" draggable="false" src="https://i.imgur.com/ATuMhih.png" alt="Timely" id={styles.logo}></img>
+                </div>
+
               </Link>
             </div>
 
             <div className="flex justify-end">
-            {renderDots()}
+              {renderDots()}
             </div>
 
           </div>
