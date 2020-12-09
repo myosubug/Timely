@@ -52,7 +52,7 @@ export default function SignUp(props) {
       return;
     }
     //Check if username contains any characters that are not whitelisted
-    else if (signUpRequest.username.match(/[^a-z^A-Z^0-9\^_]/)) {
+    else if (signUpRequest.username.match(/[^a-z^A-Z^0-9_]/)) {
       setErrorMsg("Username can only contain characters from a-z, numbers, or underscores");
       return;
     }

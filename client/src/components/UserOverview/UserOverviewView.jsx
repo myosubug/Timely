@@ -38,7 +38,7 @@ const UserOverviewView = (props) => {
         renderPosts(userInfo);
       })
       .catch(err => console.log(err));
-  }, []);
+  }, [props.username]);
 
   //Gets the posts from specified query, and sets the state
   const renderPosts = (username_obj) => {
@@ -65,7 +65,7 @@ const UserOverviewView = (props) => {
   // Converts join date to readable string
   const convertJoinDate = () => {
     let date = JSON.stringify(userInfo.joinDate);
-    date = date?.substring(1,11);
+    date = date?.substring(1, 11);
     return date;
   };
 
@@ -111,17 +111,17 @@ const UserOverviewView = (props) => {
         isLandingPg={false}
         username={props.username}
       />
-      
+
       <div className="grid grid-cols-9 gap-4 w-full">
         <div className="hidden xl:block xl:col-span-2 col-span-3 h-screen top-0 pt-24 sticky p-4 border-r-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
         </div>
 
         <div className="col-span-9 xl:col-span-5 flex-grow justify-center w-full pt-16 xl:pt-20 px-5" style={{ backgroundColor: "#fcfcfc" }}>
           <div className="justify-center">
-          {/* User grid */}
+            {/* User grid */}
             {renderUserGrid()}
 
-          {/* Post activity */}
+            {/* Post activity */}
             {posts.length > 0 &&
               <div className="text-2xl font-semibold text-gray-800 mb-5 ml-2 mt-5">
                 Post Activity

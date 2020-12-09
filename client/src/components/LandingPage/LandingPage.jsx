@@ -1,11 +1,11 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { 
-    Dialog, 
-    DialogContent, 
-    makeStyles, 
-    SwipeableDrawer, 
-    Tooltip 
+import {
+    Dialog,
+    DialogContent,
+    makeStyles,
+    SwipeableDrawer,
+    Tooltip
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { PostCreator } from '../PostCreator/PostCreator.jsx';
@@ -22,6 +22,7 @@ import axios from 'axios';
 import { SERVER_ADDRESS, socket, loggedInUser, resetLoggedInUser, populateUserInfo } from '../../AppConfig.js'
 
 import './LandingStyles.css';
+import { useCallback } from 'react';
 
 
 const useStyles = makeStyles({
@@ -46,6 +47,33 @@ const LandingPage = (props) => {
     const [isLeftMenuAvail, setIsLeftMenuAvail] = useState(false);
     const [isRightMenuAvail, setIsRightMenuAvail] = useState(false);
 
+
+    //Gets the posts from specified query, and sets the state
+    const renderPosts = useCallback(() => {
+        axios.get(SERVER_ADDRESS + postQuery)
+            .then(res => {
+                let new_posts = [];
+                for (let post of res.data) {
+                    new_posts.push(
+                        <div className="my-8 h-full" key={post._id}>
+                            <Post isAdmin={loggedInUser.isAdmin} id={post._id} thisUsername={loggedInUser.username} />
+                        </div>
+                    )
+                }
+                setPosts(new_posts);
+                getNumPosts();
+
+            })
+            .catch(err => console.log(err));
+    }, []);
+
+    // Once the user is logged in, render all the live posts
+    const setLoggedIn = useCallback((val) => {
+        setIsLoggedIn(val);
+        renderPosts();
+        //renderRightSideBar();
+    }, [renderPosts, setIsLoggedIn]);
+
     useEffect(() => {
         socket.on('update post list', () => {
             renderPosts();
@@ -55,7 +83,7 @@ const LandingPage = (props) => {
         renderPosts();
         setLoggedIn(loggedInUser.username !== "");
         getNumPosts();
-    }, []);
+    }, [renderPosts, setLoggedIn]);
 
     //Add an event listener to the window
     useEffect(() => {
@@ -89,25 +117,6 @@ const LandingPage = (props) => {
     }, []);
 
 
-    //Gets the posts from specified query, and sets the state
-    const renderPosts = () => {
-        axios.get(SERVER_ADDRESS + postQuery)
-            .then(res => {
-                let new_posts = [];
-                for (let post of res.data) {
-                    new_posts.push(
-                        <div className="my-8 h-full" key={post._id}>
-                            <Post isAdmin={loggedInUser.isAdmin} id={post._id} thisUsername={loggedInUser.username} />
-                        </div>
-                    )
-                }
-                setPosts(new_posts);
-                getNumPosts();
-
-            })
-            .catch(err => console.log(err));
-    }
-
     //Gets the number of posts the current user has
     const getNumPosts = () => {
         if (loggedInUser.username !== "") {
@@ -132,13 +141,6 @@ const LandingPage = (props) => {
         )
     }
 
-    // Once the user is logged in, render all the live posts
-    function setLoggedIn(val) {
-        setIsLoggedIn(val);
-        renderPosts();
-        renderRightSideBar();
-    }
-
     //Handles what happens after we logout
     const handleLogOut = () => {
         //Sets the loggedinUser info to an empty object again
@@ -156,12 +158,14 @@ const LandingPage = (props) => {
                     <div className="flex mb-8">
                         <Link to={"/useroverview/" + loggedInUser.username}>
                             <Tooltip title="View your settings">
-                                <img className="place-self-center h-16 w-16 mr-6 mt-2 rounded-full" src={loggedInUser.profileImage} alt="profile picture"></img>
+                                <img className="place-self-center h-16 w-16 mr-6 mt-2 rounded-full" src={loggedInUser.profileImage} alt="profile"></img>
                             </Tooltip>
                         </Link>
                         <div className="text-left truncate max-w-0 overflow-ellipsis ml-4 lg:ml-0">
                             <Link to={"/useroverview/" + loggedInUser.username}>
-                                <h2 className="text-lg font-semibold text-gray-700 border-gray-400 pb-1 border-b-2 w-36 truncate ..." > {loggedInUser.username} </h2>
+                                <Tooltip title="View your settings">
+                                    <h2 className="text-lg font-semibold text-gray-700 border-gray-400 pb-1 border-b-2 w-36 truncate ..." > {loggedInUser.username} </h2>
+                                </Tooltip>
                             </Link>
                             <div className="text-gray-600" style={{ marginTop: "0.2rem", fontSize: "13px" }}>
                                 <p>Active Posts: <b className="text-gray-700"> {numPosts} </b></p>
@@ -251,17 +255,17 @@ const LandingPage = (props) => {
                 </div>
 
                 <div className="flex justify-center px-0 md:px-6">
-                <Tooltip title="Filter posts by tags">
-                    <div
-                        onClick={() => {
-                            setRenderModalObj(prev => ({ ...prev, "tags": true }));
-                            setIsLeftMenuOpen(false);
-                        }}
-                        className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
-                        style={{ height: "3.2rem" }}>
-                        <p style={{ paddingTop: "0.18rem" }}>Tags</p>
-                    </div>
-                </Tooltip>
+                    <Tooltip title="Filter posts by tags">
+                        <div
+                            onClick={() => {
+                                setRenderModalObj(prev => ({ ...prev, "tags": true }));
+                                setIsLeftMenuOpen(false);
+                            }}
+                            className="button text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
+                            style={{ height: "3.2rem" }}>
+                            <p style={{ paddingTop: "0.18rem" }}>Tags</p>
+                        </div>
+                    </Tooltip>
                 </div>
             </div>
 
@@ -311,11 +315,11 @@ const LandingPage = (props) => {
             return (
                 <div className="xl:hidden z-30 fixed right-0 bottom-0">
                     <div className="flex items-end justify-end pt-4 px-4 pb-5 text-center block p-0">
-                    <Tooltip title="Create Post">
-                        <div className="rounded-full h-20 w-20 flex items-center justify-center bg-primary shadow-xl text-white text-3xl cursor-pointer" onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}>
-                            <FontAwesomeIcon icon={faFeather} />
-                        </div>
-                    </Tooltip>
+                        <Tooltip title="Create Post">
+                            <div className="rounded-full h-20 w-20 flex items-center justify-center bg-primary shadow-xl text-white text-3xl cursor-pointer" onClick={() => setRenderModalObj(prev => ({ ...prev, "post": true }))}>
+                                <FontAwesomeIcon icon={faFeather} />
+                            </div>
+                        </Tooltip>
                     </div>
                 </div>
             );
@@ -365,10 +369,10 @@ const LandingPage = (props) => {
                 </div>
                 <div className="col-span-9 md:col-span-6 xl:col-span-5 flex-grow justify-center w-full pt-16 xl:pt-20 px-5" style={{ backgroundColor: "#fcfcfc" }}>
                     <div className="justify-center">
-                    {/* Check if there are any posts, if not display a default message */}
+                        {/* Check if there are any posts, if not display a default message */}
                         {posts.length < 1
                             ? (
-                                <div className="flex justify-center text-2xl font-semibold text-gray-700 rounded-full px-3 py-3 pt-10 opacity-50 cursor-pointer">
+                                <div className="flex justify-center text-2xl font-semibold text-gray-700 rounded-full px-3 py-3 pt-10 opacity-50 select-none ...">
                                     <i className="pr-4" />
                                         No Active Posts 😔
                                 </div>)

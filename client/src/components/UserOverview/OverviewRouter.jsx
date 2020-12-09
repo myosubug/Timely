@@ -46,13 +46,13 @@ function OverviewRouter() {
 
       })
       .catch(err => console.log(err));
-  }, []);
+  }, [username]);
 
 
 
   return (
     <div>
-      { ret }
+      { ret}
     </div>
   );
 

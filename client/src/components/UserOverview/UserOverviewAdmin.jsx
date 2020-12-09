@@ -50,7 +50,7 @@ const UserOverviewAdmin = (props) => {
 
       })
       .catch(err => console.log(err));
-  }, []);
+  }, [props.username]);
 
   //Gets the posts from specified query, and sets the state
   const renderPosts = (username_obj) => {
@@ -124,10 +124,10 @@ const UserOverviewAdmin = (props) => {
       .catch(err => (console.log(err)));
   };
 
-   // Converts join date to readable string
-   const convertJoinDate = () => {
+  // Converts join date to readable string
+  const convertJoinDate = () => {
     let date = JSON.stringify(userInfo.joinDate);
-    date = date?.substring(1,11);
+    date = date?.substring(1, 11);
     return date;
   };
 
@@ -138,7 +138,7 @@ const UserOverviewAdmin = (props) => {
         <div className="lg:flex items-baseline border-b-2 border-gray-200 items-center py-5">
           <div className="w-full lg:w-1/2">
             <div className="flex justify-center lg:justify-start">
-            {/* Avatar */}
+              {/* Avatar */}
               <div className="flex justify-start">
                 <Grid item xs={9} className="ProfilePic">
                   <IconButton color="primary" >
@@ -218,13 +218,13 @@ const UserOverviewAdmin = (props) => {
           </div>
 
           <div className="w-full lg:w-1/2 mt-4 lg:mt-2 h-12 px-16 flex justify-center lg:justify-end">
-          <Tooltip title="Delete user from Timely">
-            <div
-              onClick={() => setDeleteModalOpen(true)}
-              className="flex w-32 justify-center items-center button-cancel text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
-              <span>Ban User</span>
-            </div>
-          </Tooltip>
+            <Tooltip title="Delete user from Timely">
+              <div
+                onClick={() => setDeleteModalOpen(true)}
+                className="flex w-32 justify-center items-center button-cancel text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
+                <span>Ban User</span>
+              </div>
+            </Tooltip>
           </div>
         </div>
 
@@ -238,13 +238,13 @@ const UserOverviewAdmin = (props) => {
           </div>
 
           <div className="w-full lg:w-1/2 mt-4 lg:mt-2 h-12 px-16 flex justify-center lg:justify-end">
-          <Tooltip title="Change user's password">
-            <div
-              onClick={() => setPassModalOpen(true)}
-              className="flex w-32 justify-center items-center button text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
-              <span>Change</span>
-            </div>
-          </Tooltip>
+            <Tooltip title="Change user's password">
+              <div
+                onClick={() => setPassModalOpen(true)}
+                className="flex w-32 justify-center items-center button text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
+                <span>Change</span>
+              </div>
+            </Tooltip>
           </div>
 
         </div>

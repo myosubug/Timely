@@ -45,7 +45,7 @@ const UserOverviewEdit = (props) => {
         renderPosts(userInfo);
       })
       .catch(err => console.log(err));
-  }, []);
+  }, [props.username]);
 
   //Gets the posts from specified query, and sets the state
   const renderPosts = (username_obj) => {
@@ -97,10 +97,10 @@ const UserOverviewEdit = (props) => {
       .catch(err => (console.log(err)));
   };
 
-   // Converts join date to readable string
-   const convertJoinDate = () => {
+  // Converts join date to readable string
+  const convertJoinDate = () => {
     let date = JSON.stringify(userInfo.joinDate);
-    date = date?.substring(1,11);
+    date = date?.substring(1, 11);
     return date;
   };
 
@@ -187,12 +187,12 @@ const UserOverviewEdit = (props) => {
           </div>
 
           <div className="w-full lg:w-1/2 mt-4 lg:mt-2 h-12 px-16 flex justify-center lg:justify-end">
-          <Tooltip title="Change password">
-            <div
-              onClick={() => setPassModalOpen(true)}
-              className="flex w-32 justify-center items-center button text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
-              <span>Change</span>
-            </div>
+            <Tooltip title="Change password">
+              <div
+                onClick={() => setPassModalOpen(true)}
+                className="flex w-32 justify-center items-center button text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
+                <span>Change</span>
+              </div>
             </Tooltip>
           </div>
 
