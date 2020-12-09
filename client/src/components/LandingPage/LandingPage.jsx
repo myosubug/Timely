@@ -83,6 +83,8 @@ const LandingPage = (props) => {
         renderPosts();
         setLoggedIn(loggedInUser.username !== "");
         getNumPosts();
+
+        return () => { socket.off('update post list') }
     }, [renderPosts, setLoggedIn]);
 
     //Add an event listener to the window

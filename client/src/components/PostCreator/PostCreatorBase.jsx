@@ -22,7 +22,7 @@ const PostCreatorBase = (props) => {
                 <i className="pr-0.5" />
                     Create Post
             </div>
-               <RadioGroup row aria-label="position" name="position" defaultValue="top" className={styles.selectBtns}>
+            <RadioGroup row aria-label="position" name="position" defaultValue="top" className={styles.selectBtns}>
                 <FormControlLabel
                     value="text"
                     checked={props.isText}
@@ -55,6 +55,7 @@ const PostCreatorBase = (props) => {
                 <div>
                     <div className={styles.action_btn}>
                         <button
+                            type="button"
                             onClick={props.onCancel}
                             className="button-cancel text-white text-2xl font-semibold mb-2 w-full text-center rounded cursor-pointer shadow-md"
                             style={{ height: "3rem", padding: " 0 1rem 0 1rem" }}>
