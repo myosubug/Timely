@@ -12,6 +12,8 @@ import Alert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { SERVER_ADDRESS, loggedInUser } from '../../AppConfig.js'
+import styles from './Sign.module.css';
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -76,7 +78,7 @@ export default function SignIn(props) {
             <TextField variant="outlined" margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
             <Grid item xs={12}>
               <Alert variant="outlined" severity="error">
-                Your user name or password is wrong, please check again.
+                Your username or password is wrong, please check again.
             </Alert>
             </Grid>
             <Grid item xs={12}>
