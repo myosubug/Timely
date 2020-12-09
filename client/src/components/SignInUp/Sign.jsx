@@ -58,9 +58,7 @@ const Sign = (props) => {
         }
     }
 
-    
-    if (isSignIn) {
-        return (
+    return (
             <div>
                 <div className={classes.tabs}>
                     <Button className={classes.buttonStyle} type="submit" color="primary" onClick={handleSignIn}>
@@ -70,25 +68,44 @@ const Sign = (props) => {
                         Create Account
                     </Button>
                 </div>
-                <SignIn onCancel={props.onCancel} setLoggedIn={props.setLoggedIn} />
-            </div>
-        );
-    }
-    else {
-        return (
-            <div>
-                <div className={classes.tabs}>
-                    <Button className={classes.buttonStyle} type="submit" color="primary" onClick={handleSignIn}>
-                        Welcome back
-                    </Button>
-                    <Button className={classes.buttonStyle} type="submit" color="primary" onClick={handleSignUp}>
-                        Create Account
-                    </Button>
-                </div>
+                {isSignIn 
+                ? <SignIn onCancel={props.onCancel} setLoggedIn={props.setLoggedIn} />
+                : <SignUp onCancel={props.onCancel} setLoggedIn={props.setLoggedIn} />
+                }
                 <SignUp onCancel={props.onCancel} setLoggedIn={props.setLoggedIn} />
             </div>
-        );
-    }
+    );
+
+    // if (isSignIn) {
+    //     return (
+    //         <div>
+    //             <div className={classes.tabs}>
+    //                 <Button className={classes.buttonStyle} type="submit" color="primary" onClick={handleSignIn}>
+    //                     Welcome back
+    //                 </Button>
+    //                 <Button className={classes.buttonStyle} type="submit" color="primary" onClick={handleSignUp}>
+    //                     Create Account
+    //                 </Button>
+    //             </div>
+    //             <SignIn onCancel={props.onCancel} setLoggedIn={props.setLoggedIn} />
+    //         </div>
+    //     );
+    // }
+    // else {
+    //     return (
+    //         <div>
+    //             <div className={classes.tabs}>
+    //                 <Button className={classes.buttonStyle} type="submit" color="primary" onClick={handleSignIn}>
+    //                     Welcome back
+    //                 </Button>
+    //                 <Button className={classes.buttonStyle} type="submit" color="primary" onClick={handleSignUp}>
+    //                     Create Account
+    //                 </Button>
+    //             </div>
+    //             <SignUp onCancel={props.onCancel} setLoggedIn={props.setLoggedIn} />
+    //         </div>
+    //     );
+    // }
 }
 
 export { Sign };
