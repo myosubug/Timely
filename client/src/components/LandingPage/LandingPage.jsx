@@ -100,7 +100,7 @@ const LandingPage = (props) => {
                 setIsRightMenuAvail(true);
             }
 
-            if (window.innerWidth > 768) {
+            if (window.innerWidth >= 768) {
                 setIsLeftMenuOpen(false);
                 setIsLeftMenuAvail(false);
             }
@@ -217,7 +217,7 @@ const LandingPage = (props) => {
     const renderLeftSideBar = () => {
         return (
             <div>
-                <div className="flex justify-center text-white mt-4 font-medium text-3xl">
+                <div className="flex items-start justify-center text-white mt-4 font-medium text-3xl">
                     <img width="150px;" draggable="false" src="https://i.imgur.com/ATuMhih.png" alt="Timely logo"></img>
                 </div>
 

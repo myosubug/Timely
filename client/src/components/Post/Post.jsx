@@ -62,90 +62,91 @@ const Post = (props) => {
 
     //Gets all the necessary variables needed for the post
     useEffect(() => {
-
+        let mounted = true;
         const populateDate = () => {
             axios.get(SERVER_ADDRESS + "/posts/" + props.id)
                 .then(res => {
-                    const obj = res.data;
+                    if (mounted) {
+                        const obj = res.data;
 
-                    const id = obj._id;
-                    const username = obj.username;
-                    const type = obj.type;
-                    const expiryDate = obj.expiryDate;
-                    const timePosted = new Date(obj.dateCreated);
-                    const tags = obj.tags;
+                        const id = obj._id;
+                        const username = obj.username;
+                        const type = obj.type;
+                        const expiryDate = obj.expiryDate;
+                        const timePosted = new Date(obj.dateCreated);
+                        const tags = obj.tags;
 
-                    const maxTime = obj.maxTime;
-                    let time = (new Date(expiryDate) - new Date()) / 1000; //Time difference in seconds
+                        const maxTime = obj.maxTime;
+                        let time = (new Date(expiryDate) - new Date()) / 1000; //Time difference in seconds
 
-                    //Check if the difference is less than 0, and if so, set it to 0 (compensating for post removal lag)
-                    if (time < 0) {
-                        time = 0;
-                    }
-                    setTimeRemaining(time);
-
-                    const likeCount = obj.likeCount;
-                    const dislikeCount = obj.dislikeCount;
-                    const text_content = obj.textContent;
-                    const img_src = obj.imageURL;
-
-
-                    //Adapated from https://stackoverflow.com/questions/25275696/javascript-format-date-time/25276435 
-                    const formatDate = (date) => {
-
-                        let hours = date.getHours();
-                        let minutes = date.getMinutes();
-                        let ampm = hours >= 12 ? 'PM' : 'AM';
-                        hours = hours % 12;
-                        hours = hours ? hours : 12; // the hour '0' should be '12'
-                        minutes = minutes < 10 ? '0' + minutes : minutes;
-                        let strTime = hours + ':' + minutes + ' ' + ampm;
-
-                        return date.toDateString() + " at " + strTime;
-
-
-                    }
-
-                    const date_display = formatDate(timePosted);
-
-                    //Get the user's profile picture
-                    axios.get(SERVER_ADDRESS + "/users/findUser/" + username)
-                        .then(({ data }) => {
-                            const profileImage = data.profileImage;
-
-                            //Set the date
-                            setPostDetails({
-                                id: id,
-                                type: type,
-                                maxTime: maxTime,
-                                time: time,
-                                username: username,
-                                timePosted: date_display,
-                                likeCount: likeCount,
-                                dislikeCount: dislikeCount,
-                                textContent: text_content,
-                                imgSrc: img_src,
-                                profileImage: profileImage,
-                                tags: tags
-
-                            });
+                        //Check if the difference is less than 0, and if so, set it to 0 (compensating for post removal lag)
+                        if (time < 0) {
+                            time = 0;
                         }
-                        )
-                        .catch(err => console.log(err));
+                        setTimeRemaining(time);
+
+                        const likeCount = obj.likeCount;
+                        const dislikeCount = obj.dislikeCount;
+                        const text_content = obj.textContent;
+                        const img_src = obj.imageURL;
+
+
+                        //Adapated from https://stackoverflow.com/questions/25275696/javascript-format-date-time/25276435 
+                        const formatDate = (date) => {
+
+                            let hours = date.getHours();
+                            let minutes = date.getMinutes();
+                            let ampm = hours >= 12 ? 'PM' : 'AM';
+                            hours = hours % 12;
+                            hours = hours ? hours : 12; // the hour '0' should be '12'
+                            minutes = minutes < 10 ? '0' + minutes : minutes;
+                            let strTime = hours + ':' + minutes + ' ' + ampm;
+
+                            return date.toDateString() + " at " + strTime;
+
+
+                        }
+
+                        const date_display = formatDate(timePosted);
+
+                        //Get the user's profile picture
+                        axios.get(SERVER_ADDRESS + "/users/findUser/" + username)
+                            .then(({ data }) => {
+                                const profileImage = data.profileImage;
+
+                                //Set the date
+                                setPostDetails({
+                                    id: id,
+                                    type: type,
+                                    maxTime: maxTime,
+                                    time: time,
+                                    username: username,
+                                    timePosted: date_display,
+                                    likeCount: likeCount,
+                                    dislikeCount: dislikeCount,
+                                    textContent: text_content,
+                                    imgSrc: img_src,
+                                    profileImage: profileImage,
+                                    tags: tags
+
+                                });
+                            }
+                            )
+                            .catch(err => console.log(err));
 
 
 
 
-                    //Check if we have already liked the post
-                    if (props.thisUsername in obj.likedUsers) {
-                        setIsLikeSelected(true);
+                        //Check if we have already liked the post
+                        if (props.thisUsername in obj.likedUsers) {
+                            setIsLikeSelected(true);
+                        }
+                        else if (props.thisUsername in obj.dislikedUsers) {
+                            setIsDislikeSelected(true);
+                        }
+
+
                     }
-                    else if (props.thisUsername in obj.dislikedUsers) {
-                        setIsDislikeSelected(true);
-                    }
-
-
-
                 })
                 .catch(err => console.log(err));
         }
@@ -159,7 +160,11 @@ const Post = (props) => {
         //On the first render, get the data
         populateDate();
 
-        return () => { socket.off(update_event_name) }
+
+        return () => {
+            socket.off(update_event_name);
+            mounted = false;
+        }
     }, [props.id, props.thisUsername, props.username]);
 
     //Sets the interval for the timer
