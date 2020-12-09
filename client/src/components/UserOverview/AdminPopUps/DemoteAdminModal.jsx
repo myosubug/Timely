@@ -58,7 +58,7 @@ export const DemoteAdminModal = (props) => {
       className="DemoteAdminModal"
     >
       <DialogTitle id="title">
-        🚨 Demote user 🚨
+        <span role="img" aria-label="alarm"> 🚨 </span> Demote user <span role="img" aria-label="alarm"> 🚨 </span>
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
@@ -67,7 +67,7 @@ export const DemoteAdminModal = (props) => {
         {renderAlert()}
       </DialogContent>
       <DialogActions>
-      {isDeleted
+        {isDeleted
           ?
           <Button
             onClick={handleClose}

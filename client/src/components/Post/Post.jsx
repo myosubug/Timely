@@ -158,7 +158,7 @@ const Post = (props) => {
 
         //On the first render, get the data
         populateDate();
-    }, []);
+    }, [props.id, props.thisUsername, props.username]);
 
     //Sets the interval for the timer
     useEffect(() => {
@@ -206,12 +206,12 @@ const Post = (props) => {
             if (props.thisUsername !== "") {
                 return (<div className="ml-auto mr-3">
                     <div className={`${styles.action_btn} ${styles.no_text_select} ${isLikeSelected ? styles.action_btn_selected : ''}`} onClick={handleLikeClick}>
-                        <p className="pr-2">👍</p>
+                        <p className="pr-2"> <span role="img" aria-label="upvote">👍</span> </p>
                         <p> {renderLikeInfo(postDetails.likeCount)} </p>
                     </div>
 
                     <div className={`${styles.action_btn} ${styles.no_text_select} ${isDislikeSelected ? styles.action_btn_selected : ''}`} onClick={handleDislikeClick}>
-                        <p className="pr-2">👎</p>
+                        <p className="pr-2"> <span role="img" aria-label="downvote"> 👎 </span></p>
                         <p> {renderLikeInfo(postDetails.dislikeCount)} </p>
                     </div>
                 </div>
@@ -249,7 +249,7 @@ const Post = (props) => {
     //Renders the content depending on the type of post
     const renderContent = () => {
         if (postDetails.type === "img") {
-            return <img src={postDetails.imgSrc} />
+            return <img src={postDetails.imgSrc} alt="Post" />
         }
         else {
             return <div>{postDetails.textContent}</div>

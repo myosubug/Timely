@@ -58,7 +58,7 @@ export const PromoteUserModal = (props) => {
       className="PromoteUserModal"
     >
       <DialogTitle id="title">
-        🚨 Promote user 🚨
+        <span role="img" aria-label="alarm"> 🚨 </span> Promote user <span role="img" aria-label="alarm"> 🚨 </span>
       </DialogTitle>
       <DialogContent>
         <DialogContentText>

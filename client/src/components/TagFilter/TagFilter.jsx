@@ -85,7 +85,7 @@ export default function TagFilter(props) {
     }
 
     const handleGetTags = () => {
-        setTags([]);
+        //setTags([]);
         axios.get(SERVER_ADDRESS + "/posts/seach-tags?tag=" + values.input)
             .then(({ data }) => {
                 let tags = [];
