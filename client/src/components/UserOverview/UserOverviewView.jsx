@@ -107,10 +107,7 @@ const UserOverviewView = (props) => {
 
   return (
     <div className="UserOverviewEdit">
-      <NavBar
-        isLandingPg={false}
-        username={props.username}
-      />
+      <NavBar />
 
       <div className="grid grid-cols-9 gap-4 w-full">
         <div className="hidden xl:block xl:col-span-2 col-span-3 h-screen top-0 pt-24 sticky p-4 border-r-2 border-gray-400" style={{ backgroundColor: "#ededed" }}>
