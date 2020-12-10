@@ -204,10 +204,7 @@ const UserOverviewEdit = (props) => {
 
   return (
     <div className="UserOverviewEdit">
-      <NavBar
-        isLandingPg={false}
-        username={props.username}
-      />
+      <NavBar />
 
 
       <div className="grid grid-cols-9 gap-4 w-full">

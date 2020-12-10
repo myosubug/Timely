@@ -255,8 +255,7 @@ const UserOverviewAdmin = (props) => {
 
   return (
     <div className="UserOverviewEdit">
-      <NavBar
-      />
+      <NavBar />
 
 
       <div className="grid grid-cols-9 gap-4 w-full">
