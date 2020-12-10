@@ -145,7 +145,7 @@ const UserOverviewEdit = (props) => {
           </div>
         </div>
 
-        <div className="UserActions pl-8 py-5">
+        <div className="UserActions lg:pl-8 lg:py-5">
           {renderUserActions()}
         </div>
       </div>
