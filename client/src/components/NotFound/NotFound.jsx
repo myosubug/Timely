@@ -1,53 +1,38 @@
 import React from 'react';
-import {
-  Typography,
-  Grid,
-  makeStyles
-} from '@material-ui/core'
 import NavBar from '../NavBar/NavBar.jsx';
 
-const useStyles = makeStyles((theme) => ({
-  redirect_text: {
-    margin: "auto",
-    color: "blue"
-  }
-}));
 
 export const NotFound = () => {
 
-  const classes = useStyles();
-
   return (
-    <Grid
-      container
-      justify="center"
-      direction="column"
-      alignItems="center"
-      spacing={2}
-    >
-      <Grid item />
-      <Grid item>
-        <img
-          src="https://i.kym-cdn.com/photos/images/newsfeed/001/056/730/597.jpg"
-          className="NotFound"
-          alt="Page Not Found"
-          width=""
-        />
-      </Grid>
-      <Grid item>
-        <Typography variant="h3">
-          Page not found
-    </Typography>
-      </Grid>
-      <Grid item>
-        <Typography variant="h5">
-          The page you requested does not exist.
-        </Typography>
-        <Typography variant="h6">
-          <a href="/" className={classes.redirect_text}> Click here to go back to main page </a>
-        </Typography>
-      </Grid>
-    </Grid>
+    <div style={{ backgroundColor: "#ededed" }} className="h-screen">
+      <NavBar />
+      <div className="justify-center" style={{ backgroundColor: "#ededed" }}>
+        <div className="col-span-9 xl:col-span-5 flex-grow justify-center w-full pt-16 xl:pt-20 px-5" style={{ backgroundColor: "#ededed" }}>
+          <div className="flex justify-center pt-10 pb-4">
+            <img
+              src="https://i.kym-cdn.com/photos/images/newsfeed/001/056/730/597.jpg"
+              className="shadow-lg"
+              alt="Page Not Found"
+            />
+          </div>
+          <div className="flex justify-center text-5xl text-center text-gray-700 rounded-full pt-4 pb-4">
+            <p className="font-medium "> 404 Error </p>
+          </div>
+          <div className="flex justify-center text-2xl text-center text-gray-600 rounded-full pt-4 pb-4">
+            <p className="font-normal"> The page you requested does not exist ¯\_(ツ)_/¯ </p>
+          </div>
+          <div className="flex justify-center pt-4 pb-4">
+            <button
+              type="button"
+              className="button text-white text-2xl font-semibold mb-2 text-center rounded cursor-pointer shadow-md flex justify-center"
+              style={{ height: "3rem", padding: " 0 1rem 0 1rem", margin: "10px" }}>
+              <a href="/" style={{ padding: "0.1rem" }}> Go go back to main page </a>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
