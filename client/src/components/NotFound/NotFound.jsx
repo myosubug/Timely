@@ -11,7 +11,7 @@ export const NotFound = () => {
         <div className="col-span-9 xl:col-span-5 flex-grow justify-center w-full pt-16 xl:pt-20 px-5" style={{ backgroundColor: "#ededed" }}>
           <div className="flex justify-center pt-10 pb-4">
             <img
-              src="https://i.kym-cdn.com/photos/images/newsfeed/001/056/730/597.jpg"
+              src={process.env.PUBLIC_URL + '/404.jpg'}
               className="shadow-lg"
               alt="Page Not Found"
             />
