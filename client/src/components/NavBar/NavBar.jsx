@@ -60,7 +60,7 @@ export const NavBar = (props) => {
             <div className="flex justify-center">
               <Link to="/">
                 <div className="inline-block align-middle">
-                  <img width="150px" draggable="false" src="https://i.imgur.com/ATuMhih.png" alt="Timely" id={styles.logo}></img>
+                  <img width="150px" draggable="false" src={process.env.PUBLIC_URL + '/Logo.png'} alt="Timely" id={styles.logo}></img>
                 </div>
 
               </Link>

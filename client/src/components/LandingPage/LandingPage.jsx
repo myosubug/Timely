@@ -218,7 +218,7 @@ const LandingPage = (props) => {
         return (
             <div>
                 <div className="flex items-start justify-center text-white mt-4 font-medium text-3xl">
-                    <img width="150px;" draggable="false" src="https://i.imgur.com/ATuMhih.png" alt="Timely logo"></img>
+                    <img width="150px;" draggable="false" src={process.env.PUBLIC_URL + '/Logo.png'} alt="Timely logo"></img>
                 </div>
 
                 <div className="selector mt-4 mb-8 md:px-5">

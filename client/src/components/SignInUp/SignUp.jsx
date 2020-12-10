@@ -84,9 +84,9 @@ export default function SignUp(props) {
 
   return (
     <Container id={styles.container} maxWidth="sm">
-    <CssBaseline />
+      <CssBaseline />
       <div>
-        <div className="flex justify-center text-2xl text-gray-700 rounded-full pb-4 cursor-pointer">
+        <div className="flex justify-center text-2xl text-gray-700 rounded-full pb-4">
           <p className="font-medium "> Sign Up </p>
         </div>
         <form onSubmit={handleSignUp} noValidate>
