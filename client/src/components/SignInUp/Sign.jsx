@@ -27,7 +27,7 @@ const Sign = (props) => {
         </div>
         <div>
           <SignIn onCancel={props.onCancel} setLoggedIn={props.setLoggedIn}/>
-          <div className="flex justify-center pb-5 pt-5">
+          <div className="flex justify-center pb-5">
               <button onClick={handleSignUp}>
                 <p className="text-lg">Don't have an account? Click here</p>
               </button>
@@ -45,7 +45,7 @@ const Sign = (props) => {
         </div>
         <div>
           <SignUp onCancel={props.onCancel} setLoggedIn={props.setLoggedIn}/>
-          <div className="flex justify-center pb-5 pt-5">
+          <div className="flex justify-center pb-5">
               <button onClick={handleSignIn}>
                 <p className="text-lg">Already have an account? Click here</p>
               </button>
