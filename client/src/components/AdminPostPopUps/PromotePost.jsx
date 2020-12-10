@@ -44,13 +44,13 @@ export const PromotePost = (props) => {
       <DialogActions>
         <Button
           onClick={handleClose}
-          className="CancelButton"
+          className="CancelButton focus:outline-none"
         >
           Cancel
         </Button>
         <Button
           onClick={handleOnConfirmClick}
-          className="ConfirmButton"
+          className="ConfirmButton focus:outline-none"
         >
           Confirm
         </Button>

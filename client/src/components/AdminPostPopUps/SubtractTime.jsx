@@ -67,7 +67,7 @@ export const SubTime = (props) => {
           autoFocus
           margin="dense"
           id="postLifetime"
-          label="Extend post lifetime"
+          label="Subtract from post lifetime"
           type="number"
           required
           InputProps={{
@@ -76,19 +76,20 @@ export const SubTime = (props) => {
           error={errorMsg !== ""}
           helperText={errorMsg}
           onChange={onTextChange}
+          className="w-full"
         >
         </TextField>
       </DialogContent>
       <DialogActions>
         <Button
           onClick={handleClose}
-          className="CancelButton"
+          className="CancelButton focus:outline-none"
         >
           Cancel
         </Button>
         <Button
           onClick={handleOnConfirmClick}
-          className="ConfirmButton"
+          className="ConfirmButton focus:outline-none"
         >
           Confirm
         </Button>
