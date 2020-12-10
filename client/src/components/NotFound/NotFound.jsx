@@ -4,7 +4,7 @@ import {
   Grid,
   makeStyles
 } from '@material-ui/core'
-
+import NavBar from '../NavBar/NavBar.jsx';
 
 const useStyles = makeStyles((theme) => ({
   redirect_text: {

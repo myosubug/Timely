@@ -354,8 +354,6 @@ const LandingPage = (props) => {
         <div>
             <NavBar
                 openSignInModal={() => setRenderModalObj(prev => ({ ...prev, "login": true }))}
-                isLandingPg={true}
-                username={loggedInUser.username}
                 rightSideBarRenderer={() => setIsRightMenuOpen(true)}
                 leftSideBarRenderer={() => setIsLeftMenuOpen(true)}
             />

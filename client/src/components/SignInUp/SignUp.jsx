@@ -12,7 +12,6 @@ import { SERVER_ADDRESS, loggedInUser } from '../../AppConfig.js'
 import styles from './Sign.module.css';
 export default function SignUp(props) {
   const [errorMsg, setErrorMsg] = useState("");
-  // const classes = useStyles();
 
   function handleSignUp(e) {
     e.preventDefault();

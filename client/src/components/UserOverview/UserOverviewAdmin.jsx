@@ -256,8 +256,6 @@ const UserOverviewAdmin = (props) => {
   return (
     <div className="UserOverviewEdit">
       <NavBar
-        isLandingPg={false}
-        username={props.username}
       />
 
 

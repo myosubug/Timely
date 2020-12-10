@@ -12,7 +12,6 @@ export const NavBar = (props) => {
 
   NavBar.propTypes = {
     openSignInModal: PropTypes.func,
-    isLandingPg: PropTypes.bool.isRequired,
     rightSideBarRenderer: PropTypes.func,
     leftSideBarRenderer: PropTypes.func
   };
