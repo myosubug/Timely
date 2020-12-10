@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Avatar,
-  Grid,
-} from '@material-ui/core';
 import NavBar from '../NavBar/NavBar';
 import { Post } from '../Post/Post';
 import axios from 'axios';
@@ -90,9 +86,9 @@ const UserOverviewView = (props) => {
 
               <div className="UserInfo truncate max-w-0 overflow-ellipsis" style={{ marginRight: "0.25rem" }}>
                 <div style={{ color: "#53b7bb" }} className="text-2xl font-medium">
-                  <p className="truncate ...">
+                  <span className="truncate ...">
                     {"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""}
-                  </p>
+                  </span>
                   <span className="text-sm text-gray-600 font-normal">{posts.length} active posts</span>
                 </div>
                 <div className="text-md font-sm">

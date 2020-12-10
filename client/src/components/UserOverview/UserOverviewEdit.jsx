@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Avatar,
-  Grid,
-  IconButton,
-  Tooltip,
-} from '@material-ui/core';
+import { Tooltip } from '@material-ui/core';
 import DeleteAccountModal from '../DeleteAccountModal/DeleteAccountModal';
 import EditPasswordModal from '../EditPasswordModal/EditPasswordModal';
 import NavBar from '../NavBar/NavBar';
@@ -108,35 +103,34 @@ const UserOverviewEdit = (props) => {
   const renderUserGrid = () => {
     return (
       <div>
-
         <div className="lg:flex items-baseline border-b-2 border-gray-200 items-center py-5">
           <div className="w-full lg:w-1/2">
 
             <div className="flex justify-center lg:justify-start">
               <div className="flex justify-start">
-                <button className="flex h-20 w-20">
-                  <input
-                    accept="image/*"
-                    hidden
-                    id="avatar-image-upload"
-                    type="file"
-                    onChange={handleOnImgChange}
-                  />
-                  <label htmlFor="avatar-image-upload">
-                    <img
-                      alt="Avatar"
-                      src={image}
-                      className="place-self-center h-20 w-20 mr-6 mt-2 rounded-full"
+                <Tooltip title="Change profile picture">
+                  <button className="flex h-20 w-20">
+                    <input
+                      accept="image/*"
+                      hidden
+                      id="avatar-image-upload"
+                      type="file"
+                      onChange={handleOnImgChange}
                     />
-                  </label>
-                </button>
+                    <label htmlFor="avatar-image-upload">
+                      <img
+                        alt="Avatar"
+                        src={image}
+                        className="place-self-center h-20 w-20 mr-6 mt-2 rounded-full"
+                      />
+                    </label>
+                  </button>
+                </Tooltip>
               </div>
 
               <div className="UserInfo pl-6 truncate max-w-0 overflow-ellipsis" style={{ marginRight: "0.25rem" }}>
                 <div style={{ color: "#53b7bb" }} className="text-2xl font-medium">
-                  <p className="truncate ...">
-                  {"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""} 
-                  </p>
+                  <span className="truncate ...">{"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""}</span>
                   <span className="text-sm text-gray-600 font-normal">{posts.length} active posts</span>
                 </div>
                 <div className="text-md font-sm">
@@ -144,7 +138,7 @@ const UserOverviewEdit = (props) => {
                 </div>
               </div>
             </div>
-            
+
           </div>
         </div>
 
