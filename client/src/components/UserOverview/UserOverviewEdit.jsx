@@ -176,9 +176,11 @@ const UserOverviewEdit = (props) => {
 
         {/* Password */}
         <div className="lg:flex items-baseline">
-          <div className="w-full lg:w-1/2"><h3 className="font-semibold text-center lg:text-left m-0 p-0 text-2xl text-gray-700">
-            Password
-              </h3><h5 className="font-normal text-center lg:text-left m-0 p-0 text-sm lg:text-base">
+          <div className="w-full lg:w-1/2">
+            <h3 className="font-semibold text-center lg:text-left m-0 p-0 text-2xl text-gray-700">
+              Password
+              </h3>
+            <h5 className="font-normal text-center lg:text-left m-0 p-0 text-sm lg:text-base">
               ********
               </h5>
           </div>
@@ -187,7 +189,8 @@ const UserOverviewEdit = (props) => {
             <Tooltip title="Change password">
               <div
                 onClick={() => setPassModalOpen(true)}
-                className="flex w-32 justify-center items-center button text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md">
+                className="flex w-32 justify-center items-center button text-white text-md font-semibold mb-2 rounded cursor-pointer shadow-md"
+              >
                 <span>Change</span>
               </div>
             </Tooltip>
