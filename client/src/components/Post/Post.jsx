@@ -230,7 +230,12 @@ const Post = (props) => {
         const header = <CardHeader
             style={{ width: "100%" }}
             avatar={<Tooltip title="View profile"><Avatar className={styles.profile_info} onClick={handleUserClick} src={postDetails.profileImage}></Avatar></Tooltip>}
-            title={<p className={styles.profile_info} onClick={handleUserClick}> {postDetails.username} </p>}
+            title={
+                <Tooltip title="View profile">
+                    <div className={"truncate cursor-pointer"} onClick={handleUserClick} style={{ width: "fit-content" }} id={styles["username-display"]}> {postDetails.username} </div>
+                </Tooltip>
+            }
+
             subheader={postDetails.timePosted}
             action={renderActions()}
         />;
@@ -259,7 +264,7 @@ const Post = (props) => {
             return <img src={postDetails.imgSrc} alt="Post" />
         }
         else {
-            return <div>{postDetails.textContent}</div>
+            return <p>{postDetails.textContent}</p>
         }
     }
 

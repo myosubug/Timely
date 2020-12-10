@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogActions,
@@ -29,48 +29,60 @@ export const EditPasswordModal = (props) => {
 
   const [isDeleted, setIsDeleted] = useState(false);
 
+
+  useEffect(() => {
+    if (props.isOpen) {
+      setIsDeleted(false);
+      setAlert({
+        message: "Your password must be at least 3 characters long.",
+        severity: "info"
+      });
+    }
+
+
+  }, [props.isOpen])
+
   // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
-    setAlert({
-      message: "Your password must be at least 3 characters long.",
-      severity: "info"
-    });
   };
 
   // Function that handles the password change
-  const handleOnConfirmClick = async () => {
-    //Check if the passwords match
-    await axios.post(SERVER_ADDRESS + "/users/verifyUser", { username: props.username, password: document.getElementById('currentPass').value })
-      .then(res => {
-        if (!res) {
-          return res;
-        }
-      })
-      .catch(err => console.log(err));
+  const handleOnConfirmClick = () => {
 
-    // Check if new password meets requirements
-    if (!document.getElementById('newPass').value || document.getElementById('newPass').value.length < 3) {
-      setAlert({ message: "New password must be at least 3 characters.", severity: "error" });
-      console.log("New password must be at least 3 characters.");
-    }
-    // Passwords don't match
-    else if (document.getElementById('newPass').value !== document.getElementById('confirmPass').value) {
-      setAlert({ message: "Passwords must match.", severity: "error" });
-      console.log("Passwords must match.");
-    }
-    // Passwords match and is updated
-    else {
-      const data = { password: document.getElementById('newPass').value };
-      // axios call 
-      axios.post(SERVER_ADDRESS + '/users/update/pass/' + props.username, data)
-        .then(res => {
-          console.log("Axios: password successfully updated!")
-          setAlert({ message: "Password successfully updated!", severity: "success" });
+    if (document.getElementById('currentPass').value !== "") {
+      //Check if the passwords match
+      axios.post(SERVER_ADDRESS + "/users/verifyUser", { username: props.username, password: document.getElementById('currentPass').value })
+        .then(({ data }) => {
+          //Check if the enntered password matches with the old one
+          if (data) {
+            // Check if new password meets requirements
+            if (!document.getElementById('newPass').value || document.getElementById('newPass').value.length < 3) {
+              setAlert({ message: "New password must be at least 3 characters.", severity: "error" });
+            }
+            // Passwords don't match
+            else if (document.getElementById('newPass').value !== document.getElementById('confirmPass').value) {
+              setAlert({ message: "New passwords must match.", severity: "error" });
+            }
+            // Passwords match and is updated
+            else {
+              const data = { password: document.getElementById('newPass').value };
+              // axios call 
+              axios.post(SERVER_ADDRESS + '/users/update/pass/' + props.username, data)
+                .then(() => {
+                  setAlert({ message: "Password successfully updated!", severity: "success" });
+                })
+                .catch(err => (console.log(err)))
+              setIsDeleted(true);
+            }
+          }
+          else {
+            setAlert({ message: "Current password does not match.", severity: "error" });
+          }
         })
-        .catch(err => (console.log(err)))
-        setIsDeleted(true);
+        .catch(err => console.log(err));
     }
+
   };
 
   // Function that renders the current alert set in the state
@@ -105,7 +117,6 @@ export const EditPasswordModal = (props) => {
           required
         />
         <TextField
-          autoFocus
           margin="dense"
           id="newPass"
           label="New password"
@@ -114,7 +125,6 @@ export const EditPasswordModal = (props) => {
           required
         />
         <TextField
-          autoFocus
           margin="dense"
           id="confirmPass"
           label="Re-enter new password"
@@ -125,11 +135,11 @@ export const EditPasswordModal = (props) => {
         {renderAlert()}
       </DialogContent>
       <DialogActions>
-      {isDeleted
+        {isDeleted
           ?
           <Button
             onClick={handleClose}
-            className="CloseButton"
+            className="CloseButton focus:outline-none"
           >
             Close
         </Button>
@@ -137,13 +147,13 @@ export const EditPasswordModal = (props) => {
           <>
             <Button
               onClick={handleClose}
-              className="ConfirmButton"
+              className="ConfirmButton focus:outline-none"
             >
               Cancel
             </Button>
             <Button
               onClick={handleOnConfirmClick}
-              className="ConfirmButton"
+              className="ConfirmButton focus:outline-none"
             >
               Confirm
             </Button>
