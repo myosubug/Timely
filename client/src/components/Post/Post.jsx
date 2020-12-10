@@ -112,7 +112,7 @@ const Post = (props) => {
                         //Get the user's profile picture
                         axios.get(SERVER_ADDRESS + "/users/findUser/" + username)
                             .then(({ data }) => {
-                                const profileImage = data.profileImage;
+                                const profileImage = data.profileImage + "?" + Date.now();
 
                                 //Set the date
                                 setPostDetails({
@@ -229,7 +229,7 @@ const Post = (props) => {
 
         const header = <CardHeader
             style={{ width: "100%" }}
-            avatar={<Tooltip title="View profile"><Avatar className={styles.profile_info} onClick={handleUserClick} src={`${postDetails.profileImage}?${Date.now()}`}></Avatar></Tooltip>}
+            avatar={<Tooltip title="View profile"><Avatar className={styles.profile_info} onClick={handleUserClick} src={postDetails.profileImage}></Avatar></Tooltip>}
             title={<p className={styles.profile_info} onClick={handleUserClick}> {postDetails.username} </p>}
             subheader={postDetails.timePosted}
             action={renderActions()}
