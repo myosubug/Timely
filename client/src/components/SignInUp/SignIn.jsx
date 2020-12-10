@@ -1,42 +1,18 @@
 import React, { useState } from 'react';
 import {
-  Button,
   CssBaseline,
   TextField,
   Grid,
-  Typography,
-  Container,
-  makeStyles
+  Container
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { SERVER_ADDRESS, loggedInUser } from '../../AppConfig.js'
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  form: {
-    width: '100%',
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    background: '#7ED3D6',
-    '&:hover': {
-      background: "#53b7bb",
-    },
-    margin: theme.spacing(2, 0, 2),
-  },
-}));
-
+import styles from './Sign.module.css';
 
 export default function SignIn(props) {
   const [isSignInOkay, setIsSignInOkay] = useState(true);
-  const classes = useStyles();
 
   function handleSignIn(e) {
     e.preventDefault();
@@ -63,66 +39,56 @@ export default function SignIn(props) {
       })
 
   }
-  if (!isSignInOkay) {
-    return (
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
-          <form onSubmit={handleSignIn} className={classes.form} noValidate>
-            <TextField variant="outlined" margin="normal" required fullWidth id="username" label="User Name" name="email" autoComplete="email" autoFocus />
-            <TextField variant="outlined" margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
-            <Grid item xs={12}>
-              <Alert variant="outlined" severity="error">
-                Your user name or password is wrong, please check again.
-            </Alert>
-            </Grid>
-            <Grid item xs={12}>
-              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-                Sign In
-                </Button>
-            </Grid>
-            <Grid item xs={12}>
-              <Button fullWidth variant="contained" color="primary" onClick={props.onCancel} className={classes.submit}>
-                Cancel
-                </Button>
-            </Grid>
-          </form>
+
+  return (
+    <Container id={styles.container} maxWidth="sm">
+      <CssBaseline />
+      <div>
+        <div className="flex justify-center text-2xl text-gray-700 rounded-full pb-4 cursor-pointer">
+          <p className="font-medium "> Sign In </p>
         </div>
-      </Container>
-    );
-  } else {
-    return (
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
-          <Typography component="h1" variant="h5">
-            Sign in
-            </Typography>
-          <form onSubmit={handleSignIn} className={classes.form} noValidate>
-            <TextField variant="outlined" margin="normal" required fullWidth id="username" label="User Name" name="email" autoComplete="email" autoFocus />
-            <TextField variant="outlined" margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
+        <form onSubmit={handleSignIn} noValidate>
+          <Grid container>
             <Grid item xs={12}>
-              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-                Sign In
-                  </Button>
+              <TextField variant="outlined" margin="normal" required fullWidth id="username" label="Username" name="email" autoComplete="email" autoFocus />
             </Grid>
             <Grid item xs={12}>
-              <Button fullWidth variant="contained" color="primary" onClick={props.onCancel} className={classes.submit}>
-                Cancel
-                  </Button>
+              <TextField variant="outlined" margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
             </Grid>
-          </form>
-        </div>
-      </Container>
-    );
-  }
+            {!isSignInOkay &&
+              <Grid item xs={12}>
+                <Alert variant="outlined" severity="error">
+                  Your username or password is wrong, please try again.
+                </Alert>
+              </Grid>
+            }
+          </Grid>
+          <div>
+             <div className={styles.buttonDiv}>
+              <button
+                type="button"
+                onClick={props.onCancel}
+                className="button-cancel text-white text-2xl font-semibold mb-2 text-center rounded cursor-pointer shadow-md"
+                style={{ height: "3rem", padding: " 0 1rem 0 1rem", margin: "10px" }}>
+                <p style={{ padding: "0.1rem" }}> Cancel </p>
+              </button>
+
+              <button
+                type="submit"
+                className="button text-white text-2xl font-semibold mb-2 text-center rounded cursor-pointer shadow-md"
+                style={{ height: "3rem", padding: " 0 1rem 0 1rem", margin: "10px" }}>
+                <p style={{ padding: "0.1rem" }}> Sign In </p>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </Container>
+  );
 }
 
 SignIn.propTypes = {
-  onCancel: PropTypes.func
+  onCancel: PropTypes.func,
 };
 
 

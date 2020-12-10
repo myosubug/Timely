@@ -1,41 +1,18 @@
 import React, { useState } from 'react';
 import {
-  Button,
   CssBaseline,
   TextField,
   Grid,
-  Typography,
-  Container,
-  makeStyles
+  Container
 } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { SERVER_ADDRESS, loggedInUser } from '../../AppConfig.js'
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  form: {
-    width: '100%',
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    background: '#7ED3D6',
-    '&:hover': {
-      background: "#53b7bb",
-    },
-    margin: theme.spacing(2, 0, 2),
-  }
-}));
-
+import styles from './Sign.module.css';
 export default function SignUp(props) {
   const [errorMsg, setErrorMsg] = useState("");
-  const classes = useStyles();
+  // const classes = useStyles();
 
   function handleSignUp(e) {
     e.preventDefault();
@@ -95,22 +72,28 @@ export default function SignUp(props) {
             {errorMsg}
           </Alert>
         </Grid>
-
       );
     }
+    return (
+      <Grid item xs={12}>
+        <Alert variant="outlined" severity="info">
+          Your username and password must be at least 3 characters long.
+      </Alert>
+      </Grid>
+    );
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          Sign up
-          </Typography>
-        <form onSubmit={handleSignUp} className={classes.form} noValidate>
+    <Container id={styles.container} maxWidth="sm">
+    <CssBaseline />
+      <div>
+        <div className="flex justify-center text-2xl text-gray-700 rounded-full pb-4 cursor-pointer">
+          <p className="font-medium "> Sign Up </p>
+        </div>
+        <form onSubmit={handleSignUp} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField variant="outlined" required fullWidth id="username" label="User Name" name="email" autoComplete="email" />
+              <TextField variant="outlined" required fullWidth id="username" label="Username" name="email" autoComplete="email" />
             </Grid>
             <Grid item xs={12}>
               <TextField variant="outlined" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
@@ -120,16 +103,24 @@ export default function SignUp(props) {
             </Grid>
             {renderError()}
           </Grid>
-          <Grid item xs={12}>
-            <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-              Sign Up
-                </Button>
-          </Grid>
-          <Grid item xs={12}>
-            <Button fullWidth variant="contained" color="primary" onClick={props.onCancel} className={classes.submit}>
-              Cancel
-                </Button>
-          </Grid>
+          <div>
+            <div className={styles.buttonDiv}>
+              <button
+                type="button"
+                onClick={props.onCancel}
+                className="button-cancel text-white text-2xl font-semibold mb-2 text-center rounded cursor-pointer shadow-md"
+                style={{ height: "3rem", padding: " 0 1rem 0 1rem", margin: "10px" }}>
+                <p style={{ padding: "0.1rem" }}> Cancel </p>
+              </button>
+
+              <button
+                type="submit"
+                className="button text-white text-2xl font-semibold mb-2 text-center rounded cursor-pointer shadow-md"
+                style={{ height: "3rem", padding: " 0 1rem 0 1rem", margin: "10px" }}>
+                <p style={{ padding: "0.1rem" }}> Sign Up </p>
+              </button>
+            </div>
+          </div>
         </form>
       </div>
     </Container>
@@ -137,9 +128,8 @@ export default function SignUp(props) {
 
 }
 
-
 SignUp.propTypes = {
-  onCancel: PropTypes.func
+  onCancel: PropTypes.func.isRequired,
 };
 
 export { SignUp };
