@@ -111,37 +111,40 @@ const UserOverviewEdit = (props) => {
 
         <div className="lg:flex items-baseline border-b-2 border-gray-200 items-center py-5">
           <div className="w-full lg:w-1/2">
+
             <div className="flex justify-center lg:justify-start">
               <div className="flex justify-start">
-                <Grid item xs={9} className="ProfilePic">
-                  <IconButton color="primary" >
-                    <input
-                      accept="image/*"
-                      hidden
-                      id="avatar-image-upload"
-                      type="file"
-                      onChange={handleOnImgChange}
+                <button className="flex h-20 w-20">
+                  <input
+                    accept="image/*"
+                    hidden
+                    id="avatar-image-upload"
+                    type="file"
+                    onChange={handleOnImgChange}
+                  />
+                  <label htmlFor="avatar-image-upload">
+                    <img
+                      alt="Avatar"
+                      src={image}
+                      className="place-self-center h-20 w-20 mr-6 mt-2 rounded-full"
                     />
-                    <label htmlFor="avatar-image-upload">
-                      <Avatar
-                        alt="Avatar"
-                        src={image}
-                        className="avatar"
-                      />
-                    </label>
-                  </IconButton>
-                </Grid>
+                  </label>
+                </button>
               </div>
 
-              <div className="UserInfo pl-2" style={{ marginRight: "0.25rem" }}>
+              <div className="UserInfo pl-6 truncate max-w-0 overflow-ellipsis" style={{ marginRight: "0.25rem" }}>
                 <div style={{ color: "#53b7bb" }} className="text-2xl font-medium">
-                  {"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""} <span className="text-sm text-gray-600 font-normal">{posts.length} active posts</span>
+                  <p className="truncate ...">
+                  {"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""} 
+                  </p>
+                  <span className="text-sm text-gray-600 font-normal">{posts.length} active posts</span>
                 </div>
                 <div className="text-md font-sm">
                   {"Member since " + convertJoinDate()}
                 </div>
               </div>
             </div>
+            
           </div>
         </div>
 
@@ -219,7 +222,7 @@ const UserOverviewEdit = (props) => {
             {posts.length > 0 &&
               <div className="text-2xl font-semibold text-gray-800 mb-5 ml-2 mt-5">
                 Post Activity
-                    </div>
+              </div>
             }
             {posts}
           </div>
