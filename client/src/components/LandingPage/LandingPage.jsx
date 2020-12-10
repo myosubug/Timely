@@ -157,13 +157,15 @@ const LandingPage = (props) => {
         if (isLoggedIn) {
             return (
                 <div>
-                    <div className="flex mb-8">
+                    <div className="flex mb-8 max-w-full overflow-x-auto">
                         <Link to={"/useroverview/" + loggedInUser.username}>
                             <Tooltip title="View your settings">
-                                <img className="place-self-center h-16 w-16 mr-6 mt-2 rounded-full" src={loggedInUser.profileImage} alt="profile"></img>
+                                <img className="place-self-center h-16 w-16 mr-6 rounded-full" src={loggedInUser.profileImage} alt="profile"
+                                    style={{ minWidth: "4rem", minHeight: "4rem" }}
+                                ></img>
                             </Tooltip>
                         </Link>
-                        <div className="text-left truncate max-w-0 overflow-ellipsis ml-4 lg:ml-0">
+                        <div className="text-left truncate max-w-0 overflow-ellipsis ml-0">
                             <Link to={"/useroverview/" + loggedInUser.username}>
                                 <Tooltip title="View your settings">
                                     <h2 className="text-lg font-semibold text-gray-700 border-gray-400 pb-1 border-b-2 w-36 truncate ..." > {loggedInUser.username} </h2>

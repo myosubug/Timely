@@ -29,10 +29,10 @@ export const PromoteUserModal = (props) => {
   // Resets the state when the modal is closed
   const handleClose = () => {
     props.onClose();
-    setAlert({
-      message: "You can promote the user at any time.",
-      severity: "info"
-    });
+
+    if (isDeleted) {
+      window.location.reload();
+    }
   };
 
   // Function that handles account deletion
@@ -63,9 +63,6 @@ export const PromoteUserModal = (props) => {
       <DialogContent>
         <DialogContentText>
           Are you sure you want to promote this user?
-        </DialogContentText>
-        <DialogContentText>
-          {"@" + props.username}
         </DialogContentText>
         {renderAlert()}
       </DialogContent>

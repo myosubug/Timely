@@ -91,3 +91,23 @@
 #tag_container{
     margin: 0 3% 1% 3%;
 }
+
+/* Set boundries for the username depending on the screen size */
+
+@media (min-width: 0px) {
+    #username-display{
+        max-width: 100px;
+    }
+}
+
+@media (min-width: 640px) {
+    #username-display{
+        max-width: 300px;
+    }
+}
+
+@media (min-width: 768px) {
+    #username-display{
+        max-width: 300px;
+    }
+}

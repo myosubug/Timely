@@ -103,47 +103,51 @@ const UserOverviewEdit = (props) => {
   const renderUserGrid = () => {
     return (
       <div>
-        <div className="lg:flex items-baseline border-b-2 border-gray-200 items-center py-5">
-          <div className="w-full lg:w-1/2">
+        <div>
+          <div className="lg:flex items-baseline border-b-2 border-gray-200 items-center py-5 lg:pl-8 overflow-x-auto">
+            <div className="w-full lg:w-1/2">
 
-            <div className="flex justify-center lg:justify-start">
               <div className="flex justify-start">
-                <Tooltip title="Change profile picture">
-                  <button className="flex h-20 w-20">
-                    <input
-                      accept="image/*"
-                      hidden
-                      id="avatar-image-upload"
-                      type="file"
-                      onChange={handleOnImgChange}
-                    />
-                    <label htmlFor="avatar-image-upload">
-                      <img
-                        alt="Avatar"
-                        src={image}
-                        className="place-self-center h-20 w-20 mr-6 mt-2 rounded-full"
+                <div className="flex justify-start">
+                  <Tooltip title="Change profile picture">
+                    <button className="flex h-20 w-20 focus:outline-none">
+                      <input
+                        accept="image/*"
+                        hidden
+                        id="avatar-image-upload"
+                        type="file"
+                        onChange={handleOnImgChange}
                       />
-                    </label>
-                  </button>
-                </Tooltip>
-              </div>
+                      <label htmlFor="avatar-image-upload" className="cursor-pointer">
+                        <img
+                          alt="Avatar"
+                          src={image}
+                          className="place-self-center h-20 w-20 mr-6 mt-2 rounded-full"
+                        />
+                      </label>
+                    </button>
+                  </Tooltip>
+                </div>
 
-              <div className="UserInfo pl-6 truncate max-w-0 overflow-ellipsis" style={{ marginRight: "0.25rem" }}>
-                <div style={{ color: "#53b7bb" }} className="text-2xl font-medium">
-                  <span className="truncate ...">{"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""}</span>
-                  <span className="text-sm text-gray-600 font-normal">{posts.length} active posts</span>
+                <div className="UserInfo pl-6 max-w-0" style={{ marginRight: "0.25rem" }}>
+                  <div style={{ color: "#53b7bb" }} className="text-2xl font-medium">
+                    <p>{userInfo.isAdmin ? "👑" : ""}&#8205;{userInfo.username}</p>
+                    <p className="text-sm text-gray-600 font-normal">{posts.length} active posts</p>
+                  </div>
+                  <div className="text-md font-sm">
+                    {"Member since " + convertJoinDate()}
+                  </div>
                 </div>
-                <div className="text-md font-sm">
-                  {"Member since " + convertJoinDate()}
-                </div>
+
               </div>
             </div>
 
           </div>
-        </div>
 
-        <div className="UserActions lg:pl-8 lg:py-5">
-          {renderUserActions()}
+          {/* Account actions */}
+          <div className="UserActions lg:pl-8 lg:py-5">
+            {renderUserActions()}
+          </div>
         </div>
       </div>
     )
@@ -157,7 +161,7 @@ const UserOverviewEdit = (props) => {
         <div className="lg:flex items-baseline">
           <div className="w-full lg:w-1/2"><h3 className="font-semibold text-center lg:text-left m-0 p-0 text-2xl text-gray-700">
             Username
-              </h3><h5 className="font-normal text-center lg:text-left m-0 p-0 text-sm lg:text-base">
+              </h3><h5 className="font-normal text-center lg:text-left m-0 p-0 text-sm lg:text-base truncate">
               {userInfo.username}
             </h5>
           </div>
