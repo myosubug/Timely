@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Avatar,
-  Grid,
-  IconButton,
-  Tooltip
-} from '@material-ui/core';
+import { Tooltip } from '@material-ui/core';
 import BanUserModal from './AdminPopUps/BanUserModal';
 import AdminEditPasswordModal from './AdminPopUps/AdminEditPasswordModal';
 import DemoteAdminModal from './AdminPopUps/DemoteAdminModal';
@@ -135,13 +130,13 @@ const UserOverviewAdmin = (props) => {
   const renderUserGrid = () => {
     return (
       <div>
-        <div className="lg:flex items-baseline border-b-2 border-gray-200 items-center py-5">
+        <div className="lg:flex items-baseline border-b-2 border-gray-200 items-center py-5 lg:pl-8">
           <div className="w-full lg:w-1/2">
+
             <div className="flex justify-center lg:justify-start">
-              {/* Avatar */}
               <div className="flex justify-start">
-                <Grid item xs={9} className="ProfilePic">
-                  <IconButton color="primary" >
+                <Tooltip title="Change profile picture">
+                  <button className="flex h-20 w-20">
                     <input
                       accept="image/*"
                       hidden
@@ -150,24 +145,26 @@ const UserOverviewAdmin = (props) => {
                       onChange={handleOnImgChange}
                     />
                     <label htmlFor="avatar-image-upload">
-                      <Avatar
+                      <img
                         alt="Avatar"
                         src={image}
-                        className="avatar"
+                        className="place-self-center h-20 w-20 mr-6 mt-2 rounded-full"
                       />
                     </label>
-                  </IconButton>
-                </Grid>
+                  </button>
+                </Tooltip>
               </div>
 
-              <div className="UserInfo pl-2" style={{ marginRight: "0.25rem" }}>
+              <div className="UserInfo pl-6 truncate max-w-0 overflow-ellipsis" style={{ marginRight: "0.25rem" }}>
                 <div style={{ color: "#53b7bb" }} className="text-2xl font-medium">
-                  {"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""} <span className="text-sm text-gray-600 font-normal">{posts.length} active posts</span>
+                  <span className="truncate ...">{"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""}</span>
+                  <span className="text-sm text-gray-600 font-normal">{posts.length} active posts</span>
                 </div>
                 <div className="text-md font-sm">
                   {"Member since " + convertJoinDate()}
                 </div>
               </div>
+
             </div>
           </div>
 
@@ -182,7 +179,6 @@ const UserOverviewAdmin = (props) => {
                   <span>Demote User</span>
                 </div>
               </Tooltip>
-
               :
               <Tooltip title="Promote user to admin">
                 <div
@@ -197,7 +193,7 @@ const UserOverviewAdmin = (props) => {
         </div>
 
         {/* Account actions */}
-        <div className="UserActions pl-8 py-5">
+        <div className="UserActions lg:pl-8 lg:py-5">
           {renderUserActions()}
         </div>
       </div>
@@ -230,9 +226,11 @@ const UserOverviewAdmin = (props) => {
 
         {/* Password */}
         <div className="lg:flex items-baseline">
-          <div className="w-full lg:w-1/2"><h3 className="font-semibold text-center lg:text-left m-0 p-0 text-2xl text-gray-700">
-            Password
-              </h3><h5 className="font-normal text-center lg:text-left m-0 p-0 text-sm lg:text-base">
+          <div className="w-full lg:w-1/2">
+            <h3 className="font-semibold text-center lg:text-left m-0 p-0 text-2xl text-gray-700">
+              Password
+              </h3>
+            <h5 className="font-normal text-center lg:text-left m-0 p-0 text-sm lg:text-base">
               ********
               </h5>
           </div>
