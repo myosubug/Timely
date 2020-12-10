@@ -76,22 +76,24 @@ const UserOverviewView = (props) => {
 
         <div className="lg:flex items-baseline border-b-2 border-gray-200 items-center py-5">
           <div className="w-full lg:w-1/2">
+
             <div className="flex justify-center lg:justify-start">
               <div className="flex justify-start">
-                <Grid item xs={9} className="ProfilePic">
                   <label htmlFor="avatar-image-upload">
-                    <Avatar
+                    <img
                       alt="Avatar"
                       src={image}
-                      className="avatar"
+                      className="place-self-center h-20 w-20 mr-6 mt-2 rounded-full"
                     />
                   </label>
-                </Grid>
               </div>
 
-              <div className="UserInfo pl-2" style={{ marginRight: "0.25rem" }}>
+              <div className="UserInfo truncate max-w-0 overflow-ellipsis" style={{ marginRight: "0.25rem" }}>
                 <div style={{ color: "#53b7bb" }} className="text-2xl font-medium">
-                  {"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""} <span className="text-sm text-gray-600 font-normal">{posts.length} active posts</span>
+                  <p className="truncate ...">
+                    {"@" + userInfo.username} {userInfo.isAdmin ? " 👑 " : ""}
+                  </p>
+                  <span className="text-sm text-gray-600 font-normal">{posts.length} active posts</span>
                 </div>
                 <div className="text-md font-sm">
                   {"Member since " + convertJoinDate()}
