@@ -148,7 +148,7 @@ const PostSubMenu = (props) => {
             <div>
                 <Tooltip title="Post Actions">
                     <IconButton
-                        className="px-0 py-0"
+                        className="px-0 py-0 focus:outline-none"
                         ref={anchorRef}
                         aria-controls={open ? "menu-list-grow" : undefined}
                         aria-haspopup="true"

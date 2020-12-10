@@ -23,15 +23,15 @@ const Sign = (props) => {
     return (
       <div>
         <div className="flex justify-center">
-          <img width="220px" draggable="false" src="https://i.imgur.com/ATuMhih.png" alt="Timely"></img>
+          <img width="220px" draggable="false" src={process.env.PUBLIC_URL + '/Logo.png'} alt="Timely"></img>
         </div>
         <div>
-          <SignIn onCancel={props.onCancel} setLoggedIn={props.setLoggedIn}/>
+          <SignIn onCancel={props.onCancel} setLoggedIn={props.setLoggedIn} />
           <div className="flex justify-center pb-5">
-              <button onClick={handleSignUp}>
-                <p className="text-lg">Don't have an account? Click here</p>
-              </button>
-            </div>
+            <button onClick={handleSignUp} className="focus:outline-none">
+              <p className="text-lg">Don't have an account? Click here</p>
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -41,15 +41,15 @@ const Sign = (props) => {
       <div>
 
         <div className="flex justify-center">
-          <img width="220px" draggable="false" src="https://i.imgur.com/ATuMhih.png" alt="Timely"></img>
+          <img width="220px" draggable="false" src={process.env.PUBLIC_URL + '/Logo.png'} alt="Timely"></img>
         </div>
         <div>
-          <SignUp onCancel={props.onCancel} setLoggedIn={props.setLoggedIn}/>
+          <SignUp onCancel={props.onCancel} setLoggedIn={props.setLoggedIn} />
           <div className="flex justify-center pb-5">
-              <button onClick={handleSignIn}>
-                <p className="text-lg">Already have an account? Click here</p>
-              </button>
-            </div>
+            <button onClick={handleSignIn} className="focus:outline-none">
+              <p className="text-lg">Already have an account? Click here</p>
+            </button>
+          </div>
         </div>
       </div>
     );
