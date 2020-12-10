@@ -44,7 +44,7 @@ export default function SignIn(props) {
     <Container id={styles.container} maxWidth="sm">
       <CssBaseline />
       <div>
-        <div className="flex justify-center text-2xl text-gray-700 rounded-full pb-4 cursor-pointer">
+        <div className="flex justify-center text-2xl text-gray-700 rounded-full pb-4">
           <p className="font-medium "> Sign In </p>
         </div>
         <form onSubmit={handleSignIn} noValidate>
@@ -64,7 +64,7 @@ export default function SignIn(props) {
             }
           </Grid>
           <div>
-             <div className={styles.buttonDiv}>
+            <div className={styles.buttonDiv}>
               <button
                 type="button"
                 onClick={props.onCancel}
