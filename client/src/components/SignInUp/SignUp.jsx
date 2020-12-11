@@ -22,6 +22,12 @@ export default function SignUp(props) {
     }
 
 
+    if (signUpRequest.username === "") {
+      setErrorMsg("Username cannot be empty");
+      return;
+    }
+
+
     //Validate username
     if (signUpRequest.username.split(' ').length > 1) {
       setErrorMsg("Username cannot contain spaces");
