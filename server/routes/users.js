@@ -144,6 +144,13 @@ router.route('/delete/:username').post((req, res) => {
                                     for (let path of img_addr) {
                                         fs.unlink(path, (err) => { if (err) { console.log(err) } });
                                     }
+
+                                }
+
+                                //Delete the profile picture
+                                const profileImg_ar = user.profileImage.split('/');
+                                if (profileImg_ar[profileImg_ar.length - 2] !== "defaults") {
+                                    fs.unlink(IMAGE_DIR + "avatars/" + profileImg_ar[profileImg_ar.length - 1], (err) => { if (err) { console.log(err) } });
                                 }
                             })
 
@@ -195,43 +202,51 @@ router.route('/upload-profile/:username').post((req, res) => {
     const image = req.files.myFile;
     const username_id = req.params.username;
 
-    const ext_ar = image.name.split('.');
-    const ext = ext_ar[ext_ar.length - 1]; //Get the last element
-    image.name = username_id + "." + ext;
-    const fileName = image.name;
-
-    const path = IMAGE_DIR + "avatars/" + fileName;
-    image.mv(path); //Move the file to the specified path
-
-    //Get the URL for the User
-    const img_url = req.protocol + '://' + req.get('host') + "/images/avatars/" + fileName;
-    //update the User with the specified id
-    User.findOneAndUpdate({ username: username_id }, { $set: { profileImage: img_url } })
+    User.findOne({ username: username_id })
         .then(user => {
-            const url = user.profileImage;
-            res.json(url);
 
-            //Update all active posts so that they can render the new image
-            Post.find({ username: user.username })
-                .then(posts => {
-                    for (let post of posts) {
-                        io.emit("update post " + post._id);
-                    }
+            //Get previous image and delete it
 
-                })
+            //Get the old image filename
+            const profileImg_ar = user.profileImage.split('/');
+            //Delete the old profile picture
+            if (profileImg_ar[profileImg_ar.length - 2] !== "defaults") {
+                fs.unlink(IMAGE_DIR + "avatars/" + profileImg_ar[profileImg_ar.length - 1], (err) => { if (err) { console.log(err) } });
+            }
+
+            //Update the profile picture address with the new one
+            const ext_ar = image.name.split('.');
+            const ext = ext_ar[ext_ar.length - 1]; //Get the last element
+            image.name = username_id + "." + ext;
+            const fileName = image.name;
+
+            const path = IMAGE_DIR + "avatars/" + fileName;
+            image.mv(path); //Move the file to the specified path
+
+            //Get the URL for the User
+            const img_url = req.protocol + '://' + req.get('host') + "/images/avatars/" + fileName;
+            //update the User with the specified id
+            User.findOneAndUpdate({ username: username_id }, { $set: { profileImage: img_url } })
+                .then(user => {
+                    const url = user.profileImage;
+                    res.json(url);
+
+                    //Update all active posts so that they can render the new image
+                    Post.find({ username: user.username })
+                        .then(posts => {
+                            for (let post of posts) {
+                                io.emit("update post " + post._id);
+                            }
+                        })
+                        .catch(err => res.status(400).json('Error: ' + err));
+                }
+                )
                 .catch(err => res.status(400).json('Error: ' + err));
-        }
-        )
-        .catch(err => console.log(err));
-});
+        })
+        .catch(err => res.status(400).json('Error: ' + err))
 
-// Determines the join date of the user
-// Finds user by their username
-// router.route('/finduser/join-date/:username').get((req, res) => {
-//     User.findOne({ username: req.params.createdAt })
-//         .then(users => res.json(users))
-//         .catch(err => res.status(400).json('Error: ' + err));
-// });
+
+});
 
 // Promote user
 // Finds user by their username and set their isAdmin to true
