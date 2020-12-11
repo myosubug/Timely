@@ -33,6 +33,11 @@ export default function SignUp(props) {
       return;
     }
 
+    else if (signUpRequest.username.length > 15) {
+      setErrorMsg("Username must be less than 16 characters");
+      return;
+    }
+
 
     //Validate password
     if (signUpRequest.password.length < 3) {
