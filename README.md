@@ -1,3 +1,6 @@
+![Alt Text](demo.gif)
+
+
 ## 1. Introduction 
 
 Popular SNS applications today are bloated and constantly attempting to implement new features that are often completely irrelevant to their original purpose. This frequently distracts users from the foundation that many of these sites are built on: connecting people. Original words, thoughts, and ideas are being lost in floods of random posts and unrelated services. We believe the root of this problem lies in how SNS applications perceive what is valuable to the user. Should sites prioritize content from real world connections over viral sensations? Should sites provide marketplaces on pages originally designed for sharing images? While value is a dynamic property for these applications, we feel that users are often not given a direct enough format to express what they want to see.
